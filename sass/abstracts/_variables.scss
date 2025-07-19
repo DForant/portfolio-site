@@ -1,0 +1,129 @@
+// ==========================================================================
+// VARIABLES - Dean Forant Designs
+// ==========================================================================
+
+// Import Open Color
+@import '../../node_modules/open-color/open-color';
+
+// COLORS
+// ==========================================================================
+// Primary Brand Colors (Based on Figma Style Guide)
+$color-primary: #4A90E2;          // Primary blue from style guide
+$color-primary-light: #6BA3E8;    // Lighter blue variant
+$color-primary-dark: #2E5A8A;     // Darker blue variant
+
+// Secondary Colors 
+$color-secondary: #2C3E50;        // Dark blue-gray for text
+$color-secondary-light: #5D6D7E;  // Medium gray
+$color-secondary-dark: #1B2631;   // Very dark for strong text
+
+// Accent Colors (Gold/Yellow from logo)
+$color-accent: #F1C40F;           // Gold/yellow from logo
+$color-accent-light: #F4D03F;     // Lighter gold
+$color-accent-dark: #D4AC0D;      // Darker gold
+
+// Orange accent
+$color-orange: #E67E22;           // Orange from style guide
+$color-orange-light: #EB984E;     // Lighter orange
+$color-orange-dark: #CA6F1E;      // Darker orange
+
+// Neutral Colors
+$color-white: #FFFFFF;
+$color-gray-lightest: #F8F9FA;    // Very light background
+$color-gray-light: #E9ECEF;       // Light gray
+$color-gray: #6C757D;             // Medium gray
+$color-gray-dark: #495057;        // Dark gray for text
+$color-black: #212529;            // Near black
+
+// Success/Error/Warning Colors
+$color-success: #27AE60;
+$color-error: #E74C3C;
+$color-warning: $color-accent;
+
+// TYPOGRAPHY (Based on Figma Style Guide)
+// ==========================================================================
+// Fonts - Using elegant serif for headings, clean sans-serif for body
+$font-primary: 'Playfair Display', 'Georgia', 'Times New Roman', Times, serif;  // Serif for headings
+$font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; // Sans-serif for body text
+$font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+
+// Font Sizes (Based on 10px = 1rem with html font-size: 62.5%)
+$font-size-xs: 1.2rem;    // 12px
+$font-size-sm: 1.4rem;    // 14px  
+$font-size-base: 1.6rem;  // 16px
+$font-size-lg: 1.8rem;    // 18px
+$font-size-xl: 2.0rem;    // 20px
+$font-size-2xl: 2.4rem;   // 24px
+$font-size-3xl: 3.0rem;   // 30px
+$font-size-4xl: 3.6rem;   // 36px
+$font-size-5xl: 4.8rem;   // 48px
+
+// Font Weights
+$font-weight-light: 300;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Line Heights
+$line-height-tight: 1.25;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.75;
+
+// SPACING (Based on 10px = 1rem with html font-size: 62.5%)
+// ==========================================================================
+$spacing-xs: 0.4rem;    // 4px
+$spacing-sm: 0.8rem;    // 8px  
+$spacing-md: 1.6rem;    // 16px
+$spacing-lg: 2.4rem;    // 24px
+$spacing-xl: 3.2rem;    // 32px
+$spacing-2xl: 4.8rem;   // 48px
+$spacing-3xl: 6.4rem;   // 64px
+$spacing-4xl: 9.6rem;   // 96px
+
+// BREAKPOINTS (Convert to rem based on 10px = 1rem)
+// ==========================================================================
+$breakpoint-xs: 48rem;     // 480px
+$breakpoint-sm: 57.6rem;   // 576px
+$breakpoint-md: 76.8rem;   // 768px
+$breakpoint-lg: 99.2rem;   // 992px
+$breakpoint-xl: 120rem;    // 1200px
+$breakpoint-xxl: 140rem;   // 1400px
+
+// LAYOUT (Convert to rem based on 10px = 1rem)
+// ==========================================================================
+$container-max-width: 120rem;  // 1200px
+$grid-gutter: $spacing-lg;
+
+// BORDERS (Convert to rem based on 10px = 1rem)
+// ==========================================================================
+$border-radius-sm: 0.4rem;   // 4px
+$border-radius-md: 0.8rem;   // 8px
+$border-radius-lg: 1.2rem;   // 12px
+$border-radius-xl: 1.6rem;   // 16px
+
+$border-width: 0.1rem;       // 1px
+$border-color: $color-gray-light;
+
+// SHADOWS (Convert px values to rem based on 10px = 1rem)
+// ==========================================================================
+$shadow-sm: 0 0.1rem 0.2rem 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 0.4rem 0.6rem -0.1rem rgba(0, 0, 0, 0.1), 0 0.2rem 0.4rem -0.1rem rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 1rem 1.5rem -0.3rem rgba(0, 0, 0, 0.1), 0 0.4rem 0.6rem -0.2rem rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 2rem 2.5rem -0.5rem rgba(0, 0, 0, 0.1), 0 1rem 1rem -0.5rem rgba(0, 0, 0, 0.04);
+
+// TRANSITIONS
+// ==========================================================================
+$transition-fast: 0.15s ease-in-out;
+$transition-normal: 0.3s ease-in-out;
+$transition-slow: 0.5s ease-in-out;
+
+// Z-INDEX
+// ==========================================================================
+$z-dropdown: 1000;
+$z-sticky: 1020;
+$z-fixed: 1030;
+$z-modal-backdrop: 1040;
+$z-modal: 1050;
+$z-popover: 1060;
+$z-tooltip: 1070;

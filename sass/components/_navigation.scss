@@ -1,0 +1,118 @@
+// ==========================================================================
+// NAVIGATION COMPONENTS - Dean Forant Designs
+// ==========================================================================
+
+// This file includes styles specific to navigation components
+// Main navigation styles are in layout/_header.scss
+
+.breadcrumb {
+  @include flex-center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+  font-size: $font-size-sm;
+  
+  &__item {
+    color: $color-gray;
+    text-decoration: none;
+    transition: color $transition-normal;
+    
+    &:hover {
+      color: $color-primary;
+    }
+    
+    &--active {
+      color: $color-secondary;
+      font-weight: $font-weight-medium;
+    }
+  }
+  
+  &__separator {
+    color: $color-gray;
+    user-select: none;
+  }
+}
+
+.pagination {
+  @include flex-center;
+  gap: $spacing-sm;
+  margin-top: $spacing-2xl;
+  
+  &__item {
+    @include flex-center;
+    min-width: 4.4rem;
+    height: 4.4rem;
+    background-color: $color-white;
+    border: 0.1rem solid $border-color;
+    border-radius: $border-radius-md;
+    color: $color-secondary;
+    text-decoration: none;
+    font-weight: $font-weight-medium;
+    transition: all $transition-normal;
+    
+    &:hover {
+      border-color: $color-primary;
+      color: $color-primary;
+      background-color: rgba($color-primary, 0.05);
+    }
+    
+    &--active {
+      background-color: $color-primary;
+      border-color: $color-primary;
+      color: $color-white;
+      
+      &:hover {
+        background-color: $color-primary-dark;
+        border-color: $color-primary-dark;
+        color: $color-white;
+      }
+    }
+    
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      
+      &:hover {
+        border-color: $border-color;
+        color: $color-secondary;
+        background-color: $color-white;
+      }
+    }
+  }
+  
+  &__prev,
+  &__next {
+    padding: 0 $spacing-md;
+  }
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: $spacing-xl;
+  right: $spacing-xl;
+  @include flex-center;
+  width: 4.8rem;
+  height: 4.8rem;
+  background-color: $color-primary;
+  color: $color-white;
+  border-radius: 50%;
+  text-decoration: none;
+  box-shadow: $shadow-lg;
+  transform: translateY(10rem);
+  opacity: 0;
+  transition: all $transition-normal;
+  z-index: $z-fixed;
+  
+  &:hover {
+    background-color: $color-primary-dark;
+    transform: translateY(0) scale(1.1);
+  }
+  
+  &--visible {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  i {
+    font-size: $font-size-lg;
+  }
+}

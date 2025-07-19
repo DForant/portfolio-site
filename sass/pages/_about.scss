@@ -1,0 +1,178 @@
+// ==========================================================================
+// ABOUT PAGE STYLES - Dean Forant Designs
+// ==========================================================================
+
+.about-hero {
+  background: linear-gradient(135deg, $color-primary-light, $color-primary-dark);
+  color: $color-white;
+  padding: $spacing-4xl 0;
+  text-align: center;
+  
+  @include respond-to(lg) {
+    padding: 6rem 0;
+  }
+  
+  &__container {
+    @include container;
+  }
+  
+  &__title {
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-lg;
+    text-shadow: 0 0.2rem 0.4rem rgba($color-black, 0.2);
+    
+    @include respond-to(lg) {
+      font-size: $font-size-5xl;
+    }
+  }
+  
+  &__subtitle {
+    font-size: $font-size-xl;
+    opacity: 0.95;
+    max-width: 60rem;
+    margin: 0 auto;
+    line-height: $line-height-relaxed;
+    
+    @include respond-to(lg) {
+      font-size: $font-size-2xl;
+    }
+  }
+}
+
+.about-content {
+  padding: $spacing-4xl 0;
+  background-color: $color-white;
+  
+  @include respond-to(lg) {
+    padding: 6rem 0;
+  }
+  
+  &__container {
+    @include container;
+  }
+  
+  &__grid {
+    display: grid;
+    gap: $spacing-3xl;
+    grid-template-columns: 1fr;
+    align-items: center;
+    
+    @include respond-to(lg) {
+      grid-template-columns: 1fr 2fr;
+      gap: $spacing-4xl;
+    }
+  }
+  
+  &__image {
+    text-align: center;
+    
+    img {
+      width: 100%;
+      max-width: 40rem;
+      height: auto;
+      border-radius: $border-radius-xl;
+      box-shadow: $shadow-lg;
+    }
+  }
+  
+  &__text {
+    h2 {
+      font-size: $font-size-3xl;
+      color: $color-secondary;
+      margin-bottom: $spacing-lg;
+      
+      @include respond-to(lg) {
+        font-size: $font-size-4xl;
+      }
+    }
+    
+    p {
+      font-size: $font-size-lg;
+      line-height: $line-height-relaxed;
+      color: $color-gray-dark;
+      margin-bottom: $spacing-lg;
+      
+      &:last-of-type {
+        margin-bottom: $spacing-xl;
+      }
+    }
+  }
+  
+  &__cta {
+    @include button-primary;
+    padding: $spacing-lg $spacing-2xl;
+    font-size: $font-size-lg;
+  }
+}
+
+.about-skills {
+  background-color: $color-gray-light;
+  padding: $spacing-4xl 0;
+  
+  @include respond-to(lg) {
+    padding: 6rem 0;
+  }
+  
+  &__container {
+    @include container;
+  }
+  
+  &__title {
+    font-size: $font-size-3xl;
+    color: $color-secondary;
+    text-align: center;
+    margin-bottom: $spacing-3xl;
+    
+    @include respond-to(lg) {
+      font-size: $font-size-4xl;
+    }
+  }
+  
+  &__grid {
+    display: grid;
+    gap: $spacing-xl;
+    grid-template-columns: 1fr;
+    
+    @include respond-to(md) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @include respond-to(lg) {
+      grid-template-columns: repeat(3, 1fr);
+      gap: $spacing-2xl;
+    }
+  }
+  
+  &__item {
+    @include card-base;
+    padding: $spacing-xl;
+    text-align: center;
+    
+    &-icon {
+      @include flex-center;
+      width: 6.4rem;
+      height: 6.4rem;
+      background-color: $color-primary;
+      border-radius: 50%;
+      margin: 0 auto $spacing-lg;
+      
+      i {
+        font-size: $font-size-xl;
+        color: $color-white;
+      }
+    }
+    
+    &-title {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-bold;
+      color: $color-secondary;
+      margin-bottom: $spacing-sm;
+    }
+    
+    &-description {
+      color: $color-gray-dark;
+      line-height: $line-height-relaxed;
+    }
+  }
+}

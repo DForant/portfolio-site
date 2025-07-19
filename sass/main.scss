@@ -1,0 +1,32 @@
+// ==========================================================================
+// MAIN SASS FILE FOR DEAN FORANT DESIGNS
+// ==========================================================================
+
+// 1. ABSTRACTS
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
+@import 'abstracts/functions';
+
+// 2. BASE
+@import 'base/reset';
+@import 'base/typography';
+@import 'base/base';
+
+// 3. LAYOUT
+@import 'layout/header';
+@import 'layout/footer';
+@import 'layout/grid';
+
+// 4. COMPONENTS
+@import 'components/logo';
+@import 'components/navigation';
+@import 'components/buttons';
+@import 'components/forms';
+@import 'components/carousel';
+@import 'components/cards';
+
+// 5. PAGES
+@import 'pages/home';
+@import 'pages/about';
+@import 'pages/contact';
+@import 'pages/blog';

@@ -1,0 +1,239 @@
+// ==========================================================================
+// BUTTONS - Dean Forant Designs
+// ==========================================================================
+
+.btn {
+  @include button-base;
+  padding: $spacing-md $spacing-xl;
+  font-size: $font-size-base;
+  border-radius: $border-radius-lg;
+  min-height: 48px;
+  
+  // BUTTON VARIANTS
+  // ==========================================================================
+  &--primary {
+    @include button-primary;
+  }
+  
+  &--secondary {
+    @include button-secondary;
+  }
+  
+  &--outline {
+    background-color: transparent;
+    color: $color-secondary;
+    border: 2px solid $border-color;
+    
+    &:hover:not(:disabled) {
+      border-color: $color-primary;
+      color: $color-primary;
+      transform: translateY(-2px);
+      box-shadow: $shadow-md;
+    }
+  }
+  
+  &--ghost {
+    background-color: transparent;
+    color: $color-secondary;
+    border: none;
+    
+    &:hover:not(:disabled) {
+      background-color: rgba($color-primary, 0.1);
+      color: $color-primary;
+      transform: translateY(-2px);
+    }
+  }
+  
+  &--accent {
+    background-color: $color-accent;
+    color: $color-white;
+    
+    &:hover:not(:disabled) {
+      background-color: darken($color-accent, 10%);
+      transform: translateY(-2px);
+      box-shadow: $shadow-md;
+    }
+  }
+  
+  &--white {
+    background-color: $color-white;
+    color: $color-secondary;
+    border: 2px solid transparent;
+    
+    &:hover:not(:disabled) {
+      background-color: rgba($color-white, 0.9);
+      border-color: rgba($color-primary, 0.3);
+      transform: translateY(-2px);
+      box-shadow: $shadow-lg;
+    }
+  }
+  
+  // BUTTON SIZES
+  // ==========================================================================
+  &--sm {
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+    min-height: 36px;
+  }
+  
+  &--lg {
+    padding: $spacing-lg $spacing-2xl;
+    font-size: $font-size-lg;
+    min-height: 56px;
+  }
+  
+  &--xl {
+    padding: $spacing-xl $spacing-3xl;
+    font-size: $font-size-xl;
+    min-height: 64px;
+  }
+  
+  // BUTTON STATES
+  // ==========================================================================
+  &--block {
+    width: 100%;
+    display: flex;
+  }
+  
+  &--loading {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+  
+  // BUTTON ICONS
+  // ==========================================================================
+  &--icon {
+    @include flex-center;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 50%;
+    
+    &.btn--sm {
+      width: 36px;
+      height: 36px;
+    }
+    
+    &.btn--lg {
+      width: 56px;
+      height: 56px;
+    }
+  }
+  
+  .icon {
+    margin-right: $spacing-sm;
+    
+    &--right {
+      margin-right: 0;
+      margin-left: $spacing-sm;
+    }
+    
+    &--only {
+      margin: 0;
+    }
+  }
+}
+
+// BUTTON GROUPS
+// ==========================================================================
+.btn-group {
+  @include flex-center;
+  gap: $spacing-sm;
+  
+  &--vertical {
+    flex-direction: column;
+  }
+  
+  &--attached {
+    gap: 0;
+    
+    .btn {
+      border-radius: 0;
+      border-right-width: 0;
+      
+      &:first-child {
+        border-top-left-radius: $border-radius-lg;
+        border-bottom-left-radius: $border-radius-lg;
+      }
+      
+      &:last-child {
+        border-top-right-radius: $border-radius-lg;
+        border-bottom-right-radius: $border-radius-lg;
+        border-right-width: 2px;
+      }
+      
+      &:hover {
+        z-index: 1;
+      }
+    }
+  }
+  
+  &--center {
+    justify-content: center;
+  }
+  
+  &--right {
+    justify-content: flex-end;
+  }
+}
+
+// ANIMATIONS
+// ==========================================================================
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+// CTA BUTTONS (Call to Action)
+// ==========================================================================
+.cta-button {
+  @extend .btn;
+  @extend .btn--primary;
+  @extend .btn--lg;
+  
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba($color-white, 0.3), transparent);
+    transition: left 0.6s;
+  }
+  
+  &:hover::before {
+    left: 100%;
+  }
+  
+  &--hero {
+    font-size: $font-size-xl;
+    padding: $spacing-xl $spacing-3xl;
+    border-radius: $border-radius-xl;
+    min-height: 64px;
+    
+    @include respond-to(sm) {
+      font-size: $font-size-2xl;
+      padding: $spacing-xl $spacing-4xl;
+      min-height: 72px;
+    }
+  }
+}

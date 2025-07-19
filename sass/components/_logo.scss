@@ -1,0 +1,160 @@
+// ==========================================================================
+// LOGO COMPONENT - Dean Forant Designs
+// ==========================================================================
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: all $transition-normal;
+  
+  &__image {
+    height: 4rem;
+    width: auto;
+    transition: all $transition-normal;
+    
+    // Add gold filter to match brand colors
+    filter: hue-rotate(45deg) saturate(1.2) brightness(1.1);
+    
+    @include respond-to(md) {
+      height: 4.8rem;
+    }
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+  
+  &__text {
+    margin-left: $spacing-md;
+    
+    &-main {
+      font-family: $font-primary;
+      font-size: $font-size-xl;
+      font-weight: $font-weight-bold;
+      color: $color-accent;
+      line-height: 1.2;
+      display: block;
+      
+      @include respond-to(md) {
+        font-size: $font-size-2xl;
+      }
+    }
+    
+    &-sub {
+      font-family: $font-secondary;
+      font-size: $font-size-xs;
+      font-weight: $font-weight-medium;
+      color: $color-secondary;
+      text-transform: uppercase;
+      letter-spacing: 0.1rem;
+      line-height: 1;
+      margin-top: 0.2rem;
+      
+      @include respond-to(md) {
+        font-size: $font-size-sm;
+      }
+    }
+  }
+  
+  // Logo in header context
+  .header & {
+    &__image {
+      height: 3.2rem;
+      
+      @include respond-to(md) {
+        height: 4rem;
+      }
+    }
+    
+    &__text {
+      &-main {
+        font-size: $font-size-lg;
+        
+        @include respond-to(md) {
+          font-size: $font-size-xl;
+        }
+      }
+      
+      &-sub {
+        font-size: 1rem;
+        
+        @include respond-to(md) {
+          font-size: $font-size-xs;
+        }
+      }
+    }
+  }
+  
+  // Logo in hero context
+  .hero & {
+    color: $color-white;
+    margin-bottom: $spacing-xl;
+    
+    &__image {
+      height: 6rem;
+      filter: brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(45deg);
+      
+      @include respond-to(md) {
+        height: 8rem;
+      }
+    }
+    
+    &__text {
+      &-main {
+        color: $color-white;
+        font-size: $font-size-2xl;
+        
+        @include respond-to(md) {
+          font-size: $font-size-3xl;
+        }
+      }
+      
+      &-sub {
+        color: rgba($color-white, 0.9);
+      }
+    }
+  }
+  
+  // Logo hover effects
+  &:hover {
+    &__image {
+      transform: scale(1.05);
+    }
+    
+    &__text-main {
+      color: $color-accent-dark;
+    }
+  }
+}
+
+// Brand signature - for places where we want just the stylized company name
+.brand-signature {
+  font-family: $font-primary;
+  font-size: $font-size-2xl;
+  font-weight: $font-weight-bold;
+  color: $color-accent;
+  text-decoration: none;
+  letter-spacing: 0.05rem;
+  
+  &:hover {
+    color: $color-accent-dark;
+    text-decoration: none;
+  }
+  
+  &--dark {
+    color: $color-secondary-dark;
+    
+    &:hover {
+      color: $color-accent;
+    }
+  }
+  
+  &--light {
+    color: $color-white;
+    
+    &:hover {
+      color: $color-accent;
+    }
+  }
+}

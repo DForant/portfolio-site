@@ -63,6 +63,9 @@ This is my Web and Brand design business called Dean Forant Designs. The goal is
 - Ensure that the website is optimized for SEO
 - Use appropriate meta tags for SEO
 - Implement a footer with copyright information and links to social media profiles
+- All Styles should use Sass for pre-processing
+- All sizing units should be in rems for better scalability
+- Use Font Awesome for icons and social media links
 - All styles should be written using BEM methodology
 - Bootstrap should be used for responsive design and UI components but custom styles should be written in Sass
 - Use Open Color for color manipulation and theming
@@ -271,3 +274,26 @@ npm install open-color
 - Use appropriate caching strategies for static assets
 - All images are located in `assets/images`
 - There is a figma design file that can be used as a reference for the design and layout of the website as well as the color scheme and typography
+- There is a figma design for the styles guide including the color scheme, typography, logo, and a sample banner in desktop and mobile located at https://www.figma.com/design/oHusYDjYwdL3t1fbf1WZ7O/Portfolio-site-Design?node-id=2070-24&t=c7LMHnrtaif3sqXf-1
+- Ensure that the website is accessible and follows WCAG 2.1 guidelines
+- Ensure that the website is secure and follows best practices for web development
+- **Load quickly** with minimal latency
+- **Be mobile-friendly** and responsive across devices
+- **Use semantic HTML5** for better SEO and accessibility
+- **Implement proper caching** for static assets to improve performance
+- **Follow best practices** for web development, including security and performance optimization
+- **Use version control** with Git and maintain a clean commit history
+- **Document the code** and provide clear instructions for setup and deployment
+- **Use BEM methodology** for CSS class naming to ensure maintainability and readability
+- **Use Sass for styling** to take advantage of variables, nesting, and mixins
+- **Use Open Color** for color manipulation and theming
+- **Use Bootstrap** for responsive design and UI components, but write custom styles in Sass
+- **Use Strapi** for content management and blog posts
+- **Use a consistent color scheme** and typography throughout the website
+- **Ensure cross-browser compatibility** and test on major browsers (Chrome, Firefox, Safari, Edge)
+- **Implement a clean and modern design** that reflects the brand identity
+- **Optimize images** for web performance to reduce loading times
+- **Use a consistent layout** across all pages with a clear hierarchy of information
+- **Implement a navigation menu** that is easy to use and accessible
+- **Ensure that the website is optimized for SEO** with appropriate meta tags and structured data
+- **Implement a footer** with copyright information and links to social media profiles

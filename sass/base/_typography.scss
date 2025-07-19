@@ -1,0 +1,200 @@
+// ==========================================================================
+// TYPOGRAPHY - Dean Forant Designs
+// ==========================================================================
+
+// Import Google Fonts - Adding serif font for headings based on Figma
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+// BASE TYPOGRAPHY
+// ==========================================================================
+body {
+  font-family: $font-secondary; // Sans-serif for body text
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-normal;
+  color: $color-secondary;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// HEADINGS - Using serif font for elegant look
+// ==========================================================================
+h1, h2, h3, h4, h5, h6 {
+  @include heading-base;
+  font-family: $font-primary; // Serif font for headings
+  margin-bottom: $spacing-md;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.heading {
+  &--1 {
+    font-size: $font-size-5xl;
+    margin-bottom: $spacing-lg;
+    
+    @include respond-to(sm) {
+      font-size: 3.5rem;
+    }
+  }
+  
+  &--2 {
+    font-size: $font-size-4xl;
+    margin-bottom: $spacing-lg;
+    
+    @include respond-to(sm) {
+      font-size: $font-size-5xl;
+    }
+  }
+  
+  &--3 {
+    font-size: $font-size-3xl;
+    margin-bottom: $spacing-md;
+    
+    @include respond-to(sm) {
+      font-size: $font-size-4xl;
+    }
+  }
+  
+  &--4 {
+    font-size: $font-size-2xl;
+    margin-bottom: $spacing-md;
+    
+    @include respond-to(sm) {
+      font-size: $font-size-3xl;
+    }
+  }
+  
+  &--5 {
+    font-size: $font-size-xl;
+    margin-bottom: $spacing-sm;
+    
+    @include respond-to(sm) {
+      font-size: $font-size-2xl;
+    }
+  }
+  
+  &--6 {
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-sm;
+    
+    @include respond-to(sm) {
+      font-size: $font-size-xl;
+    }
+  }
+  
+  &--hero {
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    line-height: $line-height-tight;
+    margin-bottom: $spacing-lg;
+    
+    @include respond-to(sm) {
+      font-size: 4rem;
+    }
+    
+    @include respond-to(lg) {
+      font-size: 5rem;
+    }
+  }
+  
+  &--gradient {
+    @include text-gradient;
+  }
+}
+
+// PARAGRAPH
+// ==========================================================================
+p {
+  margin-bottom: $spacing-md;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.text {
+  &--lead {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-normal;
+    line-height: $line-height-relaxed;
+    color: $color-gray-dark;
+    
+    @include respond-to(sm) {
+      font-size: $font-size-2xl;
+    }
+  }
+  
+  &--large {
+    font-size: $font-size-lg;
+    line-height: $line-height-relaxed;
+  }
+  
+  &--small {
+    font-size: $font-size-sm;
+  }
+  
+  &--xs {
+    font-size: $font-size-xs;
+  }
+  
+  &--muted {
+    color: $color-gray;
+  }
+  
+  &--white {
+    color: $color-white;
+  }
+  
+  &--center {
+    text-align: center;
+  }
+  
+  &--left {
+    text-align: left;
+  }
+  
+  &--right {
+    text-align: right;
+  }
+}
+
+// LINKS
+// ==========================================================================
+a {
+  color: $color-primary;
+  text-decoration: underline;
+  transition: color $transition-normal;
+  
+  &:hover {
+    color: $color-primary-dark;
+  }
+  
+  &:focus {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+// LISTS
+// ==========================================================================
+ul, ol {
+  padding-left: $spacing-lg;
+  margin-bottom: $spacing-md;
+  
+  li {
+    margin-bottom: $spacing-xs;
+  }
+}
+
+// BLOCKQUOTE
+// ==========================================================================
+blockquote {
+  border-left: 4px solid $color-primary;
+  padding-left: $spacing-lg;
+  margin: $spacing-xl 0;
+  font-size: $font-size-lg;
+  font-style: italic;
+  color: $color-gray-dark;
+}

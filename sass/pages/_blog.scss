@@ -1,0 +1,319 @@
+// ==========================================================================
+// BLOG PAGE STYLES - Dean Forant Designs
+// ==========================================================================
+
+.blog-hero {
+  background: linear-gradient(135deg, $color-primary-light, $color-primary-dark);
+  color: $color-white;
+  padding: $spacing-4xl 0;
+  text-align: center;
+  
+  @include respond-to(lg) {
+    padding: 6rem 0;
+  }
+  
+  &__container {
+    @include container;
+  }
+  
+  &__title {
+    font-size: $font-size-4xl;
+    font-weight: $font-weight-bold;
+    margin-bottom: $spacing-lg;
+    text-shadow: 0 0.2rem 0.4rem rgba($color-black, 0.2);
+    
+    @include respond-to(lg) {
+      font-size: $font-size-5xl;
+    }
+  }
+  
+  &__subtitle {
+    font-size: $font-size-xl;
+    opacity: 0.95;
+    max-width: 60rem;
+    margin: 0 auto;
+    line-height: $line-height-relaxed;
+    
+    @include respond-to(lg) {
+      font-size: $font-size-2xl;
+    }
+  }
+}
+
+.blog-content {
+  padding: $spacing-4xl 0;
+  background-color: $color-white;
+  
+  @include respond-to(lg) {
+    padding: 6rem 0;
+  }
+  
+  &__container {
+    @include container;
+  }
+  
+  &__filters {
+    margin-bottom: $spacing-3xl;
+    text-align: center;
+    
+    &-title {
+      font-size: $font-size-lg;
+      font-weight: $font-weight-medium;
+      color: $color-secondary;
+      margin-bottom: $spacing-lg;
+    }
+    
+    &-list {
+      @include flex-center;
+      gap: $spacing-md;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    &-item {
+      padding: $spacing-sm $spacing-lg;
+      background-color: $color-gray-light;
+      color: $color-gray-dark;
+      border-radius: $border-radius-lg;
+      text-decoration: none;
+      font-weight: $font-weight-medium;
+      transition: all $transition-normal;
+      
+      &:hover,
+      &--active {
+        background-color: $color-primary;
+        color: $color-white;
+        transform: translateY(-0.2rem);
+      }
+    }
+  }
+  
+  &__grid {
+    margin-bottom: $spacing-3xl;
+  }
+  
+  &__pagination {
+    @include flex-center;
+    justify-content: center;
+  }
+}
+
+// SINGLE BLOG POST
+// ==========================================================================
+.blog-post {
+  &__hero {
+    position: relative;
+    height: 40rem;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    @include flex-column-center;
+    text-align: center;
+    
+    @include respond-to(lg) {
+      height: 50rem;
+    }
+    
+    &::before {
+      content: '';
+      @include absolute-full;
+      background: linear-gradient(
+        135deg,
+        rgba($color-secondary, 0.8) 0%,
+        rgba($color-primary, 0.7) 100%
+      );
+      z-index: 1;
+    }
+    
+    &-content {
+      position: relative;
+      z-index: 2;
+      @include container;
+      color: $color-white;
+    }
+    
+    &-title {
+      font-size: $font-size-3xl;
+      font-weight: $font-weight-bold;
+      line-height: $line-height-tight;
+      margin-bottom: $spacing-lg;
+      text-shadow: 0 0.2rem 0.4rem rgba($color-black, 0.3);
+      
+      @include respond-to(lg) {
+        font-size: $font-size-4xl;
+      }
+    }
+    
+    &-meta {
+      @include flex-center;
+      gap: $spacing-lg;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0.95;
+    }
+    
+    &-date,
+    &-author,
+    &-category {
+      font-size: $font-size-base;
+      font-weight: $font-weight-medium;
+    }
+    
+    &-category {
+      background-color: rgba($color-white, 0.2);
+      padding: $spacing-xs $spacing-md;
+      border-radius: $border-radius-lg;
+    }
+  }
+  
+  &__content {
+    padding: $spacing-4xl 0;
+    
+    @include respond-to(lg) {
+      padding: 6rem 0;
+    }
+    
+    &-container {
+      @include container;
+      max-width: 80rem;
+    }
+    
+    .content {
+      font-size: $font-size-lg;
+      line-height: $line-height-relaxed;
+      color: $color-gray-dark;
+      
+      h2 {
+        font-size: $font-size-2xl;
+        color: $color-secondary;
+        margin: $spacing-2xl 0 $spacing-lg;
+        
+        @include respond-to(lg) {
+          font-size: $font-size-3xl;
+        }
+      }
+      
+      h3 {
+        font-size: $font-size-xl;
+        color: $color-secondary;
+        margin: $spacing-xl 0 $spacing-md;
+        
+        @include respond-to(lg) {
+          font-size: $font-size-2xl;
+        }
+      }
+      
+      p {
+        margin-bottom: $spacing-lg;
+      }
+      
+      ul, ol {
+        margin-bottom: $spacing-lg;
+        padding-left: $spacing-xl;
+        
+        li {
+          margin-bottom: $spacing-sm;
+        }
+      }
+      
+      blockquote {
+        border-left: 0.4rem solid $color-primary;
+        padding-left: $spacing-xl;
+        margin: $spacing-2xl 0;
+        font-style: italic;
+        font-size: $font-size-xl;
+        color: $color-gray;
+      }
+      
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: $border-radius-md;
+        margin: $spacing-xl 0;
+        box-shadow: $shadow-md;
+      }
+      
+      code {
+        background-color: $color-gray-light;
+        padding: $spacing-xs $spacing-sm;
+        border-radius: $border-radius-sm;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 0.9em;
+      }
+      
+      pre {
+        background-color: $color-secondary;
+        color: $color-white;
+        padding: $spacing-lg;
+        border-radius: $border-radius-md;
+        margin: $spacing-xl 0;
+        overflow-x: auto;
+        
+        code {
+          background-color: transparent;
+          padding: 0;
+        }
+      }
+    }
+  }
+  
+  &__navigation {
+    border-top: 0.1rem solid $color-gray-light;
+    padding: $spacing-2xl 0;
+    
+    &-container {
+      @include container;
+      @include flex-between;
+      gap: $spacing-lg;
+      flex-direction: column;
+      
+      @include respond-to(md) {
+        flex-direction: row;
+      }
+    }
+    
+    &-item {
+      @include flex-center;
+      gap: $spacing-md;
+      text-decoration: none;
+      color: $color-secondary;
+      padding: $spacing-md $spacing-lg;
+      border-radius: $border-radius-md;
+      transition: all $transition-normal;
+      
+      &:hover {
+        background-color: rgba($color-primary, 0.1);
+        color: $color-primary;
+        transform: translateX(-0.4rem);
+      }
+      
+      &--next {
+        &:hover {
+          transform: translateX(0.4rem);
+        }
+      }
+      
+      &-content {
+        h4 {
+          font-size: $font-size-sm;
+          color: $color-gray;
+          margin-bottom: $spacing-xs;
+        }
+        
+        span {
+          font-weight: $font-weight-medium;
+        }
+      }
+    }
+  }
+}
+
+// PROJECTS PAGE (Similar structure)
+// ==========================================================================
+.projects-hero {
+  @extend .blog-hero;
+}
+
+.projects-content {
+  @extend .blog-content;
+}
