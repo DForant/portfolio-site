@@ -1,299 +1,290 @@
-## Overview
-This is my Web and Brand design business called Dean Forant Designs. The goal is to create a modern, responsive, and accessible website that showcases my work, skills, and experiences. The website will include sections for an about page, contact information, blog posts, and project showcases, as well as a way to book a free consultation call.
+Brand & Web Design Assistant
+Custom Gem
+
+Show thinking
+You are absolutely right, my apologies. It seems the formatting was cut off in the last response.
+
+Here is the entire copilot-instructions.md file, correctly wrapped in a single markdown block for easy copying.
+
+Markdown
+
+# Dean Forant Brand & Web Design - Portfolio Website Copilot Instructions
+
+This document provides instructions for building a modern, clean, and professional portfolio website for Dean Forant Brand & Web Design. The aesthetic should be derived from the official Facebook banner, emphasizing professionalism and a strong design foundation.
+
+***
+
+## I. Project & Sass Folder Structure
+
+This structure organizes the project files logically and sets up a scalable Sass architecture.
+
+/dean-forant-portfolio
+|
+|-- assets/
+|   |-- css/
+|   |   |-- style.css         // Compiled CSS output
+|   |
+|   |-- images/
+|   |   |-- logo.png
+|   |   |-- dean-photo.jpg
+|   |   |-- client-logos/
+|   |   |-- portfolio/
+|   |   |-- icons/            // For local SVG icons
+|   |
+|   |-- js/
+|   |   |-- main.js           // For homepage interactions
+|   |   |-- portfolio.js      // Logic for the dynamic project page
+|   |
+|   |-- sass/
+|       |-- abstracts/
+|       |   |-- _variables.scss
+|       |   |-- _mixins.scss
+|       |
+|       |-- base/
+|       |   |-- _base.scss
+|       |   |-- _typography.scss
+|       |
+|       |-- components/
+|       |   |-- _buttons.scss
+|       |   |-- _cards.scss
+|       |   |-- _carousel.scss
+|       |
+|       |-- layout/
+|       |   |-- _header.scss
+|       |   |-- _footer.scss
+|       |   |-- _sections.scss
+|       |
+|       |-- pages/
+|       |   |-- _home.scss
+|       |
+|       |-- main.scss
+|
+|-- portfolio/
+|   |-- project.html          // The single, dynamic template for all projects
+|
+|-- index.html
+|
+|-- copilot-instructions.md
+|
+`-- README.md
 
 
-## folder structure
-- The folder structure should be as follows:
-  - `.github/` - contains GitHub-specific files
-  - `assets/` - contains static assets like images, fonts, etc.
-      - `images/` - contains image files
-      - `js/` - contains JavaScript files
-      - `css/` - contains CSS files
-  - `sass/` - contains Sass files for styling
-  - `index.html` - the main entry point of the website
-  - `about.html` - an about page
-  - `contact.html` - a contact page
-  - `blog/` - a directory for blog posts
-    - `post1.html` - a sample blog post
-    - `post2.html` - another sample blog post
-  - `projects/` - a directory for project showcases
-    - `project1.html` - a sample project showcase
-    - `project2.html` - another sample project showcase
-  - `package.json` - contains project dependencies and scripts
-  - `README.md` - a readme file for the project
-  - `.gitignore` - a file to specify files and directories to ignore in Git
-  - `.github/copilot-instructions.md` - contains instructions for GitHub Copilot
+### Sass `main.scss` Import Order
 
-## Dependencies
-- The project should use the following dependencies:
-    - `open-color` - for color manipulation
-    - `sass` - for CSS pre-processing
-    - `bootstrap` - for responsive design and UI components
-    - `strapi` - for content management
-    
+Your `main.scss` file should import the partials in this order to ensure the correct cascade:
+```scss
+// 1. Abstracts (variables, mixins)
+@import 'abstracts/variables';
+@import 'abstracts/mixins';
 
-## website structure
-- The website should have the following structure:
-  - `index.html` - the main entry point of the website
-  - `about.html` - an about page
-  - `contact.html` - a contact page
-  - `blog/` - a directory for blog posts
-    - `post1.html` - a sample blog post
-    - `post2.html` - another sample blog post
-  - `projects/` - a directory for project showcases
-    - `project1.html` - a sample project showcase
-    - `project2.html` - another sample project showcase
-  - `booking/` - a directory for the booking system
-    - `booking.html` - the booking system page 
-  - `assets/` - a directory for static assets
-    - `css/` - a directory for CSS files
-    - `js/` - a directory for JavaScript files
-    - `images/` - a directory for image files
+// 2. Base styles
+@import 'base/base';
+@import 'base/typography';
 
-## Website Requirements
-- The website should be responsive and accessible
-- Use semantic HTML5 elements
-- Ensure cross-browser compatibility
-- Implement a clean and modern design
-- Optimize images for web performance
-- Use a consistent color scheme and typography
-  - Use Open Color for color manipulation
-- Implement a navigation menu that is easy to use
-   - Navigation menu should include links to Home, About, Contact, Blog, and Projects
-- Ensure that the website is optimized for SEO
-- Use appropriate meta tags for SEO
-- Implement a footer with copyright information and links to social media profiles
-- All Styles should use Sass for pre-processing
-- All sizing units should be in rems for better scalability
-- Use Font Awesome for icons and social media links
-- All styles should be written using BEM methodology
-- Bootstrap should be used for responsive design and UI components but custom styles should be written in Sass
-- Use Open Color for color manipulation and theming
-- Use Sanity CMS for content management and blog posts
-  Sanity should be used to manage the content of blog posts and project showcases.
-  - The CMS should be used to manage the blog posts and project showcases.
-  - There should be a seperate admin interface for managing the content of the website.
-- Implement a booking system for free consultation calls
-  - The booking system should allow users to select a date and time for the consultation call
-  - The booking system should work with a calendar API to check availability (integrate with Google Calendar or similar)
-  - The booking system should send a confirmation email to the user with the details of the consultation call
+// 3. Layout
+@import 'layout/header';
+@import 'layout/footer';
+@import 'layout/sections';
 
+// 4. Components
+@import 'components/buttons';
+@import 'components/cards';
+@import 'components/carousel';
 
-## Install dependencies
-(TODO) - Get install instructions from the respective package documentation
+// 5. Page-specific styles
+@import 'pages/home';
+CSS Naming Convention (BEM)
+We will use the BEM (Block, Element, Modifier) naming convention for all CSS classes to ensure our styles are modular and specific.
 
-- Install Sass
+Block: A standalone component. (e.g., .card, .btn)
 
-``` bash
-npm install -g sass
-```
+Element: A part of a block. Separated by two underscores. (e.g., .card__title, .card__icon)
 
-- Install Open Color
+Modifier: A variation of a block or element. Separated by two hyphens. (e.g., .btn--primary, .card--dark)
 
-``` bash
-npm install open-color
-```
-- Make sure to import the Open Color package in your Sass files for color manipulation.
-``` scss
-@import 'node_modules/open-color/open-color';
-```
+Example for a Service Card:
 
-- Install latest version of Bootstrap from cdn
-``` html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
-```
+HTML
 
-- Ensure to include the latest Bootstrap JavaScript file in your HTML files for responsive components.
-``` html
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap
-.bundle.min.js"></script>
-```
-- Install Strapi
+<div class="card card--service">
+    <div class="card__icon">...</div>
+    <h3 class="card__title">...</h3>
+    <p class="card__description">...</p>
+</div>
+SCSS
 
+// In _cards.scss
+.card {
+    // Base card styles
 
-## Webpage Style and layout guidelines
-- The page should have a clean and modern layout 
-- The top Navbar should have the following links and be responsive:
-  - Left side:
-    - Home
-    - About
-    - Contact
-    - Blog
-    - Projects
-  - Right side:
-    - a button that with the 904-323-1404 phone number that is clickable and opens the user's default phone app
-    - a button that says "Book a Free Consultation Call" that is also clickable and opens a booking system
-- The website should have a consistent color scheme and typography
-    - Use Open Color for color manipulation and theming
-- The website should be responsive and accessible
-- The website should use semantic HTML5 elements
-- The website should have a footer with the following information:
-   - Copyright © 2025 Dean Forant Designs
-   - Links to social media profiles (LinkedIn, Twitter, Facebook, Github)
-     - get the icons via Font awesome free CDN
-     ``` html
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-     ```    
+    &--service {
+        // Modifier styles specific to service cards
+    }
 
-## Home Page Requirements
-- should have a top navigation bar that is responsive
-- This navigation bar should be sticky at the top and remain visible when scrolling
-- Should have a hero section with a catchy headline and call to action
-  - There is the following images in the assets/images directory that can be used for the hero image background:
-    - dfd-desktop-1920x720-8-3-aspect.png (for desktop)
-    - dfd-mobile-375x667-8-3-aspect.png (for mobile)
-  - There is a logo image in the assets/images directory called dfd-logo.png that can be used for the logo. This logo should be placed on top of the hero image so that it is visible and stands out.
-    - For the desktop version it should be placed to the left side of the hero image but centered vertically.
-    - For the mobile version it should be placed at the top center of the hero image with a margin-top of 20px - 40 px.
-- The Hero section should have 2 call to action buttons:
-  - One button that says "I don't have a brand and need one" that will go to the brand design services page
-  - One button that says "I have a brand and need a website" that will go to the web design services page
-  - Above the CTA buttons there should be a short sub headline that says "Let's work together to create something amazing!"
-- After the hero section I would like to have a carousel that automatically rotates through a set of images
-    - These images will be of the companies that I have worked with
-    - There will be 3 images fully visible at a time with one on each side of the container partially visible
-    - The carousel should advance automatically every 5 seconds
-    - The carousel should have left and right arrows for manual navigation
-- Below the carousel there should be a 2 column section that highlights why clients should choose my services. Make this like a comparison to having a custom design versus using a template or a DIY website builder.
-- The left column should have a catchy headline like "Why Choose Custom Design?" and a list of benefits of custom design
-- The right column should have a catchy headline like "Why Avoid Templates?" and a list of reasons to avoid templates
-- Below the 2 column section there should be a section that showcases my latest blog posts
-  - This section should have a catchy headline like "Latest Blog Posts"
-  - Each blog post should have a title, a short excerpt, and a link to read more
-  - The blog posts should be displayed in a grid layout with 3 posts per row
-- Below the blog posts section there should be a section that showcases my latest projects
-  - This section should have a catchy headline like "Latest Projects"
-  - Each project should have a title, a short description, and a link to view more details
-  - The projects should be displayed in a grid layout with 3 projects per row
-- The footer should have the following information:
-   - Copyright © 2025 Dean Forant Designs
-   - Links to social media profiles (LinkedIn, Twitter, Facebook, Github)
-     - get the icons via Font awesome free CDN
-     ``` html
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    &__icon {
+        // Element styles
+    }
 
-## About Page Requirements
-  - The Page should have the same style navigation bar as the home page
-  - The hero section should have a catchy headline like "About Dean Forant Designs"
-  - The hero section should have a background image that is relevant to the brand
-  - The hero section should have a call to action button that says "Get in Touch"
-  - Below the hero section there should be a section that introduces me and my background
-    - This section should have a catchy headline like "Meet Dean Forant"
-    - This section should have a short bio about me and my experience in web and brand design
-    - This section should have a professional headshot of me.
-  - Below the introduction section there should be a section that showcases my latest projects
-    - This section should have a catchy headline like "Latest Projects"
-    - Each project should have a title, a short description, and a link to view more details
-    - The projects should be displayed in a grid layout with 3 projects per row
-    - Limit to only one row. after that there should be a "View All Projects" button that links to the projects page
-  - Below the projects section there should be a section that showcases my latest blog posts
-    - This section should have a catchy headline like "Latest Blog Posts"
-    - Each blog post should have a title, a short excerpt, and a link to read more
-    - The blog posts should be displayed in a grid layout with 3 posts per row
-    - Limit to only one row. after that there should be a "View All Blog Posts" button that links to the blog page
-  - The footer should have the following information:
-    - Copyright © 2025 Dean Forant Designs
-    - Links to social media profiles (LinkedIn, Twitter, Facebook, Github)
-      - get the icons via Font awesome free CDN
-      ``` html
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    &__title {
+        // Element styles
+    }
 
-## Contact Page Requirements
-  - The Page should have the same style navigation bar as the home page
-  - Create a hero section that will have two CTA's
-    - One CTA that says "Book a Free Consultation Call" that will open the booking system
-    - One CTA that says "Send an Email" that will open the user's default email client with my email address pre-filled
-  - Below the hero section there should be a contact form that allows users to send me a message
-    - The form should have the following fields:
-      - Name (text input)
-      - Email (email input)
-      - Subject (text input)
-      - Message (textarea)
-    - The form should have a submit button that says "Send Message"
-    - The form should validate the inputs and show an error message if any field is invalid
-    - Below the contact form there should be a section that displays my contact information
-      - This section should have a catchy headline like "Contact Information"
-      - This section should have my email address, phone number, and a link to my social media profiles
-  - The footer should have the following information:
-    - Copyright © 2025 Dean Forant Designs
-    - Links to social media profiles (LinkedIn, Twitter, Facebook, Github)
-      - get the icons via Font awesome free CDN
-      ``` html
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    &__description {
+        // Element styles
+    }
+}
+II. Design System
+A. Color Palette
+Primary Blue: #4A6C9B
 
-## Blog Page Requirements
-  - The Page should have the same style navigation bar as the home page
-  - Create a hero section that will have a catchy headline like "Latest Blog Posts"
-  - Below the Hero section we should have a list of the 5 newest blog posts
-    - Each blog post should have a title, a short excerpt, and a link to read more
-    - The blog posts should be displayed in a grid layout with 3 posts per row
-    - A max of 3 rows should be displayed, after that there should be a "View All Blog Posts" button that links to the blog page
-    - The blog page should show all the blog posts in a list format with pagination
-    - Each blog post should have a title, a short excerpt, and a link to read more
-  - The footer should have the following information:
-    - Copyright © 2025 Dean Forant Designs
-    - Links to social media profiles (LinkedIn, Twitter, Facebook, Github)
-      - get the icons via Font awesome free CDN
-      ``` html
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+Accent Gold/Yellow: #FDB813
 
-## Projects Page Requirements
-  - The Page should have the same style navigation bar as the home page
-  - Create a hero section that will have a catchy headline like "Latest Projects"
-  - Below the Hero section we should have a list of the 5 newest projects
-    - Each project should have a title, a short description, and a link to view more details
-    - The projects should be displayed in a grid layout with 3 projects per row
-    - A max of 3 rows should be displayed, after that there should be a "View All Projects" button that links to the projects page
-    - The projects page should show all the projects in a list format with pagination
-    - Each project should have a title, a short description, and a link to view more details
-  - The footer should have the following information:
-    - Copyright © 2025 Dean Forant Designs
-    - Links to social media profiles (LinkedIn, Twitter, Facebook, Github)
-      - get the icons via Font awesome free CDN
-      ``` html
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+Dark Text/Charcoal: #212529
 
-## Booking System Requirements
-- The booking system should allow users to select a date and time for the consultation call
-- The booking system should work with a calendar API to check availability (integrate with Google Calendar or similar)
-- The booking system should send a confirmation email to the user with the details of the consultation call
-- The booking system should have a user-friendly interface that allows users to easily select a date and time
-- The booking system should have a confirmation page that shows the details of the consultation call
-- The booking system should have a cancellation option that allows users to cancel the consultation call
+Light Background/Off-White: #F8F9FA
 
-## Admin Interface Requirements
-- The admin interface should be built using Strapi
-- The admin interface should allow me to manage the content of the website
-- The admin interface should allow me to create, edit, and delete blog posts and project showcases
-- The admin interface should allow me to manage the booking system
-- The admin interface should have a user-friendly interface that allows me to easily manage the content of the website
-- The admin interface should have a dashboard that shows the number of blog posts, projects, and bookings
+White: #FFFFFF
 
-## Additional Notes
-- Ensure that the website is optimized for performance and loading speed
-- Use appropriate caching strategies for static assets
-- All images are located in `assets/images`
-- There is a figma design file that can be used as a reference for the design and layout of the website as well as the color scheme and typography
-- There is a figma design for the styles guide including the color scheme, typography, logo, and a sample banner in desktop and mobile located at https://www.figma.com/design/oHusYDjYwdL3t1fbf1WZ7O/Portfolio-site-Design?node-id=2070-24&t=c7LMHnrtaif3sqXf-1
-- Ensure that the website is accessible and follows WCAG 2.1 guidelines
-- Ensure that the website is secure and follows best practices for web development
-- **Load quickly** with minimal latency
-- **Be mobile-friendly** and responsive across devices
-- **Use semantic HTML5** for better SEO and accessibility
-- **Implement proper caching** for static assets to improve performance
-- **Follow best practices** for web development, including security and performance optimization
-- **Use version control** with Git and maintain a clean commit history
-- **Document the code** and provide clear instructions for setup and deployment
-- **Use BEM methodology** for CSS class naming to ensure maintainability and readability
-- **Use Sass for styling** to take advantage of variables, nesting, and mixins
-- **Use Open Color** for color manipulation and theming
-- **Use Bootstrap** for responsive design and UI components, but write custom styles in Sass
-- **Use Strapi** for content management and blog posts
-- **Use a consistent color scheme** and typography throughout the website
-- **Ensure cross-browser compatibility** and test on major browsers (Chrome, Firefox, Safari, Edge)
-- **Implement a clean and modern design** that reflects the brand identity
-- **Optimize images** for web performance to reduce loading times
-- **Use a consistent layout** across all pages with a clear hierarchy of information
-- **Implement a navigation menu** that is easy to use and accessible
-- **Ensure that the website is optimized for SEO** with appropriate meta tags and structured data
-- **Implement a footer** with copyright information and links to social media profiles
+B. Typography
+Headings (H1, H2, H3): Use 'Playfair Display'.
+
+Body & Subheadings: Use 'Montserrat'.
+
+Google Fonts Import: Add the following to the <head> of your HTML:
+
+HTML
+
+<link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
+<link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+<link href="[https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Playfair+Display:wght@700&display=swap](https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Playfair+Display:wght@700&display=swap)" rel="stylesheet">
+III. Website Structure & Content
+A. Global Header / Navigation
+Layout: Sticky header.
+
+Left Side: Dean Forant logo.
+
+Right Side (Nav Links): Home, About, Services, Portfolio, Contact.
+
+CTA Button: "Let's Talk".
+
+B. Section 1: Hero
+Background: Subtle blue blueprint pattern from the banner.
+
+Headline (H1): Crafting Your Vision Into A Brand And Web Design That Wins
+
+Subheading: A brief statement on your 20+ years of experience.
+
+Buttons: "View My Work" and "Get In Touch".
+
+C. Section 2: Client Logo Banner
+Headline: "Trusted By Premier Organizations".
+
+Desktop Layout: A single row of the 7 client logos, with the Commonwealth of Massachusetts logo centered.
+
+Logo & Name Unit: Each logo should have the company name displayed beneath it in bold text.
+
+Mobile Layout: Converts to a one-image carousel.
+
+D. Section 3: About Me
+Layout: Two-column layout.
+
+Left Column: A professional photo of yourself.
+
+Right Column:
+
+Headline (H2): 20+ Years of Building Brands That Stand Out
+
+Body Text: A concise biography.
+
+My Process: Briefly mention your six-phase methodology.
+
+E. Section 4: Services
+Headline (H2): Services I Provide
+
+Layout: A grid of 3 service cards.
+
+Font Awesome CDN: Add the Font Awesome CDN link to the <head> of your HTML.
+
+Icons: Use Font Awesome icons for each service (fa-pen-ruler, fa-object-group, fa-list-check). These can later be replaced with local SVGs.
+
+F. Section 5: Portfolio
+Headline (H2): Selected Works
+
+Layout: A modern grid of featured project cards.
+
+Functionality: Each card will link to the single project template (/portfolio/project.html) but will pass a unique identifier for the project using a URL parameter.
+
+Link Examples:
+
+Cedarhurst Link: <a href="/portfolio/project.html?id=cedarhurst">
+
+Coffee Guild Link: <a href="/portfolio/project.html?id=coffeeguild">
+
+Chuckle Canvas Link: <a href="/portfolio/project.html?id=chucklecanvas">
+
+F.1. Dynamic Project Page (project.html)
+This single HTML file will serve as the template for all portfolio projects. Its content will be populated by JavaScript based on the id parameter in the URL.
+
+Header/Footer: The page must include the global header and footer.
+
+HTML Structure: The body should contain placeholder elements with unique IDs for JavaScript to target.
+
+HTML
+
+<main class="project-container">
+    <a href="/#portfolio-section">← Back to Portfolio</a>
+    <h1 id="project-title">[Project Title Loading...]</h1>
+    <div id="behance-embed-container">
+        </div>
+</main>
+JavaScript Functionality (/assets/js/portfolio.js):
+
+Project Data: Create a JavaScript object to store the information for each project, mapping the URL id to its title and Behance embed code.
+
+JavaScript
+
+const projectData = {
+    'cedarhurst': {
+        title: 'Cedarhurst Brewing Company',
+        embed: '<iframe src="[https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=](https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=)" ...></iframe>'
+    },
+    'coffeeguild': {
+        title: 'The Coffee Guild',
+        embed: '<iframe src="[https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=](https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=)" ...></iframe>'
+    },
+    'chucklecanvas': {
+        title: 'The Chuckle Canvas',
+        embed: '<iframe src="[https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=](https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=)" ...></iframe>'
+    }
+};
+On Page Load: The script should run when the project.html page loads.
+
+Read URL Parameter: Get the id from the URL. (e.g., using new URLSearchParams(window.location.search).get('id');).
+
+Find Project: Look up the corresponding project in the projectData object.
+
+Populate Content: If the project is found, use JavaScript to:
+
+Update the innerHTML of the <h1 id="project-title">.
+
+Update the innerHTML of the <div id="behance-embed-container"> with the project's embed code.
+
+Update the page's document title: document.title = 'Project: ' + project.title + ' | Dean Forant';.
+
+Error Handling: If no id is found or the id is invalid, redirect the user back to the main portfolio page.
+
+G. Section 6: Contact
+Headline (H2): Ready to Win? Let's Build Your Brand.
+
+Layout: Two-column layout with contact info on the left and a contact form on the right.
+
+H. Global Footer
+Layout: Three-column layout.
+
+Column 1: Dean Forant Logo and a short tagline.
+
+Column 2: Quick Links (Home, About, Services, Portfolio, Contact).
+
+Column 3 (Social Media): Icons for Facebook, LinkedIn, Behance, Youtube, Github, and Instagram.
+
+Sub-Footer: Centered copyright text.
