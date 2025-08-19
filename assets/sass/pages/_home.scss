@@ -42,8 +42,9 @@
     background: rgba(248, 249, 250, 0.75);
     padding: 2.5rem;
     border-radius: v.$border-radius-base;
-    box-shadow: 0 8px 32px rgba(74, 108, 155, 0.15),
-                0 4px 16px rgba(74, 108, 155, 0.1);
+    box-shadow: 0 12px 48px rgba(74, 108, 155, 0.25),
+                0 8px 24px rgba(74, 108, 155, 0.15),
+                0 4px 12px rgba(74, 108, 155, 0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     
