@@ -1,0 +1,25 @@
+@use '../abstracts/variables' as v;
+
+.footer {
+  background: v.$off-white;
+  color: v.$charcoal;
+  padding-top: 2rem;
+  a { color: v.$charcoal; text-decoration: none; }
+  h3 { margin-top: 0; font-family: v.$font-heading; color: v.$primary-blue; }
+}
+
+.footer__social {
+  a {
+    color: v.$charcoal;
+    margin-right: 1em;
+    font-size: 1.2em;
+    &:hover { color: v.$primary-blue; }
+  }
+}
+
+.footer__sub {
+  text-align: center;
+  padding: 1em 0;
+  background: rgba(0,0,0,.03);
+  font-size: 0.95em;
+}

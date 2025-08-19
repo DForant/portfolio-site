@@ -18,8 +18,6 @@ This document provides instructions for building a modern, clean, and profession
 
 This structure organizes the project files logically and sets up a scalable Sass architecture.
 
-/dean-forant-portfolio
-|
 |-- assets/
 |   |-- css/
 |   |   |-- style.css         // Compiled CSS output
@@ -68,8 +66,10 @@ This structure organizes the project files logically and sets up a scalable Sass
 |
 `-- README.md
 
+The project should be initialized with a package manager like npm or yarn, and the necessary dependencies should be installed. This includes sass
 
-### Sass `main.scss` Import Order
+
+## Sass `main.scss` Import Order
 
 Your `main.scss` file should import the partials in this order to ensure the correct cascade:
 ```scss
@@ -93,7 +93,9 @@ Your `main.scss` file should import the partials in this order to ensure the cor
 
 // 5. Page-specific styles
 @import 'pages/home';
-CSS Naming Convention (BEM)
+```
+
+I. CSS Naming Convention (BEM)
 We will use the BEM (Block, Element, Modifier) naming convention for all CSS classes to ensure our styles are modular and specific.
 
 Block: A standalone component. (e.g., .card, .btn)
@@ -184,6 +186,15 @@ Desktop Layout: A single row of the 7 client logos, with the Commonwealth of Mas
 Logo & Name Unit: Each logo should have the company name displayed beneath it in bold text.
 
 Mobile Layout: Converts to a one-image carousel.
+
+Ideal Layout should be as follows
+  - Flash Global
+  - SCC
+  - BMI
+  - Commonwealth of Massachusetts
+  - Agfa Healthcare
+  - Delta Mechanical Seals
+  - VelQuest
 
 D. Section 3: About Me
 Layout: Two-column layout.

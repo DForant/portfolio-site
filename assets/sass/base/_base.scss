@@ -1,0 +1,12 @@
+// _base.scss
+@use '../abstracts/variables' as v;
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: v.$font-body;
+  background: v.$off-white;
+  color: v.$charcoal;
+}

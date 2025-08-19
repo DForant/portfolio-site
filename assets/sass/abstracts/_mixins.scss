@@ -1,0 +1,13 @@
+// Common mixins
+
+@mixin flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+@mixin container($max: 1200px, $pad: 1rem) {
+	max-width: $max;
+	margin: 0 auto;
+	padding: 0 $pad;
+}

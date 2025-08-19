@@ -1,0 +1,12 @@
+// _typography.scss
+@use '../abstracts/variables' as v;
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: v.$font-heading;
+  color: v.$primary-blue;
+  margin-top: 0;
+}
+p {
+  font-family: v.$font-body;
+  color: v.$charcoal;
+}

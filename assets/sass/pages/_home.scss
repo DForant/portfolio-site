@@ -1,0 +1,23 @@
+// _home.scss
+@use '../abstracts/variables' as v;
+
+.hero {
+  background: url('/assets/images/blueprint-bg.png') center/cover no-repeat;
+  text-align: center;
+  padding: 6em 2em 4em 2em;
+  &__title {
+    font-size: 2.5em;
+    color: v.$primary-blue;
+    margin-bottom: 0.5em;
+  }
+  &__subtitle {
+    font-size: 1.25em;
+    color: v.$charcoal;
+    margin-bottom: 1.5em;
+  }
+  &__actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.5em;
+  }
+}

@@ -1,0 +1,21 @@
+// main.scss (Dart Sass module system)
+// 1) Abstracts (expose tokens/utilities in this scope if needed)
+@use 'abstracts/variables' as v;
+@use 'abstracts/mixins' as m;
+
+// 2) Base
+@use 'base/base';
+@use 'base/typography';
+
+// 3) Layout
+@use 'layout/header';
+@use 'layout/footer';
+@use 'layout/sections';
+
+// 4) Components
+@use 'components/buttons';
+@use 'components/cards';
+@use 'components/carousel';
+
+// 5) Pages
+@use 'pages/home';
