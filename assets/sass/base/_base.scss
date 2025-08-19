@@ -1,0 +1,55 @@
+// _base.scss
+@use 'sass:color';
+@use '../abstracts/variables' as v;
+
+// Reset & Base Styles
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: v.$font-body;
+  background: v.$off-white;
+  color: v.$charcoal;
+  line-height: 1.6;
+}
+
+// Container class for sections
+.section__container {
+  max-width: v.$container-max-width;
+  margin: 0 auto;
+  padding: v.$section-padding-y v.$section-padding-x;
+}
+
+// Bootstrap overrides to maintain our design system
+.btn-primary {
+  background-color: v.$primary-blue !important;
+  border-color: v.$primary-blue !important;
+  
+  &:hover, &:focus {
+    background-color: color.adjust(v.$primary-blue, $lightness: -10%) !important;
+    border-color: color.adjust(v.$primary-blue, $lightness: -10%) !important;
+  }
+}
+
+.btn-secondary {
+  background-color: v.$accent-gold !important;
+  border-color: v.$accent-gold !important;
+  color: v.$charcoal !important;
+  
+  &:hover, &:focus {
+    background-color: color.adjust(v.$accent-gold, $lightness: -10%) !important;
+    border-color: color.adjust(v.$accent-gold, $lightness: -10%) !important;
+    color: v.$charcoal !important;
+  }
+}
+
+.text-primary {
+  color: v.$primary-blue !important;
+}

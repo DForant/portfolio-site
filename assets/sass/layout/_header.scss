@@ -1,0 +1,49 @@
+// _header.scss - Bootstrap Navbar Customization
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+// Bootstrap Navbar Overrides
+.navbar {
+  padding: 1rem 0;
+  background-color: v.$white !important;
+  
+  .navbar-brand img {
+    height: 65px;
+  }
+  
+  .navbar-nav {
+    .nav-link {
+      color: v.$charcoal !important;
+      font-weight: 500;
+      font-family: v.$font-body;
+      margin: 0 0.5rem;
+      
+      &:hover, &:focus {
+        color: v.$primary-blue !important;
+      }
+    }
+  }
+  
+  .navbar-toggler {
+    border: 0;
+    padding: 0.25rem 0.5rem;
+    
+    &:focus {
+      box-shadow: none;
+    }
+    
+    .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2874, 108, 155, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+  }
+}
+
+// Main content offset for fixed navbar
+main {
+  margin-top: 80px;
+}
+
+// Smooth scrolling offset compensation
+html {
+  scroll-padding-top: 80px;
+}

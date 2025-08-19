@@ -1,0 +1,22 @@
+{
+  "name": "dean-forant-portfolio",
+  "version": "1.0.0",
+  "description": "Dean Forant Brand & Web Design Portfolio Website",
+  "main": "index.html",
+  "scripts": {
+    "sass": "sass assets/sass/main.scss assets/css/style.css",
+    "sass:watch": "sass --watch assets/sass/main.scss assets/css/style.css",
+    "sass:build": "sass assets/sass/main.scss assets/css/style.css --style compressed"
+  },
+  "keywords": [
+    "portfolio",
+    "brand design",
+    "web design",
+    "sass"
+  ],
+  "author": "Dean Forant",
+  "license": "MIT",
+  "devDependencies": {
+    "sass": "^1.90.0"
+  }
+}

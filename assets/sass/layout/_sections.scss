@@ -1,0 +1,32 @@
+// _sections.scss
+@use '../abstracts/variables' as v;
+
+// Section Base
+section {
+  padding: v.$section-padding-y 0;
+  
+  &:nth-of-type(even) {
+    background: v.$white;
+  }
+}
+
+// Section Container Override for specific sections
+.about, .services, .portfolio, .contact, .clients {
+  .section__container {
+    max-width: v.$container-max-width;
+    margin: 0 auto;
+    padding: 0 v.$section-padding-x;
+  }
+}
+
+// Section headings
+section h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2.5rem;
+  
+  @media (max-width: v.$breakpoint-md) {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+}

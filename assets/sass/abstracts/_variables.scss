@@ -1,0 +1,29 @@
+// Color Palette
+$primary-blue: #4A6C9B;
+$accent-gold: #FDB813;
+$charcoal: #212529;
+$off-white: #F8F9FA;
+$white: #FFFFFF;
+
+// Typography
+$font-heading: 'Playfair Display', serif;
+$font-body: 'Montserrat', sans-serif;
+
+// Bootstrap Variable Overrides
+$primary: $primary-blue;
+$secondary: $accent-gold;
+$dark: $charcoal;
+$light: $off-white;
+
+// Breakpoints
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+
+// Spacing
+$section-padding-y: 4rem;
+$section-padding-x: 1rem;
+$container-max-width: 1200px;
+
+// Border Radius
+$border-radius-base: 8px;
+$border-radius-small: 4px;

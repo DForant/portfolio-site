@@ -1,0 +1,61 @@
+// _buttons.scss
+@use 'sass:color';
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+// Button Base - BEM Block
+.btn {
+  @include m.flex-center;
+  display: inline-flex;
+  padding: 0.75rem 2rem;
+  border: 2px solid transparent;
+  border-radius: v.$border-radius-base;
+  font-family: v.$font-body;
+  font-weight: 500;
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  
+  // Primary Button - BEM Modifier
+  &--primary {
+    background: v.$primary-blue;
+    color: v.$white;
+    border-color: v.$primary-blue;
+    
+    &:hover, &:focus {
+      background: color.adjust(v.$primary-blue, $lightness: -10%);
+      border-color: color.adjust(v.$primary-blue, $lightness: -10%);
+      color: v.$white;
+      text-decoration: none;
+    }
+  }
+  
+  // Secondary Button - BEM Modifier
+  &--secondary {
+    background: transparent;
+    color: v.$primary-blue;
+    border-color: v.$primary-blue;
+    
+    &:hover, &:focus {
+      background: v.$primary-blue;
+      color: v.$white;
+      text-decoration: none;
+    }
+  }
+  
+  // Accent Button - BEM Modifier
+  &--accent {
+    background: v.$accent-gold;
+    color: v.$charcoal;
+    border-color: v.$accent-gold;
+    
+    &:hover, &:focus {
+      background: color.adjust(v.$accent-gold, $lightness: -10%);
+      border-color: color.adjust(v.$accent-gold, $lightness: -10%);
+      color: v.$charcoal;
+      text-decoration: none;
+    }
+  }
+}

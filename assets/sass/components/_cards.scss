@@ -1,0 +1,63 @@
+// _cards.scss
+@use '../abstracts/variables' as v;
+
+// Card Base - BEM Block
+.card {
+  background: v.$white;
+  border-radius: v.$border-radius-base;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(74, 108, 155, 0.1);
+  }
+  
+  // Card Link - BEM Element
+  &__link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  // Card Title - BEM Element
+  &__title {
+    font-size: 1.25rem;
+    margin: 1rem 0 0.5rem;
+    color: v.$primary-blue;
+  }
+  
+  // Card Description - BEM Element
+  &__description {
+    color: v.$charcoal;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  // Card Icon - BEM Element
+  &__icon {
+    font-size: 2rem;
+    color: v.$accent-gold;
+    margin-bottom: 1rem;
+  }
+  
+  // Service Card Modifier - BEM Modifier
+  &--service {
+    padding: 2rem;
+    text-align: center;
+    border: 1px solid rgba(74, 108, 155, 0.1);
+  }
+  
+  // Project Card Modifier - BEM Modifier
+  &--project {
+    .card__title {
+      padding: 0 1rem 1rem;
+    }
+    
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+  }
+}

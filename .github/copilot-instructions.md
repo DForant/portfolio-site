@@ -66,7 +66,7 @@ This structure organizes the project files logically and sets up a scalable Sass
 |
 `-- README.md
 
-The project should be initialized with a package manager like npm or yarn, and the necessary dependencies should be installed. This includes sass
+The project should be initialized with a package manager like npm or yarn, and the necessary dependencies should be installed. This includes sass or any other dependency as needed
 
 
 ## Sass `main.scss` Import Order
@@ -94,6 +94,10 @@ Your `main.scss` file should import the partials in this order to ensure the cor
 // 5. Page-specific styles
 @import 'pages/home';
 ```
+
+## Bootstrap Inclusion
+We need to implement Bootstrap but also allow us to overwrite bootstarp with our custom CSS that we create with Sass
+
 
 I. CSS Naming Convention (BEM)
 We will use the BEM (Block, Element, Modifier) naming convention for all CSS classes to ensure our styles are modular and specific.
@@ -178,10 +182,14 @@ Subheading: A brief statement on your 20+ years of experience.
 
 Buttons: "View My Work" and "Get In Touch".
 
+Text placement: The hero image has a portrait image to the right. Any copy text and call to actions should be on the left side of the hero image.
+
 C. Section 2: Client Logo Banner
 Headline: "Trusted By Premier Organizations".
 
 Desktop Layout: A single row of the 7 client logos, with the Commonwealth of Massachusetts logo centered.
+
+Logo Images: The logo images are in the `assets/images/logos/` directory.
 
 Logo & Name Unit: Each logo should have the company name displayed beneath it in bold text.
 
@@ -257,15 +265,15 @@ JavaScript
 const projectData = {
     'cedarhurst': {
         title: 'Cedarhurst Brewing Company',
-        embed: '<iframe src="[https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=](https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=)" ...></iframe>'
+        embed: '<iframe src="https://www.behance.net/embed/project/227216357?ilo0=1" height="316" width="404" allowfullscreen lazyload frameborder="0" allow="clipboard-write" refererPolicy="strict-origin-when-cross-origin"></iframe>'
     },
     'coffeeguild': {
         title: 'The Coffee Guild',
-        embed: '<iframe src="[https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=](https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=)" ...></iframe>'
+        embed: '<iframe src="https://www.behance.net/embed/project/231368347?ilo0=1" height="316" width="404" allowfullscreen lazyload frameborder="0" allow="clipboard-write" refererPolicy="strict-origin-when-cross-origin"></iframe>'
     },
     'chucklecanvas': {
         title: 'The Chuckle Canvas',
-        embed: '<iframe src="[https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=](https://www.behance.net/embed/project/INSERT_ID_HERE?ilo0=)" ...></iframe>'
+        embed: '<iframe src="https://www.behance.net/embed/project/227216357?ilo0=1" height="316" width="404" allowfullscreen lazyload frameborder="0" allow="clipboard-write" refererPolicy="strict-origin-when-cross-origin"></iframe>'
     }
 };
 On Page Load: The script should run when the project.html page loads.
