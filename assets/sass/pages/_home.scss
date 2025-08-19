@@ -2,7 +2,8 @@
 @use '../abstracts/variables' as v;
 
 .hero {
-  background: url('/assets/images/blueprint-bg.png') center/cover no-repeat;
+  height: 80vh;
+  background: url('/assets/images/web-banner-80.jpg') center/cover no-repeat;
   text-align: center;
   padding: 6em 2em 4em 2em;
   &__title {
