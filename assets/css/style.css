@@ -349,7 +349,7 @@ section h2 {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(248, 249, 250, 0.4);
+  background: rgba(248, 249, 250, 0.15);
   z-index: 1;
 }
 .hero .section__container {
@@ -368,10 +368,22 @@ section h2 {
 }
 .hero__content {
   max-width: 600px;
+  background: rgba(248, 249, 250, 0.95);
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(74, 108, 155, 0.15), 0 4px 16px rgba(74, 108, 155, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 @media (max-width: 768px) {
   .hero__content {
     max-width: 100%;
+    padding: 2rem;
+  }
+}
+@media (max-width: 480px) {
+  .hero__content {
+    padding: 1.5rem;
   }
 }
 .hero__title {
