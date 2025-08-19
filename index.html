@@ -17,36 +17,41 @@
 </head>
 <body>
     <!-- Header -->
-    <nav class="navbar navbar-expand-md navbar-light bg-white fixed-top shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="/" aria-label="Dean Forant Home">
-                <img src="/assets/images/banner-logo.png" alt="Dean Forant Brand & Web Design" height="40" />
+    <header class="header">
+        <div class="header__container">
+            <a class="header__logo" href="/" aria-label="Dean Forant Home">
+                <img src="/assets/images/banner-logo.png" alt="Dean Forant Brand & Web Design" />
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+            
+            <button class="header__toggle" aria-label="Toggle navigation menu" aria-controls="header-nav" aria-expanded="false">
+                <span class="header__toggle-bar"></span>
+                <span class="header__toggle-bar"></span>
+                <span class="header__toggle-bar"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#home">Home</a>
+            
+            <nav id="header-nav" class="header__nav" aria-label="Primary Navigation">
+                <ul class="header__nav-list">
+                    <li class="header__nav-item">
+                        <a class="header__nav-link" href="#home">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#about">About</a>
+                    <li class="header__nav-item">
+                        <a class="header__nav-link" href="#about">About</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#services">Services</a>
+                    <li class="header__nav-item">
+                        <a class="header__nav-link" href="#services">Services</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#portfolio-section">Portfolio</a>
+                    <li class="header__nav-item">
+                        <a class="header__nav-link" href="#portfolio-section">Portfolio</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#contact">Contact</a>
+                    <li class="header__nav-item">
+                        <a class="header__nav-link" href="#contact">Contact</a>
                     </li>
                 </ul>
-                <a class="btn btn--primary" href="#contact">Let's Talk</a>
-            </div>
+            </nav>
+            
+            <a class="btn btn--primary header__cta" href="#contact">Let's Talk</a>
         </div>
-    </nav>
+    </header>
 
     <main id="home">
         <!-- Hero -->
@@ -54,7 +59,7 @@
             <div class="section__container">
                 <div class="hero__content">
                     <h1 class="hero__title">Crafting Your Vision Into A Brand And Web Design That Wins</h1>
-                    <p class="hero__subtitle">Over 20 years helping organizations build brands that stand out and websites that convert.</p>
+                    <p class="hero__subtitle">Your Vision, My Expertise. Let's Build a Brand That Stands Out.</p>
                     <div class="hero__actions">
                         <a class="btn btn--primary" href="#portfolio-section">View My Work</a>
                         <a class="btn btn--secondary" href="#contact">Get In Touch</a>
@@ -69,7 +74,7 @@
         <!-- Clients Banner -->
         <section id="clients" class="clients" aria-labelledby="clients-title">
             <div class="section__container">
-                <h2 id="clients-title">Trusted By Premier Organizations</h2>
+                <h2 id="clients-title">Brands I've Had the Pleasure of Working With</h2>
                 <div class="clients__row carousel" role="region" aria-label="Client logos" tabindex="0">
                     <div class="clients__item"><img src="/assets/images/client-logos/flash-global.png" alt="Flash Global logo" /><div class="clients__name"><strong>Flash Global</strong></div></div>
                     <div class="clients__item"><img src="/assets/images/client-logos/scc.png" alt="SCC logo" /><div class="clients__name"><strong>SCC</strong></div></div>
@@ -89,8 +94,8 @@
                     <img src="/assets/images/dean-photo.jpg" alt="Photo of Dean Forant" style="width:100%; border-radius:8px;" />
                 </div>
                 <div class="about__content" style="flex:2 1 420px; min-width:280px;">
-                    <h2 id="about-title">20+ Years of Building Brands That Stand Out</h2>
-                    <p>I'm Dean, a brand and web designer focused on helping teams translate their business goals into crisp visual systems and conversion-focused websites. From discovery through launch, I drive clarity and quality.</p>
+                    <h2 id="about-title">Bringing 20+ Years of Professional Design Experience to Small Businesses.</h2>
+                    <p>Hi, I'm Dean. I help small local businesses tell their story with great branding and a professional website. My goal is to create a look and feel that you'll love and that will attract more of your ideal customers.</p>
                     <p><strong>My process:</strong> Discover → Define → Design → Develop → Deploy → Debrief.</p>
                 </div>
             </div>

@@ -1,49 +1,201 @@
-// _header.scss - Bootstrap Navbar Customization
+// _header.scss - Custom Responsive Navbar
 @use '../abstracts/variables' as v;
 @use '../abstracts/mixins' as m;
 
-// Bootstrap Navbar Overrides
-.navbar {
-  padding: 1rem 0;
-  background-color: v.$white !important;
+// Header Base Styles
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: v.$white;
+  box-shadow: 0 2px 8px rgba(74, 108, 155, 0.1);
+  z-index: 1000;
   
-  .navbar-brand img {
-    height: 65px;
+  // Header Container - BEM Element
+  &__container {
+    @include m.container;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    position: relative;
   }
   
-  .navbar-nav {
-    .nav-link {
-      color: v.$charcoal !important;
-      font-weight: 500;
-      font-family: v.$font-body;
-      margin: 0 0.5rem;
-      
-      &:hover, &:focus {
-        color: v.$primary-blue !important;
-      }
+  // Logo - BEM Element
+  &__logo {
+    z-index: 1001;
+    
+    img {
+      height: 65px;
+      width: auto;
     }
   }
   
-  .navbar-toggler {
-    border: 0;
-    padding: 0.25rem 0.5rem;
+  // Hamburger Toggle - BEM Element (hidden on desktop)
+  &__toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
     
     &:focus {
-      box-shadow: none;
+      outline: 2px solid v.$primary-blue;
+      outline-offset: 2px;
+    }
+  }
+  
+  // Hamburger Bars - BEM Element
+  &__toggle-bar {
+    width: 25px;
+    height: 3px;
+    background: v.$charcoal;
+    margin: 2px 0;
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+  
+  // Navigation - BEM Element
+  &__nav {
+    // Desktop: always visible
+    display: block;
+  }
+  
+  // Navigation List - BEM Element
+  &__nav-list {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  // Navigation Link - BEM Element
+  &__nav-link {
+    color: v.$charcoal;
+    text-decoration: none;
+    font-weight: 500;
+    font-family: v.$font-body;
+    transition: color 0.3s ease;
+    
+    &:hover, &:focus {
+      color: v.$primary-blue;
+    }
+  }
+  
+  // CTA Button - BEM Element
+  &__cta {
+    margin-left: 2rem;
+  }
+  
+  // Mobile Menu Open State - BEM Modifier
+  &--menu-open {
+    .header__toggle-bar:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
     }
     
-    .navbar-toggler-icon {
-      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2874, 108, 155, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    .header__toggle-bar:nth-child(2) {
+      opacity: 0;
+    }
+    
+    .header__toggle-bar:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+    
+    .header__nav {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
     }
   }
 }
 
-// Main content offset for fixed navbar
+// Mobile Responsive Styles (768px and below)
+@media (max-width: 856px) {
+  .header {
+    &__toggle {
+      display: flex !important;
+    }
+    
+    &__nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: v.$white;
+      box-shadow: 0 4px 12px rgba(74, 108, 155, 0.15);
+      transform: translateY(-10px);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    &__nav-list {
+      flex-direction: column;
+      gap: 0;
+      padding: 1rem 0;
+    }
+    
+    &__nav-item {
+      width: 100%;
+    }
+    
+    &__nav-link {
+      display: block;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid rgba(74, 108, 155, 0.1);
+      
+      &:hover {
+        background: rgba(74, 108, 155, 0.05);
+      }
+    }
+    
+    &__cta {
+      display: inline-flex; // Keep CTA button visible on mobile
+      margin-left: 1rem;
+    }
+  }
+}
+
+// // Desktop Styles (769px and above) 
+// @media (min-width: 769px) {
+//   .header {
+//     &__toggle {
+//       display: none !important;
+//     }
+    
+//     &__nav {
+//       display: block !important;
+//       position: static;
+//       background: transparent;
+//       box-shadow: none;
+//       transform: none;
+//       opacity: 1;
+//       visibility: visible;
+//     }
+    
+//     &__nav-list {
+//       flex-direction: row;
+//     }
+    
+//     &__cta {
+//       display: inline-flex;
+//     }
+//   }
+// }
+
+// Main content offset for fixed header
 main {
-  margin-top: 80px;
+  margin-top: 90px;
 }
 
 // Smooth scrolling offset compensation
 html {
-  scroll-padding-top: 80px;
+  scroll-padding-top: 90px;
 }
