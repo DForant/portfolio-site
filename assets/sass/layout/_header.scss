@@ -9,7 +9,7 @@
   left: 0;
   right: 0;
   background: v.$white;
-  box-shadow: 0 2px 8px rgba(74, 108, 155, 0.1);
+  box-shadow: 0 0.125rem 0.5rem rgba(74, 108, 155, 0.1);
   z-index: 1000;
   
   // Header Container - BEM Element
@@ -18,7 +18,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1rem;
+    padding: v.$spacing-md;
     position: relative;
   }
   
@@ -27,7 +27,7 @@
     z-index: 1001;
     
     img {
-      height: 65px;
+      height: 4.0625rem; // 65px converted to rem
       width: auto;
     }
   }
@@ -37,25 +37,25 @@
     display: none;
     flex-direction: column;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 2.5rem;  // 40px
+    height: 2.5rem; // 40px
     background: transparent;
     border: none;
     cursor: pointer;
     z-index: 1001;
     
     &:focus {
-      outline: 2px solid v.$primary-blue;
-      outline-offset: 2px;
+      outline: 0.125rem solid v.$primary-blue;
+      outline-offset: 0.125rem;
     }
   }
   
   // Hamburger Bars - BEM Element
   &__toggle-bar {
-    width: 25px;
-    height: 3px;
+    width: 1.5625rem;  // 25px
+    height: 0.1875rem; // 3px
     background: v.$charcoal;
-    margin: 2px 0;
+    margin: 0.125rem 0; // 2px
     transition: all 0.3s ease;
     transform-origin: center;
   }
@@ -70,7 +70,7 @@
   &__nav-list {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: v.$spacing-xl;  // 2rem
     list-style: none;
     margin: 0;
     padding: 0;
@@ -82,6 +82,7 @@
     text-decoration: none;
     font-weight: 500;
     font-family: v.$font-body;
+    font-size: v.$font-size-base;
     transition: color 0.3s ease;
     
     &:hover, &:focus {
@@ -91,13 +92,13 @@
   
   // CTA Button - BEM Element
   &__cta {
-    margin-left: 2rem;
+    margin-left: v.$spacing-xl; // 2rem
   }
   
   // Mobile Menu Open State - BEM Modifier
   &--menu-open {
     .header__toggle-bar:nth-child(1) {
-      transform: rotate(45deg) translate(6px, 6px);
+      transform: rotate(45deg) translate(0.375rem, 0.375rem); // 6px
     }
     
     .header__toggle-bar:nth-child(2) {
@@ -105,7 +106,7 @@
     }
     
     .header__toggle-bar:nth-child(3) {
-      transform: rotate(-45deg) translate(6px, -6px);
+      transform: rotate(-45deg) translate(0.375rem, -0.375rem); // 6px
     }
     
     .header__nav {
@@ -129,8 +130,8 @@
       left: 0;
       right: 0;
       background: v.$white;
-      box-shadow: 0 4px 12px rgba(74, 108, 155, 0.15);
-      transform: translateY(-10px);
+      box-shadow: 0 0.25rem 0.75rem rgba(74, 108, 155, 0.15);
+      transform: translateY(-0.625rem); // -10px
       opacity: 0;
       visibility: hidden;
       transition: all 0.3s ease;
@@ -139,7 +140,7 @@
     &__nav-list {
       flex-direction: column;
       gap: 0;
-      padding: 1rem 0;
+      padding: v.$spacing-md 0;
     }
     
     &__nav-item {
@@ -148,8 +149,8 @@
     
     &__nav-link {
       display: block;
-      padding: 1rem 2rem;
-      border-bottom: 1px solid rgba(74, 108, 155, 0.1);
+      padding: v.$spacing-md v.$spacing-xl;
+      border-bottom: 0.0625rem solid rgba(74, 108, 155, 0.1);
       
       &:hover {
         background: rgba(74, 108, 155, 0.05);
@@ -158,44 +159,17 @@
     
     &__cta {
       display: inline-flex; // Keep CTA button visible on mobile
-      margin-left: 1rem;
+      margin-left: v.$spacing-md;
     }
   }
 }
 
-// // Desktop Styles (769px and above) 
-// @media (min-width: 769px) {
-//   .header {
-//     &__toggle {
-//       display: none !important;
-//     }
-    
-//     &__nav {
-//       display: block !important;
-//       position: static;
-//       background: transparent;
-//       box-shadow: none;
-//       transform: none;
-//       opacity: 1;
-//       visibility: visible;
-//     }
-    
-//     &__nav-list {
-//       flex-direction: row;
-//     }
-    
-//     &__cta {
-//       display: inline-flex;
-//     }
-//   }
-// }
-
 // Main content offset for fixed header
 main {
-  margin-top: 90px;
+  margin-top: v.$header-height; // 5.625rem (90px)
 }
 
 // Smooth scrolling offset compensation
 html {
-  scroll-padding-top: 90px;
+  scroll-padding-top: v.$header-height; // 5.625rem (90px)
 }

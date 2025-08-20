@@ -8,6 +8,7 @@
 }
 
 html {
+  font-size: 100%; // 16px base - allows user font scaling
   scroll-behavior: smooth;
 }
 
@@ -15,6 +16,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: v.$font-body;
+  font-size: v.$font-size-base; // 1rem
   background: v.$off-white;
   color: v.$charcoal;
   line-height: 1.6;
@@ -26,6 +28,22 @@ body {
   margin: 0 auto;
   padding: v.$section-padding-y v.$section-padding-x;
 }
+
+// Utility classes for spacing
+.mt-1 { margin-top: v.$spacing-sm; }    // 0.5rem
+.mt-2 { margin-top: v.$spacing-md; }    // 1rem
+.mt-3 { margin-top: v.$spacing-lg; }    // 1.5rem
+.mt-4 { margin-top: v.$spacing-xl; }    // 2rem
+
+.mb-1 { margin-bottom: v.$spacing-sm; } // 0.5rem
+.mb-2 { margin-bottom: v.$spacing-md; } // 1rem
+.mb-3 { margin-bottom: v.$spacing-lg; } // 1.5rem
+.mb-4 { margin-bottom: v.$spacing-xl; } // 2rem
+
+.p-1 { padding: v.$spacing-sm; }        // 0.5rem
+.p-2 { padding: v.$spacing-md; }        // 1rem
+.p-3 { padding: v.$spacing-lg; }        // 1.5rem
+.p-4 { padding: v.$spacing-xl; }        // 2rem
 
 // Bootstrap overrides to maintain our design system
 .btn-primary {

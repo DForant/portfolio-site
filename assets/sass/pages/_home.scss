@@ -27,7 +27,7 @@
     z-index: 2;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
+    gap: v.$spacing-xl; // 2rem
     align-items: center;
     
     @media (max-width: v.$breakpoint-md) {
@@ -38,58 +38,58 @@
   
   // Hero Content - BEM Element
   &__content {
-    max-width: 600px;
+    max-width: 37.5rem; // 600px
     background: rgba(248, 249, 250, 0.75);
     padding: 1%;
     border-radius: v.$border-radius-base;
-    box-shadow: 0 12px 48px rgba(74, 108, 155, 0.25),
-                0 8px 24px rgba(74, 108, 155, 0.15),
-                0 4px 12px rgba(74, 108, 155, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0.75rem 3rem rgba(74, 108, 155, 0.25),
+                0 0.5rem 1.5rem rgba(74, 108, 155, 0.15),
+                0 0.25rem 0.75rem rgba(74, 108, 155, 0.1);
+    backdrop-filter: blur(0.625rem); // 10px
+    border: 0.0625rem solid rgba(255, 255, 255, 0.2); // 1px
     
     @media (max-width: v.$breakpoint-md) {
       max-width: 100%;
-      padding: 2rem;
+      padding: v.$spacing-xl; // 2rem
     }
     
     @media (max-width: 480px) {
-      padding: 1.5rem;
+      padding: v.$spacing-lg; // 1.5rem
     }
   }
   
   // Hero Title - BEM Element
   &__title {
-    font-size: 3rem;
+    font-size: v.$font-size-5xl; // 3rem
     color: v.$primary-blue;
-    margin-bottom: 1rem;
+    margin-bottom: v.$spacing-md; // 1rem
     line-height: 1.2;
     
     @media (max-width: v.$breakpoint-md) {
-      font-size: 2.5rem;
+      font-size: v.$font-size-4xl; // 2.25rem (updated from 2.5rem)
     }
     
     @media (max-width: 480px) {
-      font-size: 2rem;
+      font-size: v.$font-size-3xl; // 1.875rem (updated from 2rem)
     }
   }
   
   // Hero Subtitle - BEM Element
   &__subtitle {
-    font-size: 1.25rem;
+    font-size: v.$font-size-xl; // 1.25rem
     color: v.$charcoal;
-    margin-bottom: 2rem;
+    margin-bottom: v.$spacing-xl; // 2rem
     line-height: 1.6;
     
     @media (max-width: v.$breakpoint-md) {
-      font-size: 1.125rem;
+      font-size: v.$font-size-lg; // 1.125rem
     }
   }
   
   // Hero Actions - BEM Element
   &__actions {
     display: flex;
-    gap: 1rem;
+    gap: v.$spacing-md; // 1rem
     
     @media (max-width: v.$breakpoint-md) {
       justify-content: center;

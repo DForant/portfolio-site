@@ -9,21 +9,49 @@ $white: #FFFFFF;
 $font-heading: 'Playfair Display', serif;
 $font-body: 'Montserrat', sans-serif;
 
+// Font sizes in rem (based on 16px = 1rem)
+$font-size-xs: 0.75rem;    // 12px
+$font-size-sm: 0.875rem;   // 14px
+$font-size-base: 1rem;     // 16px
+$font-size-lg: 1.125rem;   // 18px
+$font-size-xl: 1.25rem;    // 20px
+$font-size-2xl: 1.5rem;    // 24px
+$font-size-3xl: 1.875rem;  // 30px
+$font-size-4xl: 2.25rem;   // 36px
+$font-size-5xl: 3rem;      // 48px
+$font-size-6xl: 3.75rem;   // 60px
+
 // Bootstrap Variable Overrides
 $primary: $primary-blue;
 $secondary: $accent-gold;
 $dark: $charcoal;
 $light: $off-white;
 
-// Breakpoints
+// Breakpoints (keeping px for media queries as they don't scale with rem)
+$breakpoint-sm: 576px;
 $breakpoint-md: 768px;
 $breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
 
-// Spacing
-$section-padding-y: 4rem;
-$section-padding-x: 1rem;
-$container-max-width: 1200px;
+// Spacing system in rem (following 8px grid = 0.5rem)
+$spacing-xs: 0.25rem;   // 4px
+$spacing-sm: 0.5rem;    // 8px
+$spacing-md: 1rem;      // 16px
+$spacing-lg: 1.5rem;    // 24px
+$spacing-xl: 2rem;      // 32px
+$spacing-2xl: 3rem;     // 48px
+$spacing-3xl: 4rem;     // 64px
+$spacing-4xl: 6rem;     // 96px
 
-// Border Radius
-$border-radius-base: 8px;
-$border-radius-small: 4px;
+// Layout
+$section-padding-y: $spacing-3xl;  // 4rem
+$section-padding-x: $spacing-md;   // 1rem
+$container-max-width: 75rem;       // 1200px
+
+// Border Radius in rem
+$border-radius-base: 0.5rem;    // 8px
+$border-radius-small: 0.25rem;  // 4px
+$border-radius-large: 1rem;     // 16px
+
+// Header specific
+$header-height: 5.625rem;  // 90px

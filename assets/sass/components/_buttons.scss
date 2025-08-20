@@ -7,16 +7,17 @@
 .btn {
   @include m.flex-center;
   display: inline-flex;
-  padding: 0.75rem 2rem;
-  border: 2px solid transparent;
+  padding: v.$spacing-sm v.$spacing-xl; // 0.5rem 2rem
+  border: 0.125rem solid transparent; // 2px
   border-radius: v.$border-radius-base;
   font-family: v.$font-body;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: v.$font-size-base; // 1rem
   text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
+  line-height: 1.5;
   
   // Primary Button - BEM Modifier
   &--primary {
@@ -57,5 +58,17 @@
       color: v.$charcoal;
       text-decoration: none;
     }
+  }
+  
+  // Large Button - BEM Modifier
+  &--large {
+    padding: v.$spacing-md v.$spacing-2xl; // 1rem 3rem
+    font-size: v.$font-size-lg; // 1.125rem
+  }
+  
+  // Small Button - BEM Modifier
+  &--small {
+    padding: v.$spacing-xs v.$spacing-md; // 0.25rem 1rem
+    font-size: v.$font-size-sm; // 0.875rem
   }
 }

@@ -1,52 +1,122 @@
 // _typography.scss
 @use '../abstracts/variables' as v;
 
-// Base Typography
+// Base font settings
+html {
+  font-size: 100%; // 16px - this allows users to change base font size if needed
+}
+
 body {
   font-family: v.$font-body;
-  color: v.$charcoal;
+  font-size: v.$font-size-base;
   line-height: 1.6;
+  color: v.$charcoal;
 }
 
-// Headings
-h1, h2, h3, h4, h5, h6 {
+// Heading hierarchy with rem scaling
+h1, .h1 {
   font-family: v.$font-heading;
-  color: v.$primary-blue;
-  margin-top: 0;
-  margin-bottom: 1rem;
+  font-size: v.$font-size-5xl;  // 3rem (48px)
   font-weight: 700;
-}
-
-h1 {
-  font-size: 3rem;
   line-height: 1.2;
+  margin-bottom: v.$spacing-lg;
+  color: v.$charcoal;
   
   @media (max-width: v.$breakpoint-md) {
-    font-size: 2.5rem;
+    font-size: v.$font-size-4xl;  // 2.25rem (36px) on mobile
   }
 }
 
-h2 {
-  font-size: 2.5rem;
+h2, .h2 {
+  font-family: v.$font-heading;
+  font-size: v.$font-size-4xl;  // 2.25rem (36px)
+  font-weight: 700;
   line-height: 1.3;
+  margin-bottom: v.$spacing-md;
+  color: v.$charcoal;
   
   @media (max-width: v.$breakpoint-md) {
-    font-size: 2rem;
+    font-size: v.$font-size-3xl;  // 1.875rem (30px) on mobile
   }
 }
 
-h3 {
-  font-size: 1.5rem;
+h3, .h3 {
+  font-family: v.$font-heading;
+  font-size: v.$font-size-3xl;  // 1.875rem (30px)
+  font-weight: 700;
+  line-height: 1.3;
+  margin-bottom: v.$spacing-md;
+  color: v.$charcoal;
+  
+  @media (max-width: v.$breakpoint-md) {
+    font-size: v.$font-size-2xl;  // 1.5rem (24px) on mobile
+  }
+}
+
+h4, .h4 {
+  font-family: v.$font-body;
+  font-size: v.$font-size-2xl;  // 1.5rem (24px)
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: v.$spacing-sm;
+  color: v.$charcoal;
+}
+
+h5, .h5 {
+  font-family: v.$font-body;
+  font-size: v.$font-size-xl;   // 1.25rem (20px)
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: v.$spacing-sm;
+  color: v.$charcoal;
+}
+
+h6, .h6 {
+  font-family: v.$font-body;
+  font-size: v.$font-size-lg;   // 1.125rem (18px)
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: v.$spacing-sm;
+  color: v.$charcoal;
+}
+
+// Paragraph and body text
+p {
+  font-size: v.$font-size-base;  // 1rem (16px)
+  line-height: 1.6;
+  margin-bottom: v.$spacing-md;
+  color: v.$charcoal;
+}
+
+// Lead text for important paragraphs
+.lead {
+  font-size: v.$font-size-lg;   // 1.125rem (18px)
+  font-weight: 400;
+  line-height: 1.6;
+  color: v.$charcoal;
+}
+
+// Small text
+small, .small {
+  font-size: v.$font-size-sm;   // 0.875rem (14px)
+  line-height: 1.5;
+}
+
+.text-xs {
+  font-size: v.$font-size-xs;   // 0.75rem (12px)
   line-height: 1.4;
 }
 
-// Body Text
-p {
-  font-family: v.$font-body;
-  color: v.$charcoal;
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  font-weight: 400;
+// Display text for hero sections
+.display-1 {
+  font-family: v.$font-heading;
+  font-size: v.$font-size-6xl;  // 3.75rem (60px)
+  font-weight: 700;
+  line-height: 1.1;
+  
+  @media (max-width: v.$breakpoint-md) {
+    font-size: v.$font-size-5xl;  // 3rem (48px) on mobile
+  }
 }
 
 // Links

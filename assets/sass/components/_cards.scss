@@ -9,8 +9,8 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(74, 108, 155, 0.1);
+    transform: translateY(-0.125rem); // -2px
+    box-shadow: 0 0.25rem 1.25rem rgba(74, 108, 155, 0.1); // 0 4px 20px
   }
   
   // Card Link - BEM Element
@@ -22,8 +22,8 @@
   
   // Card Title - BEM Element
   &__title {
-    font-size: 1.25rem;
-    margin: 1rem 0 0.5rem;
+    font-size: v.$font-size-xl; // 1.25rem
+    margin: v.$spacing-md 0 v.$spacing-sm; // 1rem 0 0.5rem
     color: v.$primary-blue;
   }
   
@@ -31,32 +31,33 @@
   &__description {
     color: v.$charcoal;
     line-height: 1.6;
-    margin-bottom: 1rem;
+    margin-bottom: v.$spacing-md; // 1rem
+    font-size: v.$font-size-base;
   }
   
   // Card Icon - BEM Element
   &__icon {
-    font-size: 2rem;
+    font-size: v.$font-size-3xl; // 1.875rem (updated from 2rem to use our scale)
     color: v.$accent-gold;
-    margin-bottom: 1rem;
+    margin-bottom: v.$spacing-md; // 1rem
   }
   
   // Service Card Modifier - BEM Modifier
   &--service {
-    padding: 2rem;
+    padding: v.$spacing-xl; // 2rem
     text-align: center;
-    border: 1px solid rgba(74, 108, 155, 0.1);
+    border: 0.0625rem solid rgba(74, 108, 155, 0.1); // 1px
   }
   
   // Project Card Modifier - BEM Modifier
   &--project {
     .card__title {
-      padding: 0 1rem 1rem;
+      padding: 0 v.$spacing-md v.$spacing-md; // 0 1rem 1rem
     }
     
     img {
       width: 100%;
-      height: 200px;
+      height: 12.5rem; // 200px
       object-fit: cover;
     }
   }
