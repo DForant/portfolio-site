@@ -271,6 +271,7 @@ a:hover {
 }
 .header__nav {
   display: block;
+  padding: 0 1.6rem;
 }
 .header__nav-list {
   display: flex;
@@ -309,7 +310,7 @@ a:hover {
   visibility: visible;
 }
 
-@media (max-width: 1162px) {
+@media (max-width: 1136px) {
   .header__toggle {
     display: flex !important;
   }

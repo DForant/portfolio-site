@@ -64,6 +64,7 @@
   &__nav {
     // Desktop: always visible
     display: block;
+    padding: 0 v.$spacing-md;
   }
 
   // Navigation List - BEM Element
@@ -118,7 +119,7 @@
 }
 
 // Mobile Responsive Styles (1162px and below)
-@media (max-width: 1162px) {
+@media (max-width: v.$breakpoint-lg) {
   .header {
     &__toggle {
       display: flex !important;
