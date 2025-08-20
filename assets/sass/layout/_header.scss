@@ -65,7 +65,7 @@
     // Desktop: always visible
     display: block;
   }
-  
+
   // Navigation List - BEM Element
   &__nav-list {
     display: flex;
@@ -117,14 +117,14 @@
   }
 }
 
-// Mobile Responsive Styles (768px and below)
-@media (max-width: 856px) {
+// Mobile Responsive Styles (1162px and below)
+@media (max-width: 1162px) {
   .header {
     &__toggle {
       display: flex !important;
     }
-    
     &__nav {
+      display: none;
       position: absolute;
       top: 100%;
       left: 0;
@@ -136,33 +136,37 @@
       visibility: hidden;
       transition: all 0.3s ease;
     }
-    
+    &--menu-open {
+      .header__nav {
+        display: block !important;
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+      }
+    }
     &__nav-list {
       flex-direction: column;
       gap: 0;
       padding: v.$spacing-md 0;
     }
-    
     &__nav-item {
       width: 100%;
     }
-    
     &__nav-link {
       display: block;
       padding: v.$spacing-md v.$spacing-xl;
       border-bottom: 0.0625rem solid rgba(74, 108, 155, 0.1);
-      
       &:hover {
         background: rgba(74, 108, 155, 0.05);
       }
     }
-    
     &__cta {
       display: inline-flex; // Keep CTA button visible on mobile
       margin-left: v.$spacing-md;
     }
   }
 }
+// ...existing code...
 
 // Main content offset for fixed header
 main {
@@ -173,3 +177,4 @@ main {
 html {
   scroll-padding-top: v.$header-height; // 5.625rem (90px)
 }
+// ...existing code...
