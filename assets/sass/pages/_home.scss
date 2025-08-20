@@ -60,17 +60,17 @@
   
   // Hero Title - BEM Element
   &__title {
-    font-size: v.$font-size-5xl; // 3rem
+    font-size: v.$font-size-4xl; // 3.6rem = 36px
     color: v.$primary-blue;
-    margin-bottom: v.$spacing-md; // 1rem
+    margin-bottom: v.$spacing-md; // 1.6rem
     line-height: 1.2;
     
     @media (max-width: v.$breakpoint-md) {
-      font-size: v.$font-size-4xl; // 2.25rem (updated from 2.5rem)
+      font-size: v.$font-size-3xl; // 3rem = 30px
     }
     
     @media (max-width: 480px) {
-      font-size: v.$font-size-3xl; // 1.875rem (updated from 2rem)
+      font-size: v.$font-size-2xl; // 2.4rem = 24px
     }
   }
   
