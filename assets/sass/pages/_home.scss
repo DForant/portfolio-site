@@ -4,7 +4,8 @@
 
 // Hero Section - BEM Block
 .hero {
-  min-height: 80vh;
+  height: 40rem;
+  min-height: 40vh;
   background: url('/assets/images/web-banner-80.jpg') bottom right/cover no-repeat;
   display: flex;
   align-items: center;
