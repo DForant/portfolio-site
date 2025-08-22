@@ -18,7 +18,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: v.$spacing-md;
+    padding: 0 v.$spacing-md;
     position: relative;
   }
   
@@ -27,7 +27,8 @@
     z-index: 1001;
     
     img {
-      height: 4.0625rem; // 65px converted to rem
+      margin-top: 1.5rem; 
+      height: 5rem; // 65px converted to rem
       width: auto;
     }
   }
