@@ -141,8 +141,8 @@
   }
 }
 
-// Swap hamburger and CTA position below 486px
-@media (max-width: v.$breakpoint-xs) {
+// Swap hamburger and CTA position below 962px
+@media (max-width: v.$breakpoint-md) {
   .header__container {
     display: flex;
     justify-content: space-between;
@@ -160,12 +160,14 @@
   }
   .header__logo {
     order: 1;
+  }
+}
 
+@media(max-width: v.$breakpoint-xs) {
     img{
       max-height: 4rem; // Smaller logo for small mobile
       margin-top: 0.5rem; 
     }
-  }
 }
 
 // Mobile Responsive Styles (1162px and below)
@@ -218,7 +220,6 @@
     }
   }
 }
-// ...existing code...
 
 // Main content offset for fixed header
 main {
@@ -233,4 +234,3 @@ main {
 html {
   scroll-padding-top: v.$header-height; 
 }
-// ...existing code...

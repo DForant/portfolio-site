@@ -330,7 +330,7 @@ a:hover {
   visibility: visible;
 }
 
-@media (max-width: 468px) {
+@media (max-width: 962px) {
   .header__container {
     display: flex;
     justify-content: space-between;
@@ -349,7 +349,9 @@ a:hover {
   .header__logo {
     order: 1;
   }
-  .header__logo img {
+}
+@media (max-width: 468px) {
+  img {
     max-height: 4rem;
     margin-top: 0.5rem;
   }
