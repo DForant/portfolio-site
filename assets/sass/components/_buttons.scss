@@ -72,3 +72,10 @@
     font-size: v.$font-size-sm; 
   }
 }
+
+@media (max-width: v.$breakpoint-xs) {
+  .btn {
+    font-size: v.$font-size-xs;
+    padding: v.$spacing-sm; 
+  }
+}

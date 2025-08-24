@@ -141,6 +141,33 @@
   }
 }
 
+// Swap hamburger and CTA position below 486px
+@media (max-width: v.$breakpoint-xs) {
+  .header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header__toggle {
+    order: 3;
+    margin-left: auto;
+    margin-right: 0;
+  }
+  .header__cta {
+    order: 2;
+    margin-left: v.$spacing-sm;
+    margin-right: v.$spacing-sm;
+  }
+  .header__logo {
+    order: 1;
+
+    img{
+      max-height: 4rem; // Smaller logo for small mobile
+      margin-top: 0.5rem; 
+    }
+  }
+}
+
 // Mobile Responsive Styles (1162px and below)
 @media (max-width: v.$breakpoint-md) {
   .header {
@@ -196,6 +223,10 @@
 // Main content offset for fixed header
 main {
   margin-top: v.$header-height; 
+
+  @media(max-width: v.$breakpoint-xs) {
+    margin-top: 5rem; // Adjust for smaller header on mobile
+  }
 }
 
 // Smooth scrolling offset compensation

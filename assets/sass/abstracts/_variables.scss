@@ -22,7 +22,8 @@ $font-size-5xl: 4.8rem;    // 48px
 $font-size-6xl: 6rem;      // 60px
 
 // Breakpoints (keeping px for media queries as they don't scale with rem)
-$breakpoint-sm: 776px;
+$breakpoint-xs: 468px;
+$breakpoint-sm: 768px;
 $breakpoint-md: 962px;
 $breakpoint-lg: 1200px;
 $breakpoint-xl: 1940Px;
