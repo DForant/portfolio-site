@@ -4,7 +4,7 @@
 
 // Hero Section - BEM Block
 .hero {
-  height: 40rem;
+  height: 30rem;
   background: url('/assets/images/web-banner-80.jpg') bottom right/cover no-repeat;
   display: flex;
   align-items: center;
@@ -39,7 +39,7 @@
   // Hero Content - BEM Element
   &__content {
     max-width: 45rem;
-    padding: v.$spacing-xl; // 2rem
+    padding: v.$spacing-sm; // 2rem
     background: rgba(248, 249, 250, 0.75);
     border-radius: v.$border-radius-base;
     box-shadow: 0 0.75rem 3rem rgba(74, 108, 155, 0.25),
@@ -61,7 +61,7 @@
   
   // Hero Title - BEM Element
   &__title {
-    font-size: v.$font-size-2xl; // 2.4rem
+    font-size: v.$font-size-xl; // 2.4rem
     color: v.$primary-blue;
     margin-bottom: v.$spacing-md; // 1.6rem
     line-height: 1.2;
