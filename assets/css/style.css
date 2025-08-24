@@ -725,5 +725,10 @@ section h2 {
     display: none;
   }
 }
+@media (max-width: 768px) {
+  .hero {
+    background: url("/assets/images/mobile-web-banner-80.jpg") center center/cover no-repeat;
+  }
+}
 
 /*# sourceMappingURL=style.css.map */

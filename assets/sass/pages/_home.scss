@@ -105,4 +105,8 @@
       display: none;
     }
   }
+
+  @media (max-width: v.$breakpoint-sm){
+      background: url('/assets/images/mobile-web-banner-80.jpg') center center/cover no-repeat;
+  }
 }
