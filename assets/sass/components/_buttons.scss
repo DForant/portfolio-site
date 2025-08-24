@@ -7,12 +7,12 @@
 .btn {
   @include m.flex-center;
   display: inline-flex;
-  padding: v.$spacing-sm v.$spacing-sm; 
+  padding: v.$spacing-sm v.$spacing-lg; 
   border: 0.125rem solid transparent; 
   border-radius: v.$border-radius-base;
   font-family: v.$font-body;
   font-weight: 500;
-  font-size: v.$font-size-sm; 
+  font-size: v.$font-size-base; 
   text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;

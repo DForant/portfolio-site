@@ -28,7 +28,7 @@
     
     img {
       margin-top: 1.5rem; 
-      height: 4rem; 
+      height: 6.5rem; 
       width: auto;
     }
   }
@@ -49,12 +49,15 @@
       outline: 0.125rem solid v.$primary-blue;
       outline-offset: 0.125rem;
     }
+      align-items: center;
+      margin-left: 0;
   }
+
   
   // Hamburger Bars - BEM Element
   &__toggle-bar {
     width: 1.5625rem;  
-    height: 0.1875rem; 
+    height: 0.25rem; 
     background: v.$charcoal;
     margin: 0.125rem 0; 
     transition: all 0.3s ease;
@@ -63,9 +66,10 @@
   
   // Navigation - BEM Element
   &__nav {
-    // Desktop: always visible
-    display: block;
-    padding: 0 v.$spacing-md;
+  // Desktop: always visible
+  display: block;
+  padding: 0 v.$spacing-md;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s cubic-bezier(0.4,0,0.2,1), visibility 0.5s;
   }
 
   // Navigation List - BEM Element
@@ -76,6 +80,24 @@
     list-style: none;
     margin: 0;
     padding: 0;
+    flex-direction: row;
+    transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1);
+    overflow: hidden;
+  }
+
+  // Mobile: animate menu items in column with delay
+  @media (max-width: v.$breakpoint-md) {
+    &__nav {
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 5s cubic-bezier(0.4,0,0.2,1), opacity 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
+    &--menu-open .header__nav {
+      max-height: 40rem;
+      opacity: 1;
+      transition: max-height .5s cubic-bezier(0.4,0,0.2,1), opacity 0.3s cubic-bezier(0.4,0,0.2,1);
+    }
   }
   
   // Navigation Link - BEM Element
@@ -84,7 +106,7 @@
     text-decoration: none;
     font-weight: 500;
     font-family: v.$font-body;
-    font-size: v.$font-size-xs; 
+    font-size: v.$font-size-base; 
     transition: color 0.3s ease;
     
     &:hover, &:focus {
@@ -100,7 +122,7 @@
   // Mobile Menu Open State - BEM Modifier
   &--menu-open {
     .header__toggle-bar:nth-child(1) {
-      transform: rotate(45deg) translate(0.375rem, 0.375rem); 
+      transform: rotate(45deg) translate(0.350rem, 0.350rem);
     }
     
     .header__toggle-bar:nth-child(2) {
@@ -108,7 +130,7 @@
     }
     
     .header__toggle-bar:nth-child(3) {
-      transform: rotate(-45deg) translate(0.375rem, -0.375rem); 
+      transform: rotate(-45deg) translate(0.350rem, -0.350rem);
     }
     
     .header__nav {
@@ -124,6 +146,7 @@
   .header {
     &__toggle {
       display: flex !important;
+    margin-left: 0;
     }
     &__nav {
       display: none;
