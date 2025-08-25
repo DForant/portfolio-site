@@ -54,8 +54,9 @@
       padding: v.$spacing-xl; // 2rem
     }
     
-    @media (max-width: 480px) {
-      padding: v.$spacing-lg; // 1.5rem
+    @media (max-width: v.$breakpoint-sm) {
+      width: 100%;
+      padding: v.$spacing-sm; // 1.5rem
     }
   }
   
@@ -97,16 +98,36 @@
   
   // Hero Image Placeholder - BEM Element
   &__image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: none;
     
-    @media (max-width: v.$breakpoint-md) {
-      display: none;
+    @media (max-width: v.$breakpoint-sm) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img{
+        width: 20rem;
+        height: 20rem;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 0.5rem 2rem rgba(74, 108, 155, 0.6);
+      }
     }
   }
 
   @media (max-width: v.$breakpoint-sm){
       background: url('/assets/images/mobile-web-banner-80.jpg') center center/cover no-repeat;
   }
+}
+
+// Dean portrait styling
+#dean-portrait {
+  width: 20rem !important;
+  height: 20rem !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0.5rem 2rem rgba(74, 108, 155, 0.6) !important;
+  display: block !important;
+  max-width: none !important;
+  max-height: none !important;
 }
