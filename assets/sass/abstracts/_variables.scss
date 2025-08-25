@@ -3,6 +3,7 @@ $primary-blue: #4A6C9B;
 $accent-gold: #FDB813;
 $charcoal: #212529;
 $off-white: #F8F9FA;
+$light-background: #F8F9FA;  // Same as off-white for consistency
 $white: #FFFFFF;
 
 // Typography
@@ -15,6 +16,7 @@ $font-size-sm: 1.4rem;     // 14px
 $font-size-base: 1.6rem;   // 16px
 $font-size-lg: 1.8rem;     // 18px
 $font-size-xl: 2rem;       // 20px
+$font-size-md: 2rem;       // 20px (alias for xl)
 $font-size-2xl: 2.4rem;    // 24px
 $font-size-3xl: 3rem;      // 30px
 $font-size-4xl: 3.6rem;    // 36px
@@ -46,6 +48,7 @@ $container-max-width: 120rem;      // 1200px
 // Border Radius in rem
 $border-radius-base: 0.8rem;    // 8px
 $border-radius-small: 0.4rem;   // 4px
+$border-radius-lg: 1.2rem;      // 12px
 $border-radius-large: 1.6rem;   // 16px
 
 // Header specific

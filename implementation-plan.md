@@ -88,10 +88,26 @@ Based on [.github/copilot-instructions.md](.github/copilot-instructions.md)
 
 **Acceptance Criteria:**
 - Headline: "Trusted By Premier Organizations"
-- Desktop: Single row of 7 logos with Commonwealth of Massachusetts centered
-- Logo order: Flash Global, SCC, BMI, Commonwealth of Massachusetts, Agfa Healthcare, Delta Mechanical Seals, VelQuest
+- Desktop: Grid view of 5 columns
+  - First column is split into 2 rows with the following logo and company name
+     - Delta Mechanical Seals logo and name - assets/images/delta-mechanical-seals-80.jpg
+     - VelQuest logo and name - assets/images/velquest-80.jpg
+  - Second colum is one row with Adfa Healthcare logo and company name - assets/images/agfa-healthcare.jpg
+  - third column is a single row with Commonwealth of Ma logo and name
+  - fourth column is a single row with BMI logo and name
+  - fifth column is a double row with the folowing logos
+     - Flash Global - Assets/images/flash-global-80.jpg
+     - Specialty Commerce Corp. - assets/images/scc-80.jpg
 - Each logo has company name in bold text below
-- Mobile: Converts to carousel/slider
+- Mobile: Converts to a carousel with a single logo and company name visible on the screen at a time. 
+   - Display Order:
+      - Delta Mechanical
+      - Velquest
+      - Agfa Healthcare
+      - Commonwealth Of Ma
+      - BMI
+      - Flash Global
+      - Specialty Commerce Corp 
 - Uses existing logo images from [assets/images](assets/images/)
 
 **Tasks:**

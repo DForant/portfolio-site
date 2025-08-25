@@ -38,7 +38,7 @@
   
   // Hero Content - BEM Element
   &__content {
-    max-width: 45rem;
+    width: 100%;
     padding: v.$spacing-sm; // 2rem
     background: rgba(248, 249, 250, 0.75);
     border-radius: v.$border-radius-base;
@@ -62,7 +62,7 @@
   
   // Hero Title - BEM Element
   &__title {
-    font-size: v.$font-size-xl; // 2.4rem
+    font-size: v.$font-size-3xl; 
     color: v.$primary-blue;
     margin-bottom: v.$spacing-md; // 1.6rem
     line-height: 1.2;
@@ -74,7 +74,7 @@
   
   // Hero Subtitle - BEM Element
   &__subtitle {
-    font-size: v.$font-size-sm; // 1.25rem
+    font-size: v.$font-size-lg; // 1.25rem
     color: v.$charcoal;
     margin-bottom: v.$spacing-xl; // 2rem
     line-height: 1.6;

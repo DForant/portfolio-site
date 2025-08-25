@@ -10,7 +10,7 @@
   
   &:hover {
     transform: translateY(-0.125rem); // -2px
-    box-shadow: 0 0.25rem 1.25rem rgba(74, 108, 155, 0.1); // 0 4px 20px
+    box-shadow: 0 0.25rem 1.25rem rgba(74, 108, 155, 0.15); // 0 4px 20px
   }
   
   // Card Link - BEM Element
@@ -18,47 +18,146 @@
     display: block;
     text-decoration: none;
     color: inherit;
+    height: 100%;
+  }
+  
+  // Card Image - BEM Element
+  &__image {
+    position: relative;
+    overflow: hidden;
+    
+    img {
+      width: 100%;
+      height: 20rem; // 320px
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+  }
+  
+  // Card Overlay - BEM Element
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(74, 108, 155, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  // Card CTA - BEM Element
+  &__cta {
+    color: v.$white;
+    font-weight: 500;
+    font-size: v.$font-size-lg; // 1.8rem
+    padding: v.$spacing-sm v.$spacing-md; // 1.2rem 1.6rem
+    border: 0.2rem solid v.$white;
+    border-radius: v.$border-radius-base;
+    background: transparent;
+    transition: all 0.3s ease;
+  }
+  
+  // Card Content - BEM Element
+  &__content {
+    padding: v.$spacing-lg; // 2.4rem
   }
   
   // Card Title - BEM Element
   &__title {
-    font-size: v.$font-size-xl; // 1.25rem
-    margin: v.$spacing-md 0 v.$spacing-sm; // 1rem 0 0.5rem
+    font-size: v.$font-size-lg; // 1.8rem
+    margin: 0 0 v.$spacing-sm; // 0 0 1.2rem
     color: v.$primary-blue;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    line-height: 1.3;
   }
   
   // Card Description - BEM Element
   &__description {
     color: v.$charcoal;
     line-height: 1.6;
-    margin-bottom: v.$spacing-md; // 1rem
-    font-size: v.$font-size-base;
+    margin: 0;
+    font-size: v.$font-size-sm; // 1.4rem
   }
   
   // Card Icon - BEM Element
   &__icon {
-    font-size: v.$font-size-3xl; // 1.875rem (updated from 2rem to use our scale)
+    font-size: v.$font-size-3xl; // 3rem
     color: v.$accent-gold;
-    margin-bottom: v.$spacing-md; // 1rem
+    margin-bottom: v.$spacing-md; // 1.6rem
+    display: flex;
+    justify-content: center;
+    
+    i {
+      width: 4rem; // 64px
+      height: 4rem; // 64px
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(251, 184, 19, 0.1);
+      border-radius: 50%;
+    }
   }
   
   // Service Card Modifier - BEM Modifier
   &--service {
-    padding: v.$spacing-xl; // 2rem
+    padding: v.$spacing-xl v.$spacing-lg; // 3.2rem 2.4rem
     text-align: center;
-    border: 0.0625rem solid rgba(74, 108, 155, 0.1); // 1px
+    border: 0.1rem solid rgba(74, 108, 155, 0.1); // 1px
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    .card__title {
+      font-size: v.$font-size-md; // 2rem
+      margin: v.$spacing-md 0 v.$spacing-sm; // 1.6rem 0 1.2rem
+    }
+    
+    .card__description {
+      flex-grow: 1;
+    }
+    
+    &:hover {
+      border-color: rgba(74, 108, 155, 0.2);
+      
+      .card__icon i {
+        background: rgba(251, 184, 19, 0.2);
+        transform: scale(1.05);
+      }
+    }
   }
   
   // Project Card Modifier - BEM Modifier
   &--project {
-    .card__title {
-      padding: 0 v.$spacing-md v.$spacing-md; // 0 1rem 1rem
+    border: 0.1rem solid rgba(74, 108, 155, 0.1);
+    
+    &:hover {
+      .card__overlay {
+        opacity: 1;
+      }
+      
+      .card__image img {
+        transform: scale(1.05);
+      }
+      
+      .card__cta {
+        background: v.$white;
+        color: v.$primary-blue;
+        transform: translateY(-0.25rem);
+      }
     }
     
-    img {
-      width: 100%;
-      height: 12.5rem; // 200px
-      object-fit: cover;
+    .card__content {
+      padding: v.$spacing-lg v.$spacing-md v.$spacing-md; // 2.4rem 1.6rem 1.6rem
+    }
+    
+    .card__title {
+      font-size: v.$font-size-md; // 2rem
+      margin-bottom: v.$spacing-xs; // 0.8rem
     }
   }
 }
