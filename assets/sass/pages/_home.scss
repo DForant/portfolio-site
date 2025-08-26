@@ -27,7 +27,6 @@
     z-index: 2;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: v.$spacing-xl; // 2rem
     align-items: center;
     
     @media (max-width: v.$breakpoint-md) {
@@ -38,7 +37,7 @@
   
   // Hero Content - BEM Element
   &__content {
-    width: 100%;
+    width: 85%;
     padding: v.$spacing-sm; // 2rem
     background: rgba(248, 249, 250, 0.75);
     border-radius: v.$border-radius-base;

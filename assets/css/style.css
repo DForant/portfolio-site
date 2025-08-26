@@ -930,7 +930,6 @@ section h2 {
   z-index: 2;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 3.2rem;
   align-items: center;
 }
 @media (max-width: 962px) {
@@ -940,7 +939,7 @@ section h2 {
   }
 }
 .hero__content {
-  width: 100%;
+  width: 85%;
   padding: 0.8rem;
   background: rgba(248, 249, 250, 0.75);
   border-radius: 0.8rem;
