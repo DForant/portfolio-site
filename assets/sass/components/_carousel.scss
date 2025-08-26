@@ -1,4 +1,5 @@
 // _carousel.scss
+@use 'sass:color';
 @use '../abstracts/variables' as v;
 
 // Clients Section - BEM Block
@@ -149,11 +150,11 @@
     transition: background-color 0.3s ease;
     
     &:hover {
-      background: darken(v.$primary-blue, 10%);
+      background: color.adjust(v.$primary-blue, $lightness: -10%);
     }
     
     &:disabled {
-      background: lighten(v.$primary-blue, 20%);
+      background: color.adjust(v.$primary-blue, $lightness: 20%);
       cursor: not-allowed;
     }
   }
@@ -169,7 +170,7 @@
     height: 0.8rem;
     border-radius: 50%;
     border: none;
-    background: lighten(v.$primary-blue, 30%);
+    background: color.adjust(v.$primary-blue, $lightness: 30%);
     cursor: pointer;
     transition: background-color 0.3s ease;
     

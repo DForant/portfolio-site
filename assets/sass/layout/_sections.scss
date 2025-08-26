@@ -1,4 +1,5 @@
 // _sections.scss
+@use 'sass:color';
 @use '../abstracts/variables' as v;
 
 // Section Base
@@ -106,7 +107,7 @@ section h2 {
       &:last-child {
         margin-bottom: 0;
         font-size: v.$font-size-xs; // 1.2rem
-        color: lighten(v.$charcoal, 10%);
+        color: color.adjust(v.$charcoal, $lightness: 10%);
       }
     }
   }
