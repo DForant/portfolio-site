@@ -181,14 +181,71 @@
         <section id="about" class="about" aria-labelledby="about-title">
             <div class="section__container">
                 <div class="about__grid">
+                    <!-- Left Column: About Content -->
                     <div class="about__content">
                         <h2 id="about-title">20+ Years of Building Brands That Stand Out</h2>
                         <p>Hi, I'm Dean. With over two decades of experience in brand and web design, I help small local businesses tell their story through compelling visual identity and professional websites. My goal is to create a look and feel that you'll love and that will attract more of your ideal customers.</p>
                         <p>I believe great design isn't just about making things look pretty—it's about creating meaningful connections between your brand and your customers. Every project I take on is an opportunity to help a business owner achieve their dreams.</p>
-                        <div class="about__process">
-                            <h3>My Process</h3>
-                            <p><strong>Discover</strong> → <strong>Define</strong> → <strong>Design</strong> → <strong>Develop</strong> → <strong>Deploy</strong> → <strong>Debrief</strong></p>
-                            <p>This six-phase methodology ensures we create solutions that not only look great but also drive real business results.</p>
+                    </div>
+                    
+                    <!-- Right Column: Process Tabs -->
+                    <div class="about__process">
+                        <h3>My Process</h3>
+                        
+                        <!-- Tab Navigation -->
+                        <div class="process-tabs__nav">
+                            <button class="process-tabs__tab process-tabs__tab--active" data-tab="discover" aria-selected="true">
+                                <span class="process-tabs__number">01</span>
+                                <span class="process-tabs__label">Discover</span>
+                            </button>
+                            <button class="process-tabs__tab" data-tab="define" aria-selected="false">
+                                <span class="process-tabs__number">02</span>
+                                <span class="process-tabs__label">Define</span>
+                            </button>
+                            <button class="process-tabs__tab" data-tab="design" aria-selected="false">
+                                <span class="process-tabs__number">03</span>
+                                <span class="process-tabs__label">Design</span>
+                            </button>
+                            <button class="process-tabs__tab" data-tab="develop" aria-selected="false">
+                                <span class="process-tabs__number">04</span>
+                                <span class="process-tabs__label">Develop</span>
+                            </button>
+                            <button class="process-tabs__tab" data-tab="deploy" aria-selected="false">
+                                <span class="process-tabs__number">05</span>
+                                <span class="process-tabs__label">Deploy</span>
+                            </button>
+                            <button class="process-tabs__tab" data-tab="debrief" aria-selected="false">
+                                <span class="process-tabs__number">06</span>
+                                <span class="process-tabs__label">Debrief</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Tab Content -->
+                        <div class="process-tabs__content">
+                            <div class="process-tabs__panel process-tabs__panel--active" data-panel="discover">
+                                <h4>Discovery & Research</h4>
+                                <p>We start by understanding your business, goals, target audience, and competitive landscape. Through detailed questionnaires and strategy sessions, I uncover what makes your brand unique and what your customers truly need.</p>
+                            </div>
+                            <div class="process-tabs__panel" data-panel="define">
+                                <h4>Strategy & Planning</h4>
+                                <p>Based on our discovery, I define your brand positioning, messaging hierarchy, and project scope. We establish clear objectives, timelines, and success metrics to ensure we're building something that drives real business results.</p>
+                            </div>
+                            <div class="process-tabs__panel" data-panel="design">
+                                <h4>Creative Development</h4>
+                                <p>This is where the magic happens. I create visual concepts, iterate on designs, and develop your brand identity or website. Every design decision is strategic, purposeful, and aligned with your business goals.</p>
+                            </div>
+                            <div class="process-tabs__panel" data-panel="develop">
+                                <h4>Build & Implementation</h4>
+                                <p>For web projects, I transform designs into functional, responsive websites. I focus on clean code, fast loading times, and seamless user experiences across all devices and browsers.</p>
+                            </div>
+                            <div class="process-tabs__panel" data-panel="deploy">
+                                <h4>Launch & Optimization</h4>
+                                <p>We launch your project with careful testing and optimization. I ensure everything works perfectly and provide you with the tools and knowledge to manage your new brand or website effectively.</p>
+                            </div>
+                            <div class="process-tabs__panel" data-panel="debrief">
+                                <h4>Review & Support</h4>
+                                <p>After launch, we review the project's performance and impact. I provide ongoing support, answer questions, and help you maximize the value of your investment in professional design.</p>
+                            </div>
                         </div>
                     </div>
                 </div>

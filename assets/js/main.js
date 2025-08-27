@@ -85,29 +85,55 @@ document.addEventListener('DOMContentLoaded', () => {
 		// Initialize carousel
 		updateCarousel();
 		
-		// Auto-play carousel (optional)
+		// Auto-play carousel with consistent timing
 		let autoPlayInterval;
+		let isPaused = false;
+		const autoPlaySpeed = 3500; // Consistent 3.5 second intervals
 		
 		function startAutoPlay() {
+			if (autoPlayInterval) clearInterval(autoPlayInterval);
+			
 			autoPlayInterval = setInterval(() => {
-				if (currentSlide < totalSlides - 1) {
-					currentSlide++;
-				} else {
-					currentSlide = 0;
+				if (!isPaused) {
+					if (currentSlide < totalSlides - 1) {
+						currentSlide++;
+					} else {
+						currentSlide = 0; // Loop back to first slide
+					}
+					updateCarousel();
 				}
-				updateCarousel();
-			}, 4000); // Change slide every 4 seconds
+			}, autoPlaySpeed);
 		}
 		
 		function stopAutoPlay() {
-			clearInterval(autoPlayInterval);
+			isPaused = true;
+			if (autoPlayInterval) {
+				clearInterval(autoPlayInterval);
+			}
+		}
+		
+		function resumeAutoPlay() {
+			isPaused = false;
+			startAutoPlay();
 		}
 		
 		// Start auto-play
 		startAutoPlay();
 		
-		// Pause auto-play on hover
+		// Pause auto-play on hover/focus
 		carousel.addEventListener('mouseenter', stopAutoPlay);
+		carousel.addEventListener('mouseleave', resumeAutoPlay);
+		carousel.addEventListener('focusin', stopAutoPlay);
+		carousel.addEventListener('focusout', resumeAutoPlay);
+		
+		// Pause auto-play when user interacts with controls
+		[prevBtn, nextBtn, ...indicators].forEach(control => {
+			control.addEventListener('click', () => {
+				stopAutoPlay();
+				// Resume after a delay to give user time to interact
+				setTimeout(resumeAutoPlay, 5000);
+			});
+		});
 		carousel.addEventListener('mouseleave', startAutoPlay);
 		
 		// Pause auto-play when user interacts
@@ -150,6 +176,51 @@ document.addEventListener('DOMContentLoaded', () => {
 		// Observe cards and sections
 		document.querySelectorAll('.card, .clients__item, .about__media, .about__content').forEach(el => {
 			observer.observe(el);
+		});
+	}
+
+	// Process Tabs Functionality
+	const processTabs = document.querySelectorAll('.process-tabs__tab');
+	const processPanels = document.querySelectorAll('.process-tabs__panel');
+	
+	if (processTabs.length > 0 && processPanels.length > 0) {
+		function switchTab(targetTab) {
+			const targetPanel = targetTab.getAttribute('data-tab');
+			
+			// Remove active class from all tabs and panels
+			processTabs.forEach(tab => {
+				tab.classList.remove('process-tabs__tab--active');
+				tab.setAttribute('aria-selected', 'false');
+			});
+			
+			processPanels.forEach(panel => {
+				panel.classList.remove('process-tabs__panel--active');
+			});
+			
+			// Add active class to clicked tab and corresponding panel
+			targetTab.classList.add('process-tabs__tab--active');
+			targetTab.setAttribute('aria-selected', 'true');
+			
+			const activePanel = document.querySelector(`[data-panel="${targetPanel}"]`);
+			if (activePanel) {
+				activePanel.classList.add('process-tabs__panel--active');
+			}
+		}
+		
+		// Add click event listeners to tabs
+		processTabs.forEach(tab => {
+			tab.addEventListener('click', (e) => {
+				e.preventDefault();
+				switchTab(tab);
+			});
+			
+			// Add keyboard support
+			tab.addEventListener('keydown', (e) => {
+				if (e.key === 'Enter' || e.key === ' ') {
+					e.preventDefault();
+					switchTab(tab);
+				}
+			});
 		});
 	}
 });
