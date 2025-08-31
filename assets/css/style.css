@@ -657,7 +657,7 @@ section h2 {
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.card:hover {
+.card:hover:not(.card--service) {
   transform: translateY(-0.125rem);
   box-shadow: 0 0.25rem 1.25rem rgba(74, 108, 155, 0.15);
 }
@@ -736,10 +736,12 @@ section h2 {
 .card--service {
   padding: 3.2rem 2.4rem;
   text-align: center;
-  border: 0.1rem solid rgba(74, 108, 155, 0.1);
+  border: 0.1rem solid rgba(74, 108, 155, 0.2);
   height: 100%;
   display: flex;
   flex-direction: column;
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.25rem 1.25rem rgba(74, 108, 155, 0.15);
 }
 .card--service .card__title {
   font-size: 2rem;
@@ -748,12 +750,12 @@ section h2 {
 .card--service .card__description {
   flex-grow: 1;
 }
-.card--service:hover {
-  border-color: rgba(74, 108, 155, 0.2);
-}
-.card--service:hover .card__icon i {
+.card--service .card__icon i {
   background: rgba(251, 184, 19, 0.2);
   transform: scale(1.05);
+}
+.card--service:hover {
+  transition: all 0.3s ease;
 }
 .card--project {
   border: 0.1rem solid rgba(74, 108, 155, 0.1);
