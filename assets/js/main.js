@@ -53,25 +53,29 @@ document.addEventListener('DOMContentLoaded', () => {
 				indicator.classList.toggle('clients__indicator--active', index === currentSlide);
 			});
 			
-			// Update button states
-			prevBtn.disabled = currentSlide === 0;
-			nextBtn.disabled = currentSlide === totalSlides - 1;
+			// Keep buttons always enabled for infinite loop
+			prevBtn.disabled = false;
+			nextBtn.disabled = false;
 		}
 		
-		// Previous slide
+		// Previous slide with infinite loop
 		prevBtn.addEventListener('click', () => {
 			if (currentSlide > 0) {
 				currentSlide--;
-				updateCarousel();
+			} else {
+				currentSlide = totalSlides - 1; // Loop to last slide
 			}
+			updateCarousel();
 		});
 		
-		// Next slide
+		// Next slide with infinite loop
 		nextBtn.addEventListener('click', () => {
 			if (currentSlide < totalSlides - 1) {
 				currentSlide++;
-				updateCarousel();
+			} else {
+				currentSlide = 0; // Loop to first slide
 			}
+			updateCarousel();
 		});
 		
 		// Indicator clicks
