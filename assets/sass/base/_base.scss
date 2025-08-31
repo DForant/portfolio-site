@@ -10,6 +10,11 @@
 html {
   font-size: 62.5%; // 10px base - allows user font scaling
   scroll-behavior: smooth;
+  
+  // Reduce font size to 8px at small breakpoint (768px and below)
+  @media (max-width: v.$breakpoint-sm) {
+    font-size: 50%; // 8px base
+  }
 }
 
 body {
