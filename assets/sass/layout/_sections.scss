@@ -20,7 +20,26 @@ section {
   }
 }
 
-// Section headings
+// Section Title - BEM Element for consistent section headings
+.section__title {
+  text-align: center;
+  margin-bottom: v.$spacing-2xl; // 3.2rem
+  font-size: v.$font-size-4xl; // 3.6rem
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: v.$primary-blue;
+  
+  @media (max-width: v.$breakpoint-md) {
+    font-size: v.$font-size-3xl; // 3rem
+    margin-bottom: v.$spacing-xl; // 2.4rem
+  }
+  
+  @media (max-width: v.$breakpoint-sm) {
+    font-size: v.$font-size-2xl; // 2.4rem
+  }
+}
+
+// Legacy support for section h2 (maintain backward compatibility)
 section h2 {
   text-align: center;
   margin-bottom: v.$spacing-2xl; // 3.2rem
@@ -66,6 +85,7 @@ section h2 {
   }
   
   &__content {
+    .section__title,
     h2 {
       text-align: left;
       margin-bottom: v.$spacing-lg; // 2rem

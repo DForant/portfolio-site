@@ -459,6 +459,26 @@ section:nth-of-type(even) {
   padding: 0 1.6rem;
 }
 
+.section__title {
+  text-align: center;
+  margin-bottom: 4.8rem;
+  font-size: 3.6rem;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+  color: #4A6C9B;
+}
+@media (max-width: 962px) {
+  .section__title {
+    font-size: 3rem;
+    margin-bottom: 3.2rem;
+  }
+}
+@media (max-width: 768px) {
+  .section__title {
+    font-size: 2.4rem;
+  }
+}
+
 section h2 {
   text-align: center;
   margin-bottom: 4.8rem;
@@ -501,11 +521,13 @@ section h2 {
   border-radius: 1.2rem;
   box-shadow: 0 1rem 3rem rgba(74, 108, 155, 0.15);
 }
+.about__content .section__title,
 .about__content h2 {
   text-align: left;
   margin-bottom: 2.4rem;
 }
 @media (max-width: 962px) {
+  .about__content .section__title,
   .about__content h2 {
     text-align: center;
   }
