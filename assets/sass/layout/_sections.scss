@@ -108,6 +108,12 @@ section h2 {
   }
   
   &__process {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    
     h3 {
       font-size: v.$font-size-lg; // 1.8rem
       color: v.$primary-blue;

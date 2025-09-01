@@ -546,6 +546,13 @@ section h2 {
 .about__content p:last-of-type {
   margin-bottom: 2.4rem;
 }
+.about__process {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
 .about__process h3 {
   font-size: 1.8rem;
   color: #4A6C9B;
@@ -980,6 +987,7 @@ section h2 {
   }
 }
 .process-tabs__tab {
+  width: 20rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1012,6 +1020,11 @@ section h2 {
   .process-tabs__tab {
     padding: 0.4rem;
     gap: 0.4rem;
+  }
+}
+@media (max-width: 468px) {
+  .process-tabs__tab {
+    width: 10rem;
   }
 }
 .process-tabs__number {

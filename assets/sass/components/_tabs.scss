@@ -4,7 +4,6 @@
 
 // Process Tabs Component
 .process-tabs {
-  
   // Tab Navigation
   &__nav {
     display: grid;
@@ -20,6 +19,7 @@
   
   // Individual Tab Button
   &__tab {
+    width: 20rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -55,6 +55,10 @@
     @media (max-width: v.$breakpoint-sm) {
       padding: v.$spacing-xs; // 0.8rem
       gap: v.$spacing-xs; // 0.8rem
+    }
+
+    @media (max-width: v.$breakpoint-xs){
+      width: 10rem;
     }
   }
   
