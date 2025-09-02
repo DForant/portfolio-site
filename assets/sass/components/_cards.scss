@@ -139,8 +139,14 @@
   // Project Card Modifier - BEM Modifier
   &--project {
     border: 0.1rem solid rgba(74, 108, 155, 0.1);
+    box-shadow: 0 0.4rem 1.2rem rgba(74, 108, 155, 0.12), 
+                0 0.2rem 0.4rem rgba(74, 108, 155, 0.08); // Add subtle shadow for depth
     
     &:hover {
+      box-shadow: 0 0.8rem 2.4rem rgba(74, 108, 155, 0.18), 
+                  0 0.4rem 0.8rem rgba(74, 108, 155, 0.12); // Enhanced shadow on hover
+      transform: translateY(-0.2rem); // Subtle lift effect
+      
       .card__overlay {
         opacity: 1;
       }
