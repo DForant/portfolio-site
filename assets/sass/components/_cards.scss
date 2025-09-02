@@ -29,7 +29,7 @@
     
     img {
       width: 100%;
-      height: 20rem; // 320px
+      height: 25rem; // Increased from 20rem to 25rem (400px) to prevent clipping
       object-fit: cover;
       transition: transform 0.3s ease;
     }
