@@ -750,12 +750,10 @@ section h2 {
 .card--service {
   padding: 3.2rem 2.4rem;
   text-align: center;
-  border: 0.1rem solid rgba(74, 108, 155, 0.2);
+  border: 0.1rem solid rgba(74, 108, 155, 0.15);
   height: 100%;
   display: flex;
   flex-direction: column;
-  transform: translateY(-0.125rem);
-  box-shadow: 0 0.25rem 1.25rem rgba(74, 108, 155, 0.15);
 }
 .card--service .card__title {
   font-size: 2rem;
@@ -765,8 +763,8 @@ section h2 {
   flex-grow: 1;
 }
 .card--service .card__icon i {
-  background: rgba(251, 184, 19, 0.2);
-  transform: scale(1.05);
+  background: rgba(251, 184, 19, 0.15);
+  transform: scale(1);
 }
 .card--service:hover {
   transition: all 0.3s ease;
@@ -831,15 +829,15 @@ section h2 {
   }
 }
 .clients__grid--desktop .clients__item img {
-  height: 5.3rem;
+  height: 6.5rem;
   width: auto;
-  max-width: 10.6rem;
+  max-width: 13rem;
   object-fit: contain;
 }
 @media (max-width: 1200px) {
   .clients__grid--desktop .clients__item img {
-    height: 4.6rem;
-    max-width: 9.3rem;
+    height: 5.6rem;
+    max-width: 11.5rem;
   }
 }
 .clients__column {
@@ -894,20 +892,20 @@ section h2 {
   }
 }
 .clients__item img {
-  height: 5.3rem;
+  height: 6.5rem;
   width: auto;
-  max-width: 10.6rem;
+  max-width: 13rem;
   object-fit: contain;
 }
 @media (max-width: 962px) {
   .clients__item img {
-    height: 6.6rem !important;
-    max-width: 13.3rem !important;
-    min-height: 4rem;
+    height: 8rem !important;
+    max-width: 16rem !important;
+    min-height: 5rem;
   }
 }
 .clients__item img[src*=""], .clients__item img:not([src]), .clients__item img[alt] {
-  min-height: 5.3rem;
+  min-height: 6.5rem;
   background: rgb(220.1419213974, 227.788209607, 238.3580786026);
   display: flex;
   align-items: center;
@@ -927,8 +925,11 @@ section h2 {
 }
 @media (max-width: 962px) {
   .clients__name {
-    font-size: 2rem;
-    max-width: 16rem;
+    font-size: 1.2rem;
+    max-width: 18rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 .clients__name strong {
@@ -1114,6 +1115,138 @@ section h2 {
   .process-tabs__panel p {
     font-size: 1.2rem;
   }
+}
+
+.contact__form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  max-width: 50rem;
+}
+.contact__form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.6rem;
+}
+@media (max-width: 768px) {
+  .contact__form__row {
+    grid-template-columns: 1fr;
+    gap: 2.4rem;
+  }
+}
+.contact__form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.contact__form__label {
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #212529;
+  font-family: "Montserrat", sans-serif;
+}
+.contact__form__input, .contact__form__textarea {
+  padding: 0.8rem 1.6rem;
+  border: 0.2rem solid rgb(168.3624454148, 187.3668122271, 213.6375545852);
+  border-radius: 0.8rem;
+  font-size: 1.4rem;
+  font-family: "Montserrat", sans-serif;
+  color: #212529;
+  background: #FFFFFF;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.contact__form__input:focus, .contact__form__textarea:focus {
+  outline: none;
+  border-color: #4A6C9B;
+  box-shadow: 0 0 0 0.3rem rgba(74, 108, 155, 0.15);
+}
+.contact__form__input::placeholder, .contact__form__textarea::placeholder {
+  color: rgb(78.4864864865, 88, 97.5135135135);
+  opacity: 0.7;
+}
+.contact__form__input:invalid:not(:placeholder-shown):not(:focus), .contact__form__textarea:invalid:not(:placeholder-shown):not(:focus) {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.3rem rgba(220, 53, 69, 0.15);
+}
+.contact__form__input.touched:invalid, .contact__form__textarea.touched:invalid {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.3rem rgba(220, 53, 69, 0.15);
+}
+.contact__form__textarea {
+  resize: vertical;
+  min-height: 12rem;
+  line-height: 1.6;
+}
+.contact__form__submit {
+  align-self: flex-start;
+  padding: 1.6rem 3.2rem;
+  background: #4A6C9B;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.contact__form__submit:hover {
+  background: rgb(57.519650655, 83.9475982533, 120.480349345);
+  transform: translateY(-0.1rem);
+}
+.contact__form__submit:active {
+  transform: translateY(0);
+}
+.contact__form__submit:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.3rem rgba(74, 108, 155, 0.25);
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: #212529;
+  font-family: "Montserrat", sans-serif;
+}
+label input,
+label textarea {
+  padding: 0.8rem 1.6rem;
+  border: 0.2rem solid rgb(168.3624454148, 187.3668122271, 213.6375545852);
+  border-radius: 0.8rem;
+  font-size: 1.4rem;
+  font-family: "Montserrat", sans-serif;
+  color: #212529;
+  background: #FFFFFF;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+label input:focus,
+label textarea:focus {
+  outline: none;
+  border-color: #4A6C9B;
+  box-shadow: 0 0 0 0.3rem rgba(74, 108, 155, 0.15);
+}
+label input::placeholder,
+label textarea::placeholder {
+  color: rgb(78.4864864865, 88, 97.5135135135);
+  opacity: 0.7;
+}
+label input:invalid:not(:placeholder-shown):not(:focus),
+label textarea:invalid:not(:placeholder-shown):not(:focus) {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.3rem rgba(220, 53, 69, 0.15);
+}
+label input.touched:invalid,
+label textarea.touched:invalid {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.3rem rgba(220, 53, 69, 0.15);
+}
+label textarea {
+  resize: vertical;
+  min-height: 12rem;
+  line-height: 1.6;
 }
 
 .hero {

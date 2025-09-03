@@ -36,14 +36,14 @@
       
       // Desktop grid image sizing
       .clients__item img {
-        height: 5.3rem; // 85px - Increased by ~33% from 64px
+        height: 6.5rem; // 104px - Increased from 5.3rem (85px)
         width: auto;
-        max-width: 10.6rem; // 170px - Increased by ~33% from 128px
+        max-width: 13rem; // 208px - Increased from 10.6rem (170px)
         object-fit: contain;
         
         @media (max-width: v.$breakpoint-lg) {
-          height: 4.6rem; // 74px - Increased by ~33% from 56px
-          max-width: 9.3rem; // 149px - Increased by ~33% from 112px
+          height: 5.6rem; // 90px - Increased from 4.6rem (74px)
+          max-width: 11.5rem; // 184px - Increased from 9.3rem (149px)
         }
       }
     }
@@ -120,21 +120,21 @@
     }
     
     img {
-      height: 5.3rem; // 85px - Base size for desktop
+      height: 6.5rem; // 104px - Increased from 5.3rem (85px)
       width: auto;
-      max-width: 10.6rem; // 170px - Base max width
+      max-width: 13rem; // 208px - Increased from 10.6rem (170px)
       object-fit: contain;
       
       // Mobile specific sizing
       @media (max-width: v.$breakpoint-md) {
-        height: 6.6rem !important; // 106px - Force mobile size
-        max-width: 13.3rem !important; // 213px - Force mobile max width
-        min-height: 4rem; // Fallback minimum height
+        height: 8rem !important; // 128px - Increased from 6.6rem (106px)
+        max-width: 16rem !important; // 256px - Increased from 13.3rem (213px)
+        min-height: 5rem; // Increased fallback minimum height
       }
       
       // Fallback for broken images
       &[src*=""], &:not([src]), &[alt] {
-        min-height: 5.3rem;
+        min-height: 6.5rem; // Updated to match new base size
         background: color.adjust(v.$primary-blue, $lightness: 45%);
         display: flex;
         align-items: center;
@@ -157,8 +157,11 @@
     margin-top: v.$spacing-xs; // Add spacing between logo and name
     
     @media (max-width: v.$breakpoint-md) {
-      font-size: v.$font-size-md; // 1.6rem - Even larger for mobile
-      max-width: 16rem;
+      font-size: v.$font-size-xs; // 1.2rem - Reduced to ensure single line display
+      max-width: 18rem; // Increased max-width to accommodate longer names
+      white-space: nowrap; // Prevent text wrapping to multiple lines
+      overflow: hidden; // Hide overflow text
+      text-overflow: ellipsis; // Add ellipsis for very long names
     }
     
     strong {

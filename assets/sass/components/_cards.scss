@@ -110,12 +110,11 @@
   &--service {
     padding: v.$spacing-xl v.$spacing-lg; // 3.2rem 2.4rem
     text-align: center;
-    border: 0.1rem solid rgba(74, 108, 155, 0.2); // Enhanced border by default
+    border: 0.1rem solid rgba(74, 108, 155, 0.15); // Subtle border for definition
     height: 100%;
     display: flex;
     flex-direction: column;
-    transform: translateY(-0.125rem); // Elevated position by default
-    box-shadow: 0 0.25rem 1.25rem rgba(74, 108, 155, 0.15); // Shadow by default
+    // Removed transform and box-shadow to avoid suggesting interactivity
     
     .card__title {
       font-size: v.$font-size-md; // 2rem
@@ -127,8 +126,8 @@
     }
     
     .card__icon i {
-      background: rgba(251, 184, 19, 0.2); // Enhanced icon background by default
-      transform: scale(1.05); // Slightly scaled icon by default
+      background: rgba(251, 184, 19, 0.15); // Slightly more subtle icon background
+      transform: scale(1.0); // Reset scale to normal size
     }
     
     // Remove hover effects since we're making them default

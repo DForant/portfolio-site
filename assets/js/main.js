@@ -86,6 +86,58 @@ document.addEventListener('DOMContentLoaded', () => {
 			});
 		});
 		
+		// Touch/Swipe functionality for mobile devices
+		let touchStartX = 0;
+		let touchEndX = 0;
+		let touchStartY = 0;
+		let touchEndY = 0;
+		const minSwipeDistance = 50; // Minimum distance for a swipe to register
+		
+		// Handle touch start
+		carousel.addEventListener('touchstart', (e) => {
+			touchStartX = e.changedTouches[0].screenX;
+			touchStartY = e.changedTouches[0].screenY;
+			stopAutoPlay(); // Pause auto-play during touch interaction
+		}, { passive: true });
+		
+		// Handle touch end
+		carousel.addEventListener('touchend', (e) => {
+			touchEndX = e.changedTouches[0].screenX;
+			touchEndY = e.changedTouches[0].screenY;
+			handleSwipe();
+			resumeAutoPlay(); // Resume auto-play after touch interaction
+		}, { passive: true });
+		
+		// Determine swipe direction and trigger navigation
+		function handleSwipe() {
+			const deltaX = touchEndX - touchStartX;
+			const deltaY = touchEndY - touchStartY;
+			
+			// Check if horizontal swipe is longer than vertical (prevents conflicts with scrolling)
+			if (Math.abs(deltaX) > Math.abs(deltaY)) {
+				// Check if swipe distance meets minimum threshold
+				if (Math.abs(deltaX) > minSwipeDistance) {
+					if (deltaX > 0) {
+						// Swipe right - go to previous slide
+						if (currentSlide > 0) {
+							currentSlide--;
+						} else {
+							currentSlide = totalSlides - 1; // Loop to last slide
+						}
+						updateCarousel();
+					} else {
+						// Swipe left - go to next slide
+						if (currentSlide < totalSlides - 1) {
+							currentSlide++;
+						} else {
+							currentSlide = 0; // Loop to first slide
+						}
+						updateCarousel();
+					}
+				}
+			}
+		}
+		
 		// Initialize carousel
 		updateCarousel();
 		
@@ -225,6 +277,92 @@ document.addEventListener('DOMContentLoaded', () => {
 					switchTab(tab);
 				}
 			});
+		});
+	}
+	
+	// Contact Form Validation with Custom Messages
+	const contactForm = document.querySelector('.contact__form');
+	if (contactForm) {
+		const nameField = document.getElementById('contact-name');
+		const emailField = document.getElementById('contact-email');
+		const messageField = document.getElementById('contact-message');
+		
+		// Custom validation messages
+		const validationMessages = {
+			name: {
+				valueMissing: 'Please enter your full name so I know how to address you.',
+				tooShort: 'Please enter your full name (at least 2 characters).'
+			},
+			email: {
+				valueMissing: 'Please provide your email address so I can respond to your inquiry.',
+				typeMismatch: 'Please enter a valid email address (e.g., name@example.com).',
+				patternMismatch: 'Please enter a valid email address format.'
+			},
+			message: {
+				valueMissing: 'Please tell me about your project or how I can help you.',
+				tooShort: 'Please provide more details about your project (at least 10 characters).'
+			}
+		};
+		
+		// Function to set custom validation message
+		function setCustomValidationMessage(field, fieldName) {
+			const validity = field.validity;
+			let message = '';
+			
+			if (validity.valueMissing) {
+				message = validationMessages[fieldName].valueMissing;
+			} else if (validity.typeMismatch || validity.patternMismatch) {
+				message = validationMessages[fieldName].typeMismatch || validationMessages[fieldName].patternMismatch;
+			} else if (validity.tooShort) {
+				message = validationMessages[fieldName].tooShort;
+			}
+			
+			field.setCustomValidity(message);
+		}
+		
+		// Add validation to each field
+		if (nameField) {
+			nameField.setAttribute('minlength', '2');
+			nameField.addEventListener('invalid', () => setCustomValidationMessage(nameField, 'name'));
+			nameField.addEventListener('input', () => {
+				setCustomValidationMessage(nameField, 'name');
+			});
+		}
+		
+		if (emailField) {
+			emailField.addEventListener('invalid', () => setCustomValidationMessage(emailField, 'email'));
+			emailField.addEventListener('input', () => {
+				setCustomValidationMessage(emailField, 'email');
+			});
+		}
+		
+		if (messageField) {
+			messageField.setAttribute('minlength', '10');
+			messageField.addEventListener('invalid', () => setCustomValidationMessage(messageField, 'message'));
+			messageField.addEventListener('input', () => {
+				setCustomValidationMessage(messageField, 'message');
+			});
+		}
+		
+		// Form submission handling
+		contactForm.addEventListener('submit', (e) => {
+			// Reset custom validity messages
+			[nameField, emailField, messageField].forEach(field => {
+				if (field) {
+					field.setCustomValidity('');
+					setCustomValidationMessage(field, field.id.replace('contact-', ''));
+				}
+			});
+			
+			// If form is invalid, prevent submission and show first error
+			if (!contactForm.checkValidity()) {
+				e.preventDefault();
+				const firstInvalidField = contactForm.querySelector(':invalid');
+				if (firstInvalidField) {
+					firstInvalidField.focus();
+					firstInvalidField.reportValidity();
+				}
+			}
 		});
 	}
 });

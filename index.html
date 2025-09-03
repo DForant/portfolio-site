@@ -347,20 +347,33 @@
                     <p><strong>Email:</strong> <a href="mailto:hello@deanforant.com">hello@deanforant.com</a></p>
                     <p><strong>LinkedIn:</strong> <a href="#" rel="noopener">linkedin.com/in/deanforant</a></p>
                 </div>
-                <form class="contact__form" action="#" method="post">
-                    <label>
-                        Name
-                        <input type="text" name="name" required />
-                    </label>
-                    <label>
-                        Email
-                        <input type="email" name="email" required />
-                    </label>
-                    <label>
-                        Message
-                        <textarea name="message" rows="5" required></textarea>
-                    </label>
-                    <button type="submit" class="btn btn--primary">Send Message</button>
+                <form class="contact__form" action="#" method="post" novalidate>
+                    <!-- Row 1: Name and Organization -->
+                    <div class="contact__form__row">
+                        <div class="contact__form__group">
+                            <label class="contact__form__label" for="contact-name">Name *</label>
+                            <input class="contact__form__input" type="text" id="contact-name" name="name" placeholder="Your full name" minlength="2" maxlength="100" required />
+                        </div>
+                        <div class="contact__form__group">
+                            <label class="contact__form__label" for="contact-organization">Organization</label>
+                            <input class="contact__form__input" type="text" id="contact-organization" name="organization" placeholder="Company or organization name" maxlength="100" />
+                        </div>
+                    </div>
+                    
+                    <!-- Row 2: Email (full width) -->
+                    <div class="contact__form__group">
+                        <label class="contact__form__label" for="contact-email">Email *</label>
+                        <input class="contact__form__input" type="email" id="contact-email" name="email" placeholder="your.email@example.com" maxlength="254" required />
+                    </div>
+                    
+                    <!-- Row 3: Message (full width) -->
+                    <div class="contact__form__group">
+                        <label class="contact__form__label" for="contact-message">Message *</label>
+                        <textarea class="contact__form__textarea" id="contact-message" name="message" rows="5" placeholder="Tell me about your project and how I can help..." minlength="10" maxlength="2000" required></textarea>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="contact__form__submit">Send Message</button>
                 </form>
             </div>
         </section>
