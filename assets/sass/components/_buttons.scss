@@ -21,42 +21,64 @@
   
   // Primary Button - BEM Modifier
   &--primary {
-    background: v.$primary-blue;
+    background: v.$gradient-primary;
     color: v.$white;
     border-color: v.$primary-blue;
+    box-shadow: 0 0.25rem 0.75rem rgba(74, 108, 155, 0.3);
     
     &:hover, &:focus {
-      background: color.adjust(v.$primary-blue, $lightness: -10%);
+      background: linear-gradient(135deg, #5A7BCF 0%, #2A4A7A 100%);
       border-color: color.adjust(v.$primary-blue, $lightness: -10%);
       color: v.$white;
       text-decoration: none;
+      transform: translateY(-0.1rem);
+      box-shadow: 0 0.5rem 1.5rem rgba(74, 108, 155, 0.4);
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 0.25rem 0.75rem rgba(74, 108, 155, 0.3);
     }
   }
   
   // Secondary Button - BEM Modifier
   &--secondary {
-    background: transparent;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.8) 100%);
     color: v.$primary-blue;
     border-color: v.$primary-blue;
     
     &:hover, &:focus {
-      background: v.$primary-blue;
+      background: v.$gradient-primary;
       color: v.$white;
       text-decoration: none;
+      transform: translateY(-0.1rem);
+      box-shadow: 0 0.5rem 1.5rem rgba(74, 108, 155, 0.25);
+    }
+    
+    &:active {
+      transform: translateY(0);
     }
   }
   
   // Accent Button - BEM Modifier
   &--accent {
-    background: v.$accent-gold;
+    background: v.$gradient-accent;
     color: v.$charcoal;
     border-color: v.$accent-gold;
+    box-shadow: 0 0.25rem 0.75rem rgba(253, 184, 19, 0.3);
     
     &:hover, &:focus {
-      background: color.adjust(v.$accent-gold, $lightness: -10%);
+      background: linear-gradient(135deg, #FFC030 0%, #D69510 100%);
       border-color: color.adjust(v.$accent-gold, $lightness: -10%);
       color: v.$charcoal;
       text-decoration: none;
+      transform: translateY(-0.1rem);
+      box-shadow: 0 0.5rem 1.5rem rgba(253, 184, 19, 0.4);
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 0.25rem 0.75rem rgba(253, 184, 19, 0.3);
     }
   }
   

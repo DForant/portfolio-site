@@ -3,7 +3,7 @@
 
 // Card Base - BEM Block
 .card {
-  background: v.$white;
+  background: linear-gradient(135deg, v.$white 0%, rgba(248, 249, 250, 0.8) 100%);
   border-radius: v.$border-radius-base;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -101,8 +101,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(251, 184, 19, 0.1);
+      background: linear-gradient(135deg, rgba(253, 184, 19, 0.15) 0%, rgba(253, 184, 19, 0.08) 100%);
       border-radius: 50%;
+      box-shadow: 0 0.2rem 0.8rem rgba(253, 184, 19, 0.15);
     }
   }
   
@@ -126,8 +127,9 @@
     }
     
     .card__icon i {
-      background: rgba(251, 184, 19, 0.15); // Slightly more subtle icon background
+      background: linear-gradient(135deg, rgba(253, 184, 19, 0.18) 0%, rgba(253, 184, 19, 0.10) 100%);
       transform: scale(1.0); // Reset scale to normal size
+      box-shadow: 0 0.2rem 0.8rem rgba(253, 184, 19, 0.12);
     }
     
     // Remove hover effects since we're making them default

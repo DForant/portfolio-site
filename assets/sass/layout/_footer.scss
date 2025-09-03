@@ -1,41 +1,221 @@
 // _footer.scss
+@use 'sass:color';
 @use '../abstracts/variables' as v;
 
+// Footer - BEM Block
 .footer {
-  background: v.$charcoal;
+  background: v.$gradient-primary;
   color: v.$white;
-  padding: v.$spacing-xl 0 v.$spacing-md; // 2rem 0 1rem
+  padding: v.$spacing-3xl 0 0; // 6.4rem top, no bottom padding
+  position: relative;
   
-  h3 {
-    color: v.$white;
-    font-size: v.$font-size-lg; // 1.125rem
-    margin-bottom: v.$spacing-md; // 1rem
+  // Subtle gradient overlay for depth and improved contrast
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.25) 50%, rgba(0, 0, 0, 0.35) 100%);
+    z-index: 1;
   }
   
-  a {
-    color: v.$off-white;
+  // Ensure content appears above overlay
+  > * {
+    position: relative;
+    z-index: 2;
+  }
+  
+  // Footer Container - BEM Element
+  &__container {
+    max-width: v.$container-max-width;
+    margin: 0 auto;
+    padding: 0 v.$section-padding-x; // 1.6rem horizontal padding
+  }
+  
+  // Footer Grid - BEM Element
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+    gap: v.$spacing-2xl; // 4.8rem
+    margin-bottom: v.$spacing-3xl; // 6.4rem
     
-    &:hover {
-      color: v.$accent-gold;
+    @media (max-width: v.$breakpoint-md) {
+      grid-template-columns: 1fr;
+      gap: v.$spacing-xl; // 3.2rem
+      margin-bottom: v.$spacing-2xl; // 4.8rem
+    }
+    
+    @media (max-width: v.$breakpoint-sm) {
+      gap: v.$spacing-lg; // 2.4rem
+      margin-bottom: v.$spacing-xl; // 3.2rem
     }
   }
   
-  &__social {
-    a {
-      display: inline-flex;
-      width: 2.5rem; // 40px
-      height: 2.5rem; // 40px
+  // Footer Brand Section - BEM Element
+  &__brand {
+    @media (max-width: v.$breakpoint-md) {
+      text-align: center;
+    }
+  }
+  
+  // Footer Logo - BEM Element
+  &__logo {
+    height: 5rem; // 50px
+    width: auto;
+    margin-bottom: v.$spacing-md; // 1.6rem
+    
+    @media (max-width: v.$breakpoint-sm) {
+      height: 4rem; // 40px
+    }
+  }
+  
+  // Footer Tagline - BEM Element
+  &__tagline {
+    font-size: v.$font-size-sm; // 1.4rem
+    color: color.adjust(v.$white, $lightness: -15%);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 28rem; // Limit width for readability
+    
+    @media (max-width: v.$breakpoint-md) {
+      margin: 0 auto;
+    }
+  }
+  
+  // Footer Section Titles - BEM Element
+  &__title {
+    color: v.$white;
+    font-size: v.$font-size-lg; // 1.8rem
+    font-family: v.$font-heading;
+    font-weight: 700;
+    margin-bottom: v.$spacing-lg; // 2.4rem
+    
+    @media (max-width: v.$breakpoint-md) {
+      text-align: center;
+    }
+    
+    @media (max-width: v.$breakpoint-sm) {
+      font-size: v.$font-size-md; // 1.6rem
+      margin-bottom: v.$spacing-md; // 1.6rem
+    }
+  }
+  
+  // Footer Navigation - BEM Element
+  &__nav {
+    @media (max-width: v.$breakpoint-md) {
+      text-align: center;
+    }
+  }
+  
+  &__nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: v.$spacing-sm; // 1.2rem
+    
+    @media (max-width: v.$breakpoint-md) {
       align-items: center;
+    }
+  }
+  
+  &__nav-link {
+    color: color.adjust(v.$white, $lightness: -10%);
+    text-decoration: none;
+    font-size: v.$font-size-sm; // 1.4rem
+    transition: color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+    
+    &:hover {
+      color: v.$accent-gold;
+      transform: translateX(0.5rem);
+    }
+    
+    &:focus {
+      outline: 0.2rem solid v.$accent-gold;
+      outline-offset: 0.2rem;
+    }
+  }
+  
+  // Footer Social Section - BEM Element
+  &__social-section {
+    @media (max-width: v.$breakpoint-md) {
+      text-align: center;
+    }
+  }
+  
+  // Footer Social Links Container - BEM Element
+  &__social {
+    display: flex;
+    gap: v.$spacing-md; // 1.6rem
+    flex-wrap: wrap;
+    
+    @media (max-width: v.$breakpoint-md) {
       justify-content: center;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      transition: all 0.3s ease;
-      margin: 0 v.$spacing-xs; // Add some spacing between social icons
-      
-      &:hover {
-        background: v.$accent-gold;
-        color: v.$charcoal;
-      }
+    }
+  }
+  
+  // Footer Social Link - BEM Element
+  &__social-link {
+    display: inline-flex;
+    width: 4.5rem; // 45px - larger for better touch targets
+    height: 4.5rem; // 45px
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.06) 100%);
+    color: color.adjust(v.$white, $lightness: -10%);
+    text-decoration: none;
+    font-size: v.$font-size-lg; // 1.8rem
+    transition: all 0.3s ease;
+    border: 0.2rem solid transparent;
+    
+    &:hover {
+      background: v.$gradient-accent;
+      color: v.$charcoal;
+      transform: translateY(-0.3rem);
+      box-shadow: 0 0.5rem 1.5rem rgba(253, 184, 19, 0.25);
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: v.$accent-gold;
+      transform: translateY(-0.1rem);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    @media (max-width: v.$breakpoint-sm) {
+      width: 4rem; // 40px
+      height: 4rem; // 40px
+      font-size: v.$font-size-md; // 1.6rem
+    }
+  }
+  
+  // Footer Bottom Section - BEM Element
+  &__bottom {
+    border-top: 0.1rem solid rgba(255, 255, 255, 0.1);
+    padding: v.$spacing-xl 0; // 3.2rem vertical
+    text-align: center;
+    
+    @media (max-width: v.$breakpoint-sm) {
+      padding: v.$spacing-lg 0; // 2.4rem vertical
+    }
+  }
+  
+  // Footer Copyright - BEM Element
+  &__copyright {
+    color: color.adjust(v.$white, $lightness: -20%);
+    font-size: v.$font-size-xs; // 1.2rem
+    line-height: 1.5;
+    
+    @media (max-width: v.$breakpoint-sm) {
+      font-size: 1rem; // 10px with 8px base
     }
   }
 }

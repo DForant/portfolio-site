@@ -6,6 +6,17 @@ $off-white: #F8F9FA;
 $light-background: #F8F9FA;  // Same as off-white for consistency
 $white: #FFFFFF;
 
+// Gradient Variations based on Primary Blue
+$primary-blue-light: #6B8BBF;   // Lighter variant
+$primary-blue-dark: #3A5A8A;    // Darker variant
+
+// Gradient Definitions
+$gradient-primary: linear-gradient(135deg, $primary-blue-light 0%, $primary-blue 50%, $primary-blue-dark 100%);
+$gradient-primary-soft: linear-gradient(135deg, rgba(75, 108, 155, 0.9) 0%, rgba(58, 90, 138, 0.95) 100%);
+$gradient-primary-overlay: linear-gradient(135deg, rgba(75, 108, 155, 0.15) 0%, rgba(58, 90, 138, 0.25) 100%);
+$gradient-hero: linear-gradient(135deg, rgba(75, 108, 155, 0.08) 0%, rgba(58, 90, 138, 0.12) 100%);
+$gradient-accent: linear-gradient(135deg, $accent-gold 0%, #E6A511 100%);
+
 // Typography
 $font-heading: 'Playfair Display', serif;
 $font-body: 'Montserrat', sans-serif;

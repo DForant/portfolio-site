@@ -381,35 +381,58 @@
 
     <!-- Footer -->
     <footer class="footer" role="contentinfo">
-        <div class="section__container" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1.5rem;">
-            <div>
-                <img src="/assets/images/logo.png" alt="Dean Forant logo" style="height:40px;" />
-                <p>Brand & web design rooted in strategy.</p>
+        <div class="footer__container">
+            <div class="footer__grid">
+                <!-- Logo and Tagline -->
+                <div class="footer__brand">
+                    <img src="/assets/images/Logo Light BG.png" alt="Dean Forant logo" class="footer__logo" />
+                    <p class="footer__tagline">Brand & web design rooted in strategy.</p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div class="footer__links">
+                    <h3 class="footer__title">Quick Links</h3>
+                    <nav class="footer__nav">
+                        <ul class="footer__nav-list">
+                            <li class="footer__nav-item"><a href="#home" class="footer__nav-link">Home</a></li>
+                            <li class="footer__nav-item"><a href="#about" class="footer__nav-link">About</a></li>
+                            <li class="footer__nav-item"><a href="#services" class="footer__nav-link">Services</a></li>
+                            <li class="footer__nav-item"><a href="#portfolio-section" class="footer__nav-link">Portfolio</a></li>
+                            <li class="footer__nav-item"><a href="#contact" class="footer__nav-link">Contact</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                
+                <!-- Social Media -->
+                <div class="footer__social-section">
+                    <h3 class="footer__title">Follow</h3>
+                    <div class="footer__social">
+                        <a href="#" class="footer__social-link" aria-label="Facebook">
+                            <i class="fa-brands fa-facebook" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="LinkedIn">
+                            <i class="fa-brands fa-linkedin" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="Behance">
+                            <i class="fa-brands fa-behance" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="YouTube">
+                            <i class="fa-brands fa-youtube" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="GitHub">
+                            <i class="fa-brands fa-github" aria-hidden="true"></i>
+                        </a>
+                        <a href="#" class="footer__social-link" aria-label="Instagram">
+                            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h3>Quick Links</h3>
-                <ul style="list-style:none; padding:0; margin:0; display:grid; gap:.5rem;">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#portfolio-section">Portfolio</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
+            
+            <!-- Copyright -->
+            <div class="footer__bottom">
+                <small class="footer__copyright">&copy; <span id="year"></span> Dean Forant. All rights reserved.</small>
             </div>
-            <div>
-                <h3>Follow</h3>
-                <p class="footer__social" style="display:flex; gap:1rem;">
-                    <a aria-label="Facebook" href="#"><i class="fa-brands fa-facebook"></i></a>
-                    <a aria-label="LinkedIn" href="#"><i class="fa-brands fa-linkedin"></i></a>
-                    <a aria-label="Behance" href="#"><i class="fa-brands fa-behance"></i></a>
-                    <a aria-label="YouTube" href="#"><i class="fa-brands fa-youtube"></i></a>
-                    <a aria-label="GitHub" href="#"><i class="fa-brands fa-github"></i></a>
-                    <a aria-label="Instagram" href="#"><i class="fa-brands fa-instagram"></i></a>
-                </p>
-            </div>
-        </div>
-        <div style="text-align:center; padding:1rem; border-top:1px solid rgba(0,0,0,.06);">
-            <small>&copy; <span id="year"></span> Dean Forant. All rights reserved.</small>
         </div>
     </footer>
 

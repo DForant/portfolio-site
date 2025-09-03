@@ -10,7 +10,7 @@
   align-items: center;
   position: relative;
   
-  // Overlay for better text readability
+  // Gradient overlay for better visual appeal and text readability
   &::before {
     content: '';
     position: absolute;
@@ -18,7 +18,19 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(248, 249, 250, 0.15);
+    background: v.$gradient-hero;
+    z-index: 1;
+  }
+  
+  // Additional subtle gradient for depth
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(248, 249, 250, 0.1) 0%, transparent 50%, rgba(75, 108, 155, 0.05) 100%);
     z-index: 1;
   }
   
@@ -39,13 +51,28 @@
   &__content {
     width: 85%;
     padding: v.$spacing-sm; // 2rem
-    background: rgba(248, 249, 250, 0.75);
+    background: linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
     border-radius: v.$border-radius-base;
     box-shadow: 0 0.75rem 3rem rgba(74, 108, 155, 0.25),
                 0 0.5rem 1.5rem rgba(74, 108, 155, 0.15),
                 0 0.25rem 0.75rem rgba(74, 108, 155, 0.1);
     backdrop-filter: blur(0.625rem); // 10px
     border: 0.0625rem solid rgba(255, 255, 255, 0.2); // 1px
+    position: relative;
+    
+    // Subtle inner gradient for depth
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: v.$gradient-primary-overlay;
+      border-radius: v.$border-radius-base;
+      z-index: -1;
+      opacity: 0.3;
+    }
     
     @media (max-width: v.$breakpoint-md) {
       Width: 70%;
