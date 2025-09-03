@@ -345,7 +345,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		}
 		
 		// Form submission handling
-		contactForm.addEventListener('submit', (e) => {
+		contactForm.addEventListener('submit', async (e) => {
+			e.preventDefault(); // Always prevent default to handle with JavaScript
+			
 			// Reset custom validity messages
 			[nameField, emailField, messageField].forEach(field => {
 				if (field) {
@@ -354,15 +356,124 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 			});
 			
-			// If form is invalid, prevent submission and show first error
+			// If form is invalid, show first error
 			if (!contactForm.checkValidity()) {
-				e.preventDefault();
 				const firstInvalidField = contactForm.querySelector(':invalid');
 				if (firstInvalidField) {
 					firstInvalidField.focus();
 					firstInvalidField.reportValidity();
 				}
+				return;
+			}
+
+			// Get form data
+			const formData = {
+				name: nameField.value.trim(),
+				email: emailField.value.trim(),
+				message: messageField.value.trim()
+			};
+
+			// Get submit button and show loading state
+			const submitButton = contactForm.querySelector('button[type="submit"]');
+			const originalButtonText = submitButton.textContent;
+			submitButton.textContent = 'Sending...';
+			submitButton.disabled = true;
+
+			// Add loading animation
+			submitButton.innerHTML = '<span style="display: inline-block; width: 16px; height: 16px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px;"></span>Sending...';
+
+			try {
+				// Submit to API
+				const response = await fetch('/api/contact/submit', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(formData)
+				});
+
+				const result = await response.json();
+
+				if (result.success) {
+					// Show success message
+					showFormMessage('✅ Thank you! Your message has been sent successfully. I\'ll get back to you within 24 hours.', 'success');
+					
+					// Reset form
+					contactForm.reset();
+					
+					// Optional: Smooth scroll to success message
+					const messageContainer = document.getElementById('form-message');
+					if (messageContainer) {
+						messageContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+					}
+				} else {
+					// Show error message
+					showFormMessage(`❌ ${result.message || 'There was an error sending your message. Please try again.'}`, 'error');
+				}
+
+			} catch (error) {
+				console.error('Form submission error:', error);
+				showFormMessage('❌ Network error. Please check your connection and try again.', 'error');
+			} finally {
+				// Reset button state
+				submitButton.textContent = originalButtonText;
+				submitButton.disabled = false;
 			}
 		});
+
+		// Function to show form messages
+		function showFormMessage(message, type) {
+			// Remove existing message
+			const existingMessage = document.getElementById('form-message');
+			if (existingMessage) {
+				existingMessage.remove();
+			}
+
+			// Create message element
+			const messageEl = document.createElement('div');
+			messageEl.id = 'form-message';
+			messageEl.style.cssText = `
+				padding: 16px 20px;
+				margin: 20px 0;
+				border-radius: 8px;
+				font-weight: 500;
+				animation: slideIn 0.3s ease-out;
+				${type === 'success' 
+					? 'background: #d4edda; color: #155724; border: 1px solid #c3e6cb;' 
+					: 'background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;'
+				}
+			`;
+			messageEl.textContent = message;
+
+			// Add CSS animation if not already present
+			if (!document.getElementById('form-message-styles')) {
+				const styles = document.createElement('style');
+				styles.id = 'form-message-styles';
+				styles.textContent = `
+					@keyframes slideIn {
+						from { opacity: 0; transform: translateY(-10px); }
+						to { opacity: 1; transform: translateY(0); }
+					}
+					@keyframes spin {
+						from { transform: rotate(0deg); }
+						to { transform: rotate(360deg); }
+					}
+				`;
+				document.head.appendChild(styles);
+			}
+
+			// Insert message after form
+			contactForm.parentNode.insertBefore(messageEl, contactForm.nextSibling);
+
+			// Auto-remove success messages after 8 seconds
+			if (type === 'success') {
+				setTimeout(() => {
+					if (messageEl.parentNode) {
+						messageEl.style.animation = 'slideOut 0.3s ease-in';
+						setTimeout(() => messageEl.remove(), 300);
+					}
+				}, 8000);
+			}
+		}
 	}
 });
