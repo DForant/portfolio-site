@@ -286,6 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		const nameField = document.getElementById('contact-name');
 		const emailField = document.getElementById('contact-email');
 		const messageField = document.getElementById('contact-message');
+		const organizationField = document.getElementById('contact-organization');
 		
 		// Custom validation messages
 		const validationMessages = {
@@ -370,7 +371,8 @@ document.addEventListener('DOMContentLoaded', () => {
 			const formData = {
 				name: nameField.value.trim(),
 				email: emailField.value.trim(),
-				message: messageField.value.trim()
+				message: messageField.value.trim(),
+				organization: organizationField ? organizationField.value.trim() : ''
 			};
 
 			// Get submit button and show loading state
@@ -384,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			try {
 				// Submit to API
-				const response = await fetch('/api/contact/submit', {
+				const response = await fetch('http://localhost:3000/api/contact/submit', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
@@ -429,30 +431,135 @@ document.addEventListener('DOMContentLoaded', () => {
 				existingMessage.remove();
 			}
 
-			// Create message element
-			const messageEl = document.createElement('div');
-			messageEl.id = 'form-message';
-			messageEl.style.cssText = `
-				padding: 16px 20px;
-				margin: 20px 0;
-				border-radius: 8px;
-				font-weight: 500;
-				animation: slideIn 0.3s ease-out;
-				${type === 'success' 
-					? 'background: #d4edda; color: #155724; border: 1px solid #c3e6cb;' 
-					: 'background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;'
-				}
-			`;
-			messageEl.textContent = message;
+			// Create and show modal
+			showModal(message, type);
+		}
 
-			// Add CSS animation if not already present
-			if (!document.getElementById('form-message-styles')) {
+		// Modal functionality
+		function showModal(message, type) {
+			// Remove any existing modal
+			const existingModal = document.getElementById('contact-modal');
+			if (existingModal) {
+				existingModal.remove();
+			}
+
+			// Create modal
+			const modal = document.createElement('div');
+			modal.id = 'contact-modal';
+			modal.innerHTML = `
+				<div class="modal-overlay" onclick="closeModal()">
+					<div class="modal-content" onclick="event.stopPropagation()">
+						<div class="modal-header ${type === 'success' ? 'modal-header--success' : 'modal-header--error'}">
+							<h3>${type === 'success' ? '✅ Message Sent!' : '❌ Error'}</h3>
+							<button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+						</div>
+						<div class="modal-body">
+							<p>${message}</p>
+						</div>
+						<div class="modal-footer">
+							<button class="btn btn--primary" onclick="closeModal()">
+								${type === 'success' ? 'Great!' : 'Try Again'}
+							</button>
+						</div>
+					</div>
+				</div>
+			`;
+
+			// Add modal styles if not already present
+			if (!document.getElementById('modal-styles')) {
 				const styles = document.createElement('style');
-				styles.id = 'form-message-styles';
+				styles.id = 'modal-styles';
 				styles.textContent = `
-					@keyframes slideIn {
-						from { opacity: 0; transform: translateY(-10px); }
-						to { opacity: 1; transform: translateY(0); }
+					.modal-overlay {
+						position: fixed;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+						background: rgba(0, 0, 0, 0.7);
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						z-index: 10000;
+						animation: modalFadeIn 0.3s ease-out;
+					}
+					.modal-content {
+						background: white;
+						border-radius: 12px;
+						max-width: 500px;
+						width: 90%;
+						max-height: 90vh;
+						overflow: hidden;
+						box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+						animation: modalSlideIn 0.3s ease-out;
+					}
+					.modal-header {
+						padding: 20px 24px;
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						border-bottom: 1px solid #e1e5e9;
+					}
+					.modal-header--success {
+						background: linear-gradient(135deg, #28a745, #20c997);
+						color: white;
+					}
+					.modal-header--error {
+						background: linear-gradient(135deg, #dc3545, #e74c3c);
+						color: white;
+					}
+					.modal-header h3 {
+						margin: 0;
+						font-size: 1.25rem;
+					}
+					.modal-close {
+						background: none;
+						border: none;
+						font-size: 24px;
+						color: inherit;
+						cursor: pointer;
+						padding: 0;
+						width: 30px;
+						height: 30px;
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						border-radius: 50%;
+						transition: background-color 0.2s;
+					}
+					.modal-close:hover {
+						background: rgba(255, 255, 255, 0.2);
+					}
+					.modal-body {
+						padding: 24px;
+						line-height: 1.6;
+						color: #333;
+					}
+					.modal-footer {
+						padding: 16px 24px;
+						border-top: 1px solid #e1e5e9;
+						display: flex;
+						justify-content: flex-end;
+						background: #f8f9fa;
+					}
+					.modal-footer .btn {
+						min-width: 100px;
+					}
+					@keyframes modalFadeIn {
+						from { opacity: 0; }
+						to { opacity: 1; }
+					}
+					@keyframes modalSlideIn {
+						from { opacity: 0; transform: scale(0.9) translateY(-20px); }
+						to { opacity: 1; transform: scale(1) translateY(0); }
+					}
+					@keyframes modalFadeOut {
+						from { opacity: 1; }
+						to { opacity: 0; }
+					}
+					@keyframes modalSlideOut {
+						from { opacity: 1; transform: scale(1) translateY(0); }
+						to { opacity: 0; transform: scale(0.9) translateY(-20px); }
 					}
 					@keyframes spin {
 						from { transform: rotate(0deg); }
@@ -462,18 +569,53 @@ document.addEventListener('DOMContentLoaded', () => {
 				document.head.appendChild(styles);
 			}
 
-			// Insert message after form
-			contactForm.parentNode.insertBefore(messageEl, contactForm.nextSibling);
+			// Add modal to page
+			document.body.appendChild(modal);
 
-			// Auto-remove success messages after 8 seconds
+			// Close modal on Escape key
+			const handleEscape = (e) => {
+				if (e.key === 'Escape') {
+					closeModal();
+				}
+			};
+			document.addEventListener('keydown', handleEscape);
+
+			// Store cleanup function
+			modal._cleanup = () => {
+				document.removeEventListener('keydown', handleEscape);
+			};
+
+			// Auto-close success modals after 5 seconds
 			if (type === 'success') {
 				setTimeout(() => {
-					if (messageEl.parentNode) {
-						messageEl.style.animation = 'slideOut 0.3s ease-in';
-						setTimeout(() => messageEl.remove(), 300);
+					const currentModal = document.getElementById('contact-modal');
+					if (currentModal === modal) {
+						closeModal();
 					}
-				}, 8000);
+				}, 5000);
 			}
 		}
+
+		// Global function to close modal
+		window.closeModal = function() {
+			const modal = document.getElementById('contact-modal');
+			if (modal) {
+				// Add closing animation
+				modal.querySelector('.modal-overlay').style.animation = 'modalFadeOut 0.3s ease-in';
+				modal.querySelector('.modal-content').style.animation = 'modalSlideOut 0.3s ease-in';
+				
+				// Clean up event listeners
+				if (modal._cleanup) {
+					modal._cleanup();
+				}
+				
+				// Remove modal after animation
+				setTimeout(() => {
+					if (modal.parentNode) {
+						modal.remove();
+					}
+				}, 300);
+			}
+		};
 	}
 });
