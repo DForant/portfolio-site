@@ -44,6 +44,26 @@ portfolio-site/
    Startup file: server.js
    ```
 
+**Important**: According to hosting.com documentation:
+- **Application root path**: `/home/username/portfolio-api` (NOT inside `public_html/`)
+- **Typical locations**: `/home/username/appname` or `/home/username/apps/appname`
+- **DO NOT** put the application root inside the domain document root (`public_html/`)
+
+**File Manager Structure**:
+```
+/home/username/
+├── public_html/           # Frontend files go here
+│   ├── assets/
+│   ├── index.html
+│   └── ...
+├── portfolio-api/         # Backend files go here (separate directory)
+│   ├── server.js
+│   ├── package.json
+│   ├── .env
+│   └── node_modules/
+└── ...
+```
+
 ### **Option 2: Separate Hosting**
 
 #### **Frontend**: hosting.com (Static hosting)
@@ -54,7 +74,62 @@ portfolio-site/
 - Deploy `backend/` as Node.js application
 - Configure subdomain: `api.deanforantdesigns.com`
 
-## 🛠️ Step-by-Step Deployment
+## � File Manager Setup Instructions
+
+### **Where to Place Your Backend Code**
+
+Based on hosting.com documentation, here's exactly where to place your files:
+
+#### **Step 1: Access File Manager**
+1. Log into cPanel
+2. Go to **Files** → **File Manager**
+
+#### **Step 2: Navigate to Correct Directory**
+- **DO NOT** upload backend files to `public_html/` 
+- Navigate to your **home directory**: `/home/yourusername/`
+- This is typically the root directory when you first open File Manager
+
+#### **Step 3: Create Backend Application Directory**
+1. In your home directory (`/home/yourusername/`), create a new folder:
+   ```
+   portfolio-api
+   ```
+2. This folder should be at the same level as `public_html/`, NOT inside it
+
+#### **Step 4: Upload Backend Files**
+Upload all files from your local `backend/` directory to `/home/yourusername/portfolio-api/`:
+- `server.js`
+- `package.json`
+- `.env`
+- Any other backend files
+
+#### **Step 5: Upload Frontend Files**
+Upload all files from your local `frontend/` directory to `/home/yourusername/public_html/`:
+- `index.html`
+- `assets/` folder
+- All other frontend files
+
+#### **Final File Structure in File Manager**
+```
+/home/yourusername/
+├── public_html/           # ← Frontend files (your website)
+│   ├── assets/
+│   │   ├── css/
+│   │   ├── images/
+│   │   └── js/
+│   ├── index.html
+│   └── ...
+├── portfolio-api/         # ← Backend files (Node.js app)
+│   ├── server.js
+│   ├── package.json
+│   ├── .env
+│   └── node_modules/      (created after npm install)
+├── logs/
+├── mail/
+└── tmp/
+```
+
+## �🛠️ Step-by-Step Deployment
 
 ### **Step 1: Prepare Frontend**
 
@@ -80,14 +155,34 @@ npm install --production
 **Upload to hosting.com:**
 1. **Create Node.js App in cPanel**:
    ```
-   Node.js version: 18.x
+   Node.js version: 18.x (or latest available)
    Application mode: Production
    Application root: portfolio-api
    Application URL: https://api.deanforantdesigns.com (or subdirectory)
    Application startup file: server.js
    ```
 
-2. **Environment Variables**:
+2. **File Placement in File Manager**:
+   - Navigate to `/home/username/` (your home directory)
+   - **Create folder**: `portfolio-api` (this will be your Node.js app directory)
+   - **Upload your backend files to**: `/home/username/portfolio-api/`
+   
+   **Directory structure in File Manager**:
+   ```
+   /home/username/
+   ├── public_html/           # Your frontend files
+   │   ├── assets/
+   │   ├── index.html
+   │   └── ...
+   ├── portfolio-api/         # Your backend files (Node.js app)
+   │   ├── server.js          # Main application file
+   │   ├── package.json       # Dependencies
+   │   ├── .env              # Environment variables
+   │   └── (other backend files)
+   └── ...
+   ```
+
+3. **Environment Variables**:
    ```
    NODE_ENV=production
    PORT=3000
@@ -101,13 +196,18 @@ npm install --production
    **Note**: `FRONTEND_URL` now supports multiple comma-separated URLs for CORS origins.
    This allows your backend to accept requests from multiple frontend domains if needed.
 
-3. **Upload Files**:
-   ```
-   ~/portfolio-api/
-   ├── server.js
-   ├── package.json
-   └── .env
-   ```
+4. **Upload Files to File Manager**:
+   - Use cPanel File Manager
+   - Navigate to your home directory (not `public_html/`)
+   - Create the `portfolio-api` folder
+   - Upload all files from your local `backend/` directory:
+     ```
+     ~/portfolio-api/
+     ├── server.js
+     ├── package.json
+     ├── .env
+     └── (any other backend files)
+     ```
 
 ### **Step 3: DNS Configuration (if using subdomain)**
 
