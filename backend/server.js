@@ -25,14 +25,23 @@ app.use(helmet({
 }));
 
 // CORS configuration for frontend
-app.use(cors({
-    origin: process.env.FRONTEND_URL || [
+const getAllowedOrigins = () => {
+    // If FRONTEND_URL is set, use it (can be comma-separated for multiple URLs)
+    if (process.env.FRONTEND_URL) {
+        return process.env.FRONTEND_URL.split(',').map(url => url.trim());
+    }
+    
+    // Default fallback origins for development
+    return [
         'http://localhost:3000', 
         'http://localhost:5500',
         'http://127.0.0.1:5500',
-        'https://deanforantdesigns.com',
-        'https://deanforant.com'
-    ],
+        'https://deanforantdesigns.com'
+    ];
+};
+
+app.use(cors({
+    origin: getAllowedOrigins(),
     credentials: true
 }));
 
@@ -372,6 +381,7 @@ app.listen(PORT, async () => {
     console.log(`📧 Contact form endpoint: http://localhost:${PORT}/api/contact/submit`);
     console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
     console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🌐 Allowed CORS origins: ${getAllowedOrigins().join(', ')}`);
     console.log(`📂 Working directory: ${process.cwd()}`);
     console.log(`⏰ Server started at: ${new Date().toISOString()}`);
     

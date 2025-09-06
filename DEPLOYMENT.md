@@ -95,8 +95,11 @@ npm install --production
    SMTP_PORT=465
    SMTP_USER=dean@deanforantdesigns.com
    SMTP_PASS=your_password
-   FRONTEND_URL=https://deanforantdesigns.com
+   FRONTEND_URL=https://deanforantdesigns.com,https://www.deanforantdesigns.com
    ```
+
+   **Note**: `FRONTEND_URL` now supports multiple comma-separated URLs for CORS origins.
+   This allows your backend to accept requests from multiple frontend domains if needed.
 
 3. **Upload Files**:
    ```
@@ -126,6 +129,21 @@ npm install --production
 
 ## 🔧 Local Development Setup
 
+### **Environment Configuration**
+For local development, create/update `backend/.env`:
+```bash
+# Backend environment variables for local development
+NODE_ENV=development
+PORT=3000
+FRONTEND_URL=http://127.0.0.1:5500,http://localhost:5500,http://localhost:3000
+
+# Email configuration (use your actual SMTP settings)
+SMTP_HOST=mail.deanforantdesigns.com
+SMTP_PORT=465
+SMTP_USER=dean@deanforantdesigns.com
+SMTP_PASS=your_password
+```
+
 ### **Backend Development**
 ```bash
 cd backend/
@@ -149,13 +167,48 @@ The frontend automatically detects environment:
 - **Local Development**: `http://localhost:3000/api/contact/submit`
 - **Production**: `https://api.deanforantdesigns.com/api/contact/submit`
 
+## 🔗 CORS Configuration
+
+The backend now uses a flexible CORS system that reads allowed origins from environment variables:
+
+### **Environment Variable Format**
+```bash
+# Single origin
+FRONTEND_URL=https://deanforantdesigns.com
+
+# Multiple origins (comma-separated)
+FRONTEND_URL=https://deanforantdesigns.com,https://www.deanforantdesigns.com,https://staging.deanforantdesigns.com
+```
+
+### **Development vs Production**
+
+**Local Development (.env):**
+```bash
+FRONTEND_URL=http://127.0.0.1:5500,http://localhost:5500,http://localhost:3000
+```
+
+**Production (.env):**
+```bash
+FRONTEND_URL=https://deanforantdesigns.com,https://www.deanforantdesigns.com
+```
+
+### **Debugging CORS**
+When the server starts, it will log the allowed origins:
+```
+🌐 Allowed CORS origins: http://127.0.0.1:5500, http://localhost:5500, http://localhost:3000
+```
+
 ## 🚨 Common Issues & Solutions
 
 ### **CORS Errors**
 If frontend can't reach backend:
-1. Check `FRONTEND_URL` in backend `.env`
-2. Verify CORS configuration in `server.js`
-3. Ensure subdomain is properly configured
+1. **Check `FRONTEND_URL` in backend `.env`**:
+   - For local development: `FRONTEND_URL=http://127.0.0.1:5500,http://localhost:5500`
+   - For production: `FRONTEND_URL=https://deanforantdesigns.com,https://www.deanforantdesigns.com`
+   - Multiple URLs are supported (comma-separated)
+2. **Verify CORS configuration** in `server.js` (should automatically use environment variable)
+3. **Check server startup logs** for "Allowed CORS origins" to confirm configuration
+4. Ensure subdomain is properly configured
 
 ### **hosting.com Specific Issues**
 
@@ -169,6 +222,11 @@ const apiBaseUrl = isLocalDev ? 'http://localhost:3000' : 'https://deanforantdes
 #### **Backend configuration:**
 ```
 Application URL: https://deanforantdesigns.com/api
+```
+
+**Environment Variables for path-based setup:**
+```bash
+FRONTEND_URL=https://deanforantdesigns.com
 ```
 
 ### **Email Issues**
