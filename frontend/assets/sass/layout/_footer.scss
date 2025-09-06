@@ -62,13 +62,10 @@
   
   // Footer Logo - BEM Element
   &__logo {
-    height: 5rem; // 50px
+    height: 10rem; // 
     width: auto;
     margin-bottom: v.$spacing-md; // 1.6rem
-    
-    @media (max-width: v.$breakpoint-sm) {
-      height: 4rem; // 40px
-    }
+
   }
   
   // Footer Tagline - BEM Element

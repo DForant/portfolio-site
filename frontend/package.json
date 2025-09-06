@@ -1,0 +1,23 @@
+{
+  "name": "dean-forant-portfolio-frontend",
+  "version": "1.0.0",
+  "description": "Frontend website for Dean Forant Portfolio",
+  "scripts": {
+    "sass": "sass assets/sass/main.scss assets/css/style.css",
+    "sass:watch": "sass --watch assets/sass/main.scss assets/css/style.css",
+    "sass:build": "sass assets/sass/main.scss assets/css/style.css --style compressed",
+    "build": "npm run sass:build",
+    "dev": "npm run sass:watch"
+  },
+  "keywords": [
+    "portfolio",
+    "frontend",
+    "website",
+    "sass"
+  ],
+  "author": "Dean Forant",
+  "license": "MIT",
+  "devDependencies": {
+    "sass": "^1.90.0"
+  }
+}

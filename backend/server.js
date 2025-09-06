@@ -7,7 +7,6 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const { body, validationResult } = require('express-validator');
 const nodemailer = require('nodemailer');
-const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,16 +16,25 @@ app.use(helmet({
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
-            fontSrc: ["'self'", "https://fonts.gstatic.com"],
-            scriptSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'self'"],
             imgSrc: ["'self'", "data:", "https:"],
             connectSrc: ["'self'"],
         },
     },
 }));
 
-app.use(cors());
+// CORS configuration for frontend
+app.use(cors({
+    origin: process.env.FRONTEND_URL || [
+        'http://localhost:3000', 
+        'http://localhost:5500',
+        'http://127.0.0.1:5500',
+        'https://deanforantdesigns.com'
+    ],
+    credentials: true
+}));
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -41,9 +49,6 @@ const limiter = rateLimit({
     standardHeaders: true,
     legacyHeaders: false,
 });
-
-// Serve static files
-app.use(express.static('.'));
 
 // Email configuration
 const createTransporter = () => {
@@ -133,41 +138,47 @@ const detectSpam = (formData) => {
         }
     });
 
-    // Check for excessive links
-    const linkCount = (message.match(/https?:\/\//g) || []).length;
-    if (linkCount > 2) {
-        spamScore += 3;
-        flags.push(`Too many links: ${linkCount}`);
-    }
-
-    // Check for excessive caps
-    const capsCount = (message.match(/[A-Z]/g) || []).length;
-    const capsPercentage = (capsCount / message.length) * 100;
-    if (capsPercentage > 30) {
-        spamScore += 2;
-        flags.push(`Excessive capitals: ${capsPercentage.toFixed(1)}%`);
-    }
-
-    // Check message length
-    if (message.length < 10) {
+    // Check for suspicious patterns
+    if (messageText.includes('http://') || messageText.includes('https://')) {
         spamScore += 1;
-        flags.push('Message too short');
+        flags.push('Contains URLs');
     }
 
-    // Check for valid email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        spamScore += 3;
-        flags.push('Invalid email format');
+    // Check for excessive capitalization
+    const capitalRatio = (message.match(/[A-Z]/g) || []).length / message.length;
+    if (capitalRatio > 0.5) {
+        spamScore += 1;
+        flags.push('Excessive capitalization');
+    }
+
+    // Check for repeated characters
+    if (/(.)\1{4,}/.test(message)) {
+        spamScore += 1;
+        flags.push('Repeated characters');
+    }
+
+    // Check for suspicious email patterns
+    if (email.includes('+') || email.includes('tempmail') || email.includes('10minutemail')) {
+        spamScore += 2;
+        flags.push('Suspicious email pattern');
     }
 
     return {
-        isSpam: spamScore >= 5,
-        spamScore,
-        flags,
-        confidence: Math.min(spamScore / 10, 1)
+        isSpam: spamScore >= 3,
+        score: spamScore,
+        flags: flags
     };
 };
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+    res.json({ 
+        status: 'healthy', 
+        timestamp: new Date().toISOString(),
+        service: 'Dean Forant Portfolio API',
+        environment: process.env.NODE_ENV || 'development'
+    });
+});
 
 // Contact form submission endpoint
 app.post('/api/contact/submit', limiter, [
@@ -189,7 +200,7 @@ app.post('/api/contact/submit', limiter, [
         .optional()
         .trim()
         .isLength({ max: 100 })
-        .withMessage('Organization name cannot exceed 100 characters')
+        .withMessage('Organization name must be less than 100 characters')
         .escape()
 ], async (req, res) => {
     try {
@@ -198,7 +209,7 @@ app.post('/api/contact/submit', limiter, [
         if (!errors.isEmpty()) {
             return res.status(400).json({
                 success: false,
-                message: 'Please check your form data and try again.',
+                message: 'Please check your form inputs and try again.',
                 errors: errors.array()
             });
         }
@@ -209,70 +220,50 @@ app.post('/api/contact/submit', limiter, [
             message: req.body.message,
             organization: req.body.organization || '',
             timestamp: new Date().toISOString(),
-            ip: req.ip || req.connection.remoteAddress,
-            userAgent: req.get('User-Agent') || 'Unknown'
+            ip: req.ip || req.connection.remoteAddress
         };
 
-        console.log('📧 New contact form submission:', { 
-            name: formData.name, 
-            email: formData.email,
-            organization: formData.organization,
-            messageLength: formData.message.length
-        });
-
         // Spam detection
-        const spamAnalysis = detectSpam(formData);
-        console.log('🛡️ Spam analysis:', spamAnalysis);
-
-        if (spamAnalysis.isSpam) {
-            console.log('🚫 Blocked spam submission:', spamAnalysis.flags);
+        const spamCheck = detectSpam(formData);
+        if (spamCheck.isSpam) {
+            console.log(`🚫 Spam detected from ${formData.email}:`, spamCheck);
             return res.status(400).json({
                 success: false,
-                message: 'Your message appears to be spam. If this is an error, please try rewording your message.'
+                message: 'Your message appears to be spam. Please contact me directly if this is a legitimate inquiry.'
             });
         }
+
+        console.log('📧 Processing contact form submission:', {
+            name: formData.name,
+            email: formData.email,
+            organization: formData.organization,
+            timestamp: formData.timestamp
+        });
 
         // Create email transporter
         const transporter = createTransporter();
 
-        // Email content
+        // Prepare email content
         const emailHtml = `
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
                 <div style="background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <div style="text-align: center; margin-bottom: 30px;">
-                        <h1 style="color: #4A6C9B; margin: 0; font-size: 24px;">New Website Inquiry</h1>
-                        <p style="color: #666; margin: 10px 0 0 0;">From your portfolio website contact form</p>
+                        <h1 style="color: #4A6C9B; margin: 0; font-size: 24px;">New Contact Form Submission</h1>
+                        <p style="color: #666; margin: 10px 0 0 0;">Received from deanforantdesigns.com</p>
                     </div>
                     
                     <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                        <h2 style="color: #333; font-size: 18px; margin: 0 0 15px 0;">Contact Information</h2>
-                        <p style="margin: 8px 0; color: #555;"><strong>Name:</strong> ${formData.name}</p>
-                        <p style="margin: 8px 0; color: #555;"><strong>Email:</strong> <a href="mailto:${formData.email}" style="color: #4A6C9B;">${formData.email}</a></p>
-                        ${formData.organization ? `<p style="margin: 8px 0; color: #555;"><strong>Organization:</strong> ${formData.organization}</p>` : ''}
-                        <p style="margin: 8px 0; color: #555;"><strong>Submitted:</strong> ${new Date(formData.timestamp).toLocaleString()}</p>
+                        <h3 style="color: #4A6C9B; margin: 0 0 15px 0; font-size: 18px;">Contact Information</h3>
+                        <p style="margin: 8px 0; color: #333;"><strong>Name:</strong> ${formData.name}</p>
+                        <p style="margin: 8px 0; color: #333;"><strong>Email:</strong> ${formData.email}</p>
+                        ${formData.organization ? `<p style="margin: 8px 0; color: #333;"><strong>Organization:</strong> ${formData.organization}</p>` : ''}
+                        <p style="margin: 8px 0; color: #333;"><strong>Submitted:</strong> ${new Date(formData.timestamp).toLocaleString()}</p>
                     </div>
                     
-                    <div style="background: white; border: 1px solid #e1e5e9; border-radius: 8px; padding: 20px;">
-                        <h2 style="color: #333; font-size: 18px; margin: 0 0 15px 0;">Message</h2>
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 4px solid #4A6C9B;">
-                            <p style="margin: 0; color: #333; line-height: 1.6; white-space: pre-wrap;">${formData.message}</p>
-                        </div>
+                    <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; border-left: 4px solid #4A6C9B;">
+                        <h3 style="color: #4A6C9B; margin: 0 0 15px 0; font-size: 18px;">Message</h3>
+                        <p style="margin: 0; color: #333; line-height: 1.6; white-space: pre-wrap;">${formData.message}</p>
                     </div>
-                    
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e1e5e9; text-align: center;">
-                        <p style="color: #666; font-size: 14px; margin: 0;">
-                            <strong>Quick Actions:</strong> 
-                            <a href="mailto:${formData.email}?subject=Re: Your inquiry about my design services" style="color: #4A6C9B; text-decoration: none; margin: 0 10px;">Reply to ${formData.name}</a> |
-                            <a href="tel:${formData.email}" style="color: #4A6C9B; text-decoration: none; margin: 0 10px;">Schedule Call</a>
-                        </p>
-                    </div>
-                </div>
-                
-                <div style="text-align: center; margin-top: 20px;">
-                    <p style="color: #666; font-size: 12px; margin: 0;">
-                        This email was sent from your portfolio website contact form.<br>
-                        Spam confidence: ${(spamAnalysis.confidence * 100).toFixed(1)}% | IP: ${formData.ip}
-                    </p>
                 </div>
             </div>
         `;
@@ -327,11 +318,11 @@ app.post('/api/contact/submit', limiter, [
                             Best regards,<br>
                             <strong>Dean Forant</strong><br>
                             Brand & Web Design<br>
-                            <a href="mailto:dean@deanforantdesigns.com" style="color: #4A6C9B;">dean@deanforantdesigns.com</a>
+                            <a href="https://deanforantdesigns.com" style="color: #4A6C9B;">deanforantdesigns.com</a>
                         </p>
                     </div>
                     
-                    <div style="text-align: center; background: #4A6C9B; padding: 20px; border-radius: 8px;">
+                    <div style="background: #4A6C9B; color: white; padding: 15px; border-radius: 8px; text-align: center;">
                         <p style="margin: 0; color: white; font-size: 16px;">
                             <strong>Your message has been received</strong>
                         </p>
@@ -366,8 +357,7 @@ app.post('/api/contact/submit', limiter, [
         });
 
     } catch (error) {
-        console.error('❌ Contact form error:', error);
-        
+        console.error('❌ Contact form submission error:', error);
         res.status(500).json({
             success: false,
             message: 'Sorry, there was an error sending your message. Please try again or contact me directly at dean@deanforantdesigns.com.'
@@ -375,27 +365,19 @@ app.post('/api/contact/submit', limiter, [
     }
 });
 
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-    res.json({ 
-        status: 'healthy', 
-        timestamp: new Date().toISOString(),
-        service: 'Dean Forant Portfolio API'
-    });
-});
-
-// Catch-all for SPA routing
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
+// Start server
 app.listen(PORT, async () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📧 Contact form endpoint: http://localhost:${PORT}/api/contact/submit`);
     console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
+    console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`📂 Working directory: ${process.cwd()}`);
+    console.log(`⏰ Server started at: ${new Date().toISOString()}`);
     
-    // Test email configuration
-    await testEmailConfig();
+    // Test email configuration (disabled for local dev)
+    // await testEmailConfig();
+    
+    console.log(`✅ Server initialization complete`);
 });
 
 module.exports = app;

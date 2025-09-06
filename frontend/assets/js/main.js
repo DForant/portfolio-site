@@ -385,8 +385,11 @@ document.addEventListener('DOMContentLoaded', () => {
 			submitButton.innerHTML = '<span style="display: inline-block; width: 16px; height: 16px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 8px;"></span>Sending...';
 
 			try {
-				// Submit to API
-				const response = await fetch('http://localhost:3000/api/contact/submit', {
+				// Submit to API - Configure API endpoint based on environment
+				const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+				const apiBaseUrl = isLocalDev ? 'http://localhost:3000' : 'https://api.deanforantdesigns.com';
+				
+				const response = await fetch(`${apiBaseUrl}/api/contact/submit`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',

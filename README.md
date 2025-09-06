@@ -1,84 +1,60 @@
 # Dean Forant Portfolio Website
 
-A professional portfolio website with contact form functionality and email integration.
+A professional portfolio website with separated frontend and backend architecture.
+
+## 🏗️ Project Architecture
+
+This project is organized into two main components:
+
+```
+portfolio-site/
+├── frontend/                 # 🌐 Static website (HTML, CSS, JS, images)
+│   ├── assets/
+│   ├── index.html
+│   └── package.json
+├── backend/                  # 🚀 Node.js API server (contact form, email)
+│   ├── server.js
+│   ├── package.json
+│   ├── .env
+│   └── .env.example
+├── DEPLOYMENT-SEPARATED.md   # 📋 Deployment guide
+└── README.md
+```
 
 ## 🚀 Features
 
 - **Responsive Design**: Mobile-first approach with modern CSS Grid and Flexbox
 - **Interactive Contact Form**: Professional form with validation and modal feedback
-- **Email Integration**: Automated email sending to dean@deanforantdesigns.com
+- **Email Integration**: Automated email sending with SMTP support
+- **Separated Architecture**: Independent frontend and backend for better scalability
 - **Client Carousel**: Interactive showcase of client logos
 - **Process Tabs**: Interactive workflow demonstration
-- **Smooth Animations**: CSS animations and intersection observers
 - **Security**: Rate limiting, CORS protection, and spam detection
 
-## 📋 Project Structure
+## 🛠️ Quick Start
 
-```
-portfolio-site/
-├── assets/
-│   ├── css/
-│   │   ├── style.css          # Compiled CSS
-│   │   └── style.css.map      # Source map
-│   ├── images/                # All website images
-│   ├── js/
-│   │   └── main.js           # Frontend JavaScript
-│   └── sass/                 # SCSS source files
-├── .env                      # Environment variables (not in git)
-├── .env.example             # Environment template
-├── index.html               # Main HTML file
-├── package.json             # Node.js dependencies
-├── server.js                # Express server for contact form
-└── README.md               # This file
+### **Install All Dependencies**
+```bash
+npm run install:all
 ```
 
-## 🛠️ Local Development Setup
+### **Development**
+```bash
+# Start backend API server (Terminal 1)
+npm run dev:backend
 
-### Prerequisites
+# Start frontend development (Terminal 2)  
+npm run dev:frontend
+```
 
-- Node.js (v16 or higher)
-- npm or yarn
-- SASS compiler
+### **Production Build**
+```bash
+# Build frontend for production
+npm run build:frontend
 
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd portfolio-site
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure environment variables**
-   ```bash
-   cp .env.example .env
-   ```
-   Edit `.env` with your email settings:
-   ```env
-   # Email Configuration
-   SMTP_HOST=mail.deanforantdesigns.com
-   SMTP_PORT=465
-   SMTP_USER=dean@deanforantdesigns.com
-   SMTP_PASS=your_email_password
-   
-   # Server Configuration
-   PORT=3000
-   NODE_ENV=development
-   ```
-
-4. **Start development server**
-   ```bash
-   npm start
-   ```
-
-5. **Compile SASS (for styling changes)**
-   ```bash
-   npm run sass:watch
-   ```
+# Prepare backend for production
+npm run deploy:backend
+```
 
 ## 🌐 Production Deployment to hosting.com
 
