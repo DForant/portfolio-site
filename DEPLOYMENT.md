@@ -40,7 +40,7 @@ portfolio-site/
 2. **Configuration**:
    ```
    Application root: portfolio-api
-   Application URL: https://api.deanforantdesigns.com
+   Application URL: api (for path-based) OR https://api.deanforantdesigns.com (for subdomain)
    Startup file: server.js
    ```
 
@@ -48,6 +48,22 @@ portfolio-site/
 - **Application root path**: `/home/username/portfolio-api` (NOT inside `public_html/`)
 - **Typical locations**: `/home/username/appname` or `/home/username/apps/appname`
 - **DO NOT** put the application root inside the domain document root (`public_html/`)
+
+### **Application URL Options:**
+
+#### **Option A: Path-based (Simpler setup)**
+- **Application URL field**: `api`
+- **Your API accessible at**: `https://deanforantdesigns.com/api`
+- **No subdomain creation needed**
+- **Your contact form will call**: `https://deanforantdesigns.com/api/contact/submit`
+
+#### **Option B: Subdomain (Better separation)**
+- **Application URL field**: `https://api.deanforantdesigns.com`
+- **Your API accessible at**: `https://api.deanforantdesigns.com`
+- **Requires creating subdomain in cPanel first**
+- **Your contact form will call**: `https://api.deanforantdesigns.com/api/contact/submit`
+
+**⚠️ Critical**: Whatever you choose, you must update your routes in `server.js` to include the path!
 
 **File Manager Structure**:
 ```
@@ -209,6 +225,66 @@ npm install --production
      └── (any other backend files)
      ```
 
+## ⚠️ **CRITICAL: Update Your Server Routes for hosting.com**
+
+hosting.com uses **Phusion Passenger** which requires your routes to include the Application URL path. You MUST update your `server.js` file:
+
+### **For Path-based Setup (Application URL: `api`)**
+
+**Current routes in your server.js:**
+```javascript
+// ❌ This won't work on hosting.com
+app.get('/api/health', (req, res) => {...});
+app.post('/api/contact/submit', (req, res) => {...});
+```
+
+**Must be changed to:**
+```javascript
+// ✅ This will work on hosting.com
+app.get('/api/api/health', (req, res) => {...});
+app.post('/api/api/contact/submit', (req, res) => {...});
+```
+
+**Why?** Because your app runs at `/api`, so routes become `/api` + `/api/health` = `/api/api/health`
+
+### **For Subdomain Setup (Application URL: `https://api.deanforantdesigns.com`)**
+
+**Your current routes will work as-is:**
+```javascript
+// ✅ This will work with subdomain
+app.get('/api/health', (req, res) => {...});
+app.post('/api/contact/submit', (req, res) => {...});
+```
+
+### **Recommended Approach: Environment-Based Routes**
+
+Add this to your `server.js` to handle both local development and production:
+
+```javascript
+// Environment-based route prefix
+const routePrefix = process.env.NODE_ENV === 'production' && process.env.APP_PATH 
+  ? `/${process.env.APP_PATH}` 
+  : '';
+
+// Routes with dynamic prefix
+app.get(`${routePrefix}/api/health`, (req, res) => {
+    res.json({ status: 'OK', message: 'Server is running' });
+});
+
+app.post(`${routePrefix}/api/contact/submit`, [/* your middleware */], async (req, res) => {
+    // Your contact form logic
+});
+```
+
+**Add to your `.env` file:**
+```bash
+# For path-based setup
+APP_PATH=api
+
+# For subdomain setup (leave empty)
+# APP_PATH=
+```
+
 ### **Step 3: DNS Configuration (if using subdomain)**
 
 **For `api.deanforantdesigns.com`:**
@@ -262,10 +338,37 @@ npm run sass:watch
 
 ## 🌐 API Endpoint Configuration
 
-The frontend automatically detects environment:
+The frontend automatically detects environment and must match your hosting.com setup:
 
-- **Local Development**: `http://localhost:3000/api/contact/submit`
-- **Production**: `https://api.deanforantdesigns.com/api/contact/submit`
+### **Local Development:**
+- **Backend URL**: `http://localhost:3000/api/contact/submit`
+
+### **Production (Path-based - Application URL: `api`):**
+- **Backend URL**: `https://deanforantdesigns.com/api/api/contact/submit`
+- **Note**: Double `/api` is required due to hosting.com's Passenger routing
+
+### **Production (Subdomain - Application URL: `https://api.deanforantdesigns.com`):**
+- **Backend URL**: `https://api.deanforantdesigns.com/api/contact/submit`
+
+### **Frontend JavaScript Update Required:**
+
+Update your `frontend/assets/js/main.js` file to match your chosen setup:
+
+**For Path-based setup:**
+```javascript
+const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const apiBaseUrl = isLocalDev 
+  ? 'http://localhost:3000' 
+  : 'https://deanforantdesigns.com/api';  // Note: /api path
+```
+
+**For Subdomain setup:**
+```javascript
+const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const apiBaseUrl = isLocalDev 
+  ? 'http://localhost:3000' 
+  : 'https://api.deanforantdesigns.com';  // Subdomain URL
+```
 
 ## 🔗 CORS Configuration
 
