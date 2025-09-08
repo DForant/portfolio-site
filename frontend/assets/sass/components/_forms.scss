@@ -92,6 +92,8 @@
     font-family: v.$font-body;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+    text-decoration: none; // For anchor tag styling
+    display: inline-block; // For anchor tag styling
     
     &:hover {
       background: color.adjust(v.$primary-blue, $lightness: -10%);
@@ -106,6 +108,37 @@
       outline: none;
       box-shadow: 0 0 0 0.3rem rgba(74, 108, 155, 0.25);
     }
+  }
+}
+
+// Contact Action Section - for mailto button
+.contact__action {
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-lg; // 2.4rem
+  max-width: 50rem; // Same as form for consistency
+  align-items: center; // Center the content
+  text-align: center; // Center the text
+  
+  .contact__description {
+    font-size: v.$font-size-sm; // 1.4rem
+    color: v.$charcoal;
+    line-height: 1.6;
+    margin: 0;
+  }
+  
+  .contact__mailto-btn {
+    align-self: center; // Center the button
+  }
+  
+  .contact__note {
+    font-size: 1.1rem; // Even smaller than font-size-xs for footnote appearance
+    color: color.adjust(v.$charcoal, $lightness: 30%); // Even lighter text
+    margin: 0;
+    opacity: 0.7; // More subtle
+    font-style: italic;
+    margin-top: -0.8rem; // Pull even closer to button (equivalent to spacing-xs)
+    font-weight: 400; // Ensure normal weight
   }
 }
 
