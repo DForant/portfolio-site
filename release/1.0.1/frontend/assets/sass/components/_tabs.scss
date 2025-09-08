@@ -1,0 +1,149 @@
+// _tabs.scss - Process Tabs Component
+@use 'sass:color';
+@use '../abstracts/variables' as v;
+
+// Process Tabs Component
+.process-tabs {
+  // Tab Navigation
+  &__nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: v.$spacing-xs; // 0.8rem
+    margin-bottom: v.$spacing-lg; // 2.4rem
+    
+    @media (max-width: v.$breakpoint-sm) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: v.$spacing-sm; // 1.2rem
+    }
+  }
+  
+  // Individual Tab Button
+  &__tab {
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: v.$spacing-xs; // 0.8rem
+    padding: v.$spacing-sm v.$spacing-xs; // 1.2rem 0.8rem
+    background: v.$white;
+    border: 0.2rem solid color.adjust(v.$primary-blue, $lightness: 40%);
+    border-radius: v.$border-radius-base;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: v.$font-body;
+    
+    &:hover {
+      border-color: v.$primary-blue;
+      transform: translateY(-0.2rem);
+    }
+    
+    &--active {
+      background: v.$primary-blue;
+      border-color: v.$primary-blue;
+      color: v.$white;
+      
+      .process-tabs__number {
+        background: v.$white;
+        color: v.$primary-blue;
+      }
+      
+      .process-tabs__label {
+        color: v.$white;
+      }
+    }
+    
+    @media (max-width: v.$breakpoint-sm) {
+      padding: v.$spacing-xs; // 0.8rem
+      gap: v.$spacing-xs; // 0.8rem
+    }
+
+    @media (max-width: v.$breakpoint-xs){
+      width: 10rem;
+    }
+  }
+  
+  // Tab Number
+  &__number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem; // 24px
+    height: 2.4rem; // 24px
+    background: color.adjust(v.$primary-blue, $lightness: 40%);
+    color: v.$primary-blue;
+    border-radius: 50%;
+    font-size: v.$font-size-xs; // 1.2rem
+    font-weight: 500;
+    transition: all 0.3s ease;
+    
+    @media (max-width: v.$breakpoint-sm) {
+      width: 2rem; // 20px
+      height: 2rem; // 20px
+      font-size: 1rem; // 10px
+    }
+  }
+  
+  // Tab Label
+  &__label {
+    font-size: v.$font-size-sm; // 1.4rem
+    font-weight: 500;
+    color: v.$charcoal;
+    transition: color 0.3s ease;
+    text-align: center;
+    
+    @media (max-width: v.$breakpoint-sm) {
+      font-size: v.$font-size-xs; // 1.2rem
+    }
+  }
+  
+  // Tab Content Container
+  &__content {
+    position: relative;
+    min-height: 20rem; // Ensure consistent height
+    
+    @media (max-width: v.$breakpoint-md) {
+      min-height: auto;
+    }
+  }
+  
+  // Individual Tab Panel
+  &__panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(1rem);
+    transition: all 0.4s ease;
+    
+    &--active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      position: relative; // Reset positioning for active panel
+    }
+    
+    h4 {
+      font-size: v.$font-size-lg; // 1.8rem
+      color: v.$primary-blue;
+      margin-bottom: v.$spacing-sm; // 1.2rem
+      font-family: v.$font-heading;
+      
+      @media (max-width: v.$breakpoint-sm) {
+        font-size: v.$font-size-md; // 1.6rem
+      }
+    }
+    
+    p {
+      font-size: v.$font-size-sm; // 1.4rem
+      color: v.$charcoal;
+      line-height: 1.6;
+      margin: 0;
+      
+      @media (max-width: v.$breakpoint-sm) {
+        font-size: v.$font-size-xs; // 1.2rem
+      }
+    }
+  }
+}
