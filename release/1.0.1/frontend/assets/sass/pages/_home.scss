@@ -1,0 +1,161 @@
+// _home.scss
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+// Hero Section - BEM Block
+.hero {
+  height: 60rem;
+  background: url('../images/web-banner-80.jpg') bottom right/cover no-repeat;
+  display: flex;
+  align-items: center;
+  position: relative;
+  
+  // Gradient overlay for better visual appeal and text readability
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: v.$gradient-hero;
+    z-index: 1;
+  }
+  
+  // Additional subtle gradient for depth
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(248, 249, 250, 0.1) 0%, transparent 50%, rgba(75, 108, 155, 0.05) 100%);
+    z-index: 1;
+  }
+  
+  .section__container {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    
+    @media (max-width: v.$breakpoint-md) {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+  }
+  
+  // Hero Content - BEM Element
+  &__content {
+    width: 85%;
+    padding: v.$spacing-sm; // 2rem
+    background: linear-gradient(135deg, rgba(248, 249, 250, 0.9) 0%, rgba(255, 255, 255, 0.8) 100%);
+    border-radius: v.$border-radius-base;
+    box-shadow: 0 0.75rem 3rem rgba(74, 108, 155, 0.25),
+                0 0.5rem 1.5rem rgba(74, 108, 155, 0.15),
+                0 0.25rem 0.75rem rgba(74, 108, 155, 0.1);
+    backdrop-filter: blur(0.625rem); // 10px
+    border: 0.0625rem solid rgba(255, 255, 255, 0.2); // 1px
+    position: relative;
+    
+    // Subtle inner gradient for depth
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: v.$gradient-primary-overlay;
+      border-radius: v.$border-radius-base;
+      z-index: -1;
+      opacity: 0.3;
+    }
+    
+    @media (max-width: v.$breakpoint-md) {
+      Width: 70%;
+      max-width: 100%;
+      padding: v.$spacing-xl; // 2rem
+    }
+    
+    @media (max-width: v.$breakpoint-sm) {
+      width: 100%;
+      padding: v.$spacing-sm; // 1.5rem
+    }
+  }
+  
+  // Hero Title - BEM Element
+  &__title {
+    font-size: v.$font-size-3xl; 
+    color: v.$primary-blue;
+    margin: 0 1rem;
+    margin-bottom: v.$spacing-md; // 1.6rem
+    line-height: 1.2;
+    
+    @media (max-width: v.$breakpoint-md) {
+      font-size: v.$font-size-lg; // 3rem = 30px
+    }
+  } 
+  
+  // Hero Subtitle - BEM Element
+  &__subtitle {
+    font-size: v.$font-size-lg; // 1.25rem
+    color: v.$charcoal;
+    margin: 0 2.5rem;
+    margin-bottom: v.$spacing-xl; // 2rem
+    line-height: 1.6;
+  }
+  
+  // Hero Actions - BEM Element
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    gap: v.$spacing-md; // 1rem
+    
+    @media (max-width: v.$breakpoint-md) {
+      justify-content: center;
+    }
+    
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+  
+  // Hero Image Placeholder - BEM Element
+  &__image {
+    display: none;
+    
+    @media (max-width: v.$breakpoint-sm) {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img{
+        width: 20rem;
+        height: 20rem;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 0.5rem 2rem rgba(74, 108, 155, 0.6);
+      }
+    }
+  }
+
+  @media (max-width: v.$breakpoint-sm){
+      background: url('/assets/images/mobile-web-banner-80.jpg') center center/cover no-repeat;
+  }
+}
+
+// Dean portrait styling
+#dean-portrait {
+  width: 20rem !important;
+  height: 20rem !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0.5rem 2rem rgba(74, 108, 155, 0.6) !important;
+  display: block !important;
+  max-width: none !important;
+  max-height: none !important;
+}

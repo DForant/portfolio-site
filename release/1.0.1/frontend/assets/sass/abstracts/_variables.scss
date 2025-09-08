@@ -1,0 +1,66 @@
+// Color Palette
+$primary-blue: #4A6C9B;
+$accent-gold: #FDB813;
+$charcoal: #212529;
+$off-white: #F8F9FA;
+$light-background: #F8F9FA;  // Same as off-white for consistency
+$white: #FFFFFF;
+
+// Gradient Variations based on Primary Blue
+$primary-blue-light: #6B8BBF;   // Lighter variant
+$primary-blue-dark: #3A5A8A;    // Darker variant
+
+// Gradient Definitions
+$gradient-primary: linear-gradient(135deg, $primary-blue-light 0%, $primary-blue 50%, $primary-blue-dark 100%);
+$gradient-primary-soft: linear-gradient(135deg, rgba(75, 108, 155, 0.9) 0%, rgba(58, 90, 138, 0.95) 100%);
+$gradient-primary-overlay: linear-gradient(135deg, rgba(75, 108, 155, 0.15) 0%, rgba(58, 90, 138, 0.25) 100%);
+$gradient-hero: linear-gradient(135deg, rgba(75, 108, 155, 0.08) 0%, rgba(58, 90, 138, 0.12) 100%);
+$gradient-accent: linear-gradient(135deg, $accent-gold 0%, #E6A511 100%);
+
+// Typography
+$font-heading: 'Playfair Display', serif;
+$font-body: 'Montserrat', sans-serif;
+
+// Font sizes in rem (based on 10px = 1rem)
+$font-size-xs: 1.2rem;     // 12px
+$font-size-sm: 1.4rem;     // 14px
+$font-size-base: 1.6rem;   // 16px
+$font-size-lg: 1.8rem;     // 18px
+$font-size-xl: 2rem;       // 20px
+$font-size-md: 2rem;       // 20px (alias for xl)
+$font-size-2xl: 2.4rem;    // 24px
+$font-size-3xl: 3rem;      // 30px
+$font-size-4xl: 3.6rem;    // 36px
+$font-size-5xl: 4.8rem;    // 48px
+$font-size-6xl: 6rem;      // 60px
+
+// Breakpoints (keeping px for media queries as they don't scale with rem)
+$breakpoint-xs: 468px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 962px;
+$breakpoint-lg: 1200px;
+$breakpoint-xl: 1940Px;
+
+// Spacing system in rem (following 8px grid = 0.8rem with 10px base)
+$spacing-xs: 0.4rem;    // 4px
+$spacing-sm: 0.8rem;    // 8px
+$spacing-md: 1.6rem;    // 16px
+$spacing-lg: 2.4rem;    // 24px
+$spacing-xl: 3.2rem;    // 32px
+$spacing-2xl: 4.8rem;   // 48px
+$spacing-3xl: 6.4rem;   // 64px
+$spacing-4xl: 9.6rem;   // 96px
+
+// Layout
+$section-padding-y: $spacing-3xl;  // 6.4rem
+$section-padding-x: $spacing-md;   // 1.6rem
+$container-max-width: 120rem;      // 1200px
+
+// Border Radius in rem
+$border-radius-base: 0.8rem;    // 8px
+$border-radius-small: 0.4rem;   // 4px
+$border-radius-lg: 1.2rem;      // 12px
+$border-radius-large: 1.6rem;   // 16px
+
+// Header specific
+$header-height: 6rem;   // 60px

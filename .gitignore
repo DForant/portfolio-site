@@ -42,7 +42,6 @@ Thumbs.db
 
 # Project specific
 /ror
-/release
 
 # VS Code Workspace files
 *.code-workspace
