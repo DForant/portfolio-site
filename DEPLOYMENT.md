@@ -116,7 +116,6 @@ Based on hosting.com documentation, here's exactly where to place your files:
 Upload all files from your local `backend/` directory to `/home/yourusername/portfolio-api/`:
 - `server.js`
 - `package.json`
-- `.env`
 - Any other backend files
 
 #### **Step 5: Upload Frontend Files**
@@ -149,12 +148,6 @@ Upload all files from your local `frontend/` directory to `/home/yourusername/pu
 
 ### **Step 1: Prepare Frontend**
 
-```bash
-# In frontend directory
-cd frontend/
-npm install
-npm run build
-```
 
 **Upload to hosting.com:**
 - Copy contents of `frontend/` to `public_html/`

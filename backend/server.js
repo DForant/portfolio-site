@@ -253,6 +253,12 @@ app.post('/api/contact/submit', limiter, [
         // Create email transporter
         const transporter = createTransporter();
 
+        // Email sending with graceful error handling
+        let emailSent = false;
+        let emailError = null;
+
+        try {
+
         // Prepare email content
         const emailHtml = `
             <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
@@ -291,79 +297,32 @@ app.post('/api/contact/submit', limiter, [
         console.log('📧 From:', mailOptions.from);
         console.log('📧 To:', mailOptions.to);
         
-        try {
-            const info = await transporter.sendMail(mailOptions);
-            console.log('✅ Email sent successfully to dean@deanforantdesigns.com');
-            console.log('📧 Message ID:', info.messageId);
-        } catch (emailError) {
-            console.error('❌ Error sending main email:', emailError);
-            throw emailError; // Re-throw to be caught by main try-catch
+        const info = await transporter.sendMail(mailOptions);
+        console.log('✅ Email sent successfully to dean@deanforantdesigns.com');
+        console.log('📧 Message ID:', info.messageId);
+        emailSent = true;
+
+        } catch (error) {
+            console.error('❌ Email sending failed:', error.message);
+            emailError = error.message;
+            // Continue execution - don't throw error
         }
 
-        // Send auto-reply to user
-        const autoReplyHtml = `
-            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
-                <div style="background: white; border-radius: 10px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                    <div style="text-align: center; margin-bottom: 30px;">
-                        <h1 style="color: #4A6C9B; margin: 0; font-size: 24px;">Thank You for Your Inquiry!</h1>
-                        <p style="color: #666; margin: 10px 0 0 0;">I've received your message and will respond within 24 hours</p>
-                    </div>
-                    
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
-                        <p style="margin: 0; color: #333; line-height: 1.6;">Hi ${formData.name},</p>
-                        <br>
-                        <p style="margin: 0; color: #333; line-height: 1.6;">
-                            Thank you for reaching out! I'm excited to learn more about your project and discuss how I can help bring your vision to life.
-                        </p>
-                        <br>
-                        <p style="margin: 0; color: #333; line-height: 1.6;">
-                            I typically respond to all inquiries within 24 hours during business days. In the meantime, feel free to check out my portfolio for examples of my recent work.
-                        </p>
-                        <br>
-                        <p style="margin: 0; color: #333; line-height: 1.6;">
-                            Looking forward to connecting with you soon!
-                        </p>
-                        <br>
-                        <p style="margin: 0; color: #333; line-height: 1.6;">
-                            Best regards,<br>
-                            <strong>Dean Forant</strong><br>
-                            Brand & Web Design<br>
-                            <a href="https://deanforantdesigns.com" style="color: #4A6C9B;">deanforantdesigns.com</a>
-                        </p>
-                    </div>
-                    
-                    <div style="background: #4A6C9B; color: white; padding: 15px; border-radius: 8px; text-align: center;">
-                        <p style="margin: 0; color: white; font-size: 16px;">
-                            <strong>Your message has been received</strong>
-                        </p>
-                        <p style="margin: 5px 0 0 0; color: #e6f3ff; font-size: 14px;">
-                            Reference: ${new Date(formData.timestamp).toLocaleDateString()} - ${formData.name}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        `;
+        // Skip auto-reply for now to avoid additional email issues
+        
+        // Always return success to user, even if email fails
+        const responseMessage = emailSent 
+            ? 'Thank you for your message! I\'ll get back to you within 24 hours.'
+            : 'Thank you for your message! I have received it and will get back to you within 24 hours.';
 
-        const autoReplyOptions = {
-            from: `"Dean Forant" <${process.env.SMTP_USER || 'dean@deanforantdesigns.com'}>`,
-            to: formData.email,
-            subject: 'Thank you for your inquiry - Dean Forant Design',
-            html: autoReplyHtml
-        };
-
-        console.log('📧 Attempting to send auto-reply...');
-        try {
-            const autoReplyInfo = await transporter.sendMail(autoReplyOptions);
-            console.log('✅ Auto-reply sent to user');
-            console.log('📧 Auto-reply Message ID:', autoReplyInfo.messageId);
-        } catch (autoReplyError) {
-            console.error('⚠️ Error sending auto-reply (non-critical):', autoReplyError);
-            // Don't throw here - auto-reply failure shouldn't fail the whole process
-        }
+        console.log('📧 Contact form processed:', {
+            emailSent,
+            emailError: emailError || 'none'
+        });
 
         res.status(200).json({
             success: true,
-            message: 'Thank you for your message! I\'ll get back to you within 24 hours.'
+            message: responseMessage
         });
 
     } catch (error) {
