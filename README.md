@@ -24,12 +24,12 @@ portfolio-site/
 ## 🚀 Features
 
 - **Responsive Design**: Mobile-first approach with modern CSS Grid and Flexbox
-- **Interactive Contact Form**: Professional form with validation and modal feedback
-- **Email Integration**: Automated email sending with SMTP support
-- **Separated Architecture**: Independent frontend and backend for better scalability
+- **Interactive Contact Form**: Client + server validation, spam filtering, graceful error handling
+- **Email Integration**: SMTP / Gmail fallback with development JSON transport
+- **Separated Architecture**: Independent frontend (`/frontend`) & backend (`/backend`)
 - **Client Carousel**: Interactive showcase of client logos
 - **Process Tabs**: Interactive workflow demonstration
-- **Security**: Rate limiting, CORS protection, and spam detection
+- **Security**: Helmet, rate limiting, CORS, input sanitization (xss), spam heuristics
 
 ## 🛠️ Quick Start
 
@@ -40,12 +40,19 @@ npm run install:all
 
 ### **Development**
 ```bash
-# Start backend API server (Terminal 1)
-npm run dev:backend
+# Frontend
+cd frontend
+npm install
+npm run dev   # runs SASS watcher
 
-# Start frontend development (Terminal 2)  
-npm run dev:frontend
+# Backend (in a second terminal)
+cd ../backend
+npm install
+cp .env.example .env   # add your SMTP credentials
+npm run dev             # nodemon server on :4000
 ```
+
+During local development the frontend static file can be opened directly or served via a simple static server. The form POSTs to `/api/contact` (relative). If the backend runs on a different port (e.g. 4000) configure a proxy or change `endpoint` in `assets/js/main.js` to `http://localhost:4000/api/contact`.
 
 ### **Production Build**
 ```bash
@@ -198,13 +205,13 @@ If your hosting provider doesn't support Node.js, you'll need to modify the cont
 
 ## 📧 Email Configuration Details
 
-The contact form sends emails using SMTP with the following features:
+The contact form sends emails using SMTP (preferred) or Gmail fallback:
 
 - **Primary email**: Sent to dean@deanforantdesigns.com
-- **Auto-reply**: Sent to the form submitter
-- **Spam detection**: Basic spam filtering
-- **Rate limiting**: 5 submissions per 15 minutes per IP
-- **Validation**: Client and server-side validation
+- **Auto-reply**: Currently disabled (can be added in `backend/server.js`)
+- **Spam detection**: Keyword + heuristic scoring
+- **Rate limiting**: 10 submissions / 15 min / IP (config in backend)
+- **Validation**: Shared express-validator rules + client-side checks
 
 ### Email Template
 
@@ -279,8 +286,14 @@ For deployment issues or questions:
 
 ## 📝 Changelog
 
+### v1.1.0
+- Rebuilt contact form (first/last name, company, phone, email, services, description)
+- Added backend Express API (`/api/contact`) with validation + spam filtering
+- Added XSS sanitization and JSON transport fallback for dev
+- Updated README and architecture docs
+
 ### v1.0.0
-- Initial release with complete contact form functionality
+- Initial release with basic contact form functionality
 - Professional email templates
 - Responsive design
 - Security implementations

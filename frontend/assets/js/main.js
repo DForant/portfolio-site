@@ -281,5 +281,158 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 	
 	// Contact Form - Removed since we're using mailto button
-	// Form handling code was removed when switching to mailto approach
+	// New contact form handling
+	const contactForm = document.getElementById('contact-form');
+	if (contactForm) {
+		const statusEl = document.getElementById('contact-form-status');
+		const submitBtn = document.getElementById('contact-submit');
+
+		// Simple debounce helper for status messages
+		let statusTimeout;
+		function setStatus(message, type = 'info') {
+			if (statusTimeout) clearTimeout(statusTimeout);
+			statusEl.textContent = message;
+			statusEl.className = 'contact__form__status contact__form__status--' + type;
+			if (type === 'success') {
+				statusTimeout = setTimeout(() => {
+					statusEl.textContent = '';
+					statusEl.className = 'contact__form__status';
+				}, 8000);
+			}
+		}
+
+		function sanitizeText(value) {
+			return value.replace(/[<>]/g, '').trim();
+		}
+
+		function validateField(id, validator) {
+			const input = document.getElementById(id);
+			if (!input) return true;
+			const errorEl = contactForm.querySelector(`[data-error-for="${id}"]`);
+			let errorMsg = '';
+			if (validator) {
+				errorMsg = validator(input.value);
+			}
+			if (errorMsg) {
+				input.classList.add('contact__form__input--error');
+				if (errorEl) errorEl.textContent = errorMsg;
+				return false;
+			} else {
+				input.classList.remove('contact__form__input--error');
+				if (errorEl) errorEl.textContent = '';
+				return true;
+			}
+		}
+
+		const validators = {
+			firstName: (v) => {
+				v = v.trim();
+				if (!v) return 'First name is required';
+				if (!/^[A-Za-z]{2,}$/.test(v)) return 'Only letters, min 2 characters';
+				return '';
+			},
+			lastName: (v) => {
+				v = v.trim();
+				if (!v) return 'Last name is required';
+				if (!/^[A-Za-z]{2,}$/.test(v)) return 'Only letters, min 2 characters';
+				return '';
+			},
+			phone: (v) => {
+				v = v.trim();
+				if (!v) return 'Phone number is required';
+				// Basic international / US style lenient pattern
+				if (!/^[+]?[(]?[0-9]{1,4}[)]?[-\s0-9]{5,}$/.test(v)) return 'Enter valid phone number';
+				return '';
+			},
+			email: (v) => {
+				v = v.trim();
+				if (!v) return 'Email is required';
+				if (!/^\S+@\S+\.\S+$/.test(v)) return 'Enter a valid email';
+				return '';
+			},
+			description: (v) => {
+				v = v.trim();
+				if (!v) return 'Description is required';
+				if (v.length < 10) return 'Minimum 10 characters';
+				if (v.length > 5000) return 'Maximum 5000 characters';
+				return '';
+			}
+		};
+
+		// Attach blur listeners for real-time validation
+		Object.keys(validators).forEach((id) => {
+			const el = document.getElementById(id);
+			if (el) {
+				el.addEventListener('blur', () => validateField(id, validators[id]));
+			}
+		});
+
+		contactForm.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			setStatus('Validating...', 'info');
+
+			// Validate all required fields
+			let allValid = true;
+			Object.keys(validators).forEach((id) => {
+				if (!validateField(id, validators[id])) allValid = false;
+			});
+			if (!allValid) {
+				setStatus('Please correct the errors above.', 'error');
+				return;
+			}
+
+			submitBtn.disabled = true;
+			submitBtn.textContent = 'Submitting...';
+
+			// Collect services
+			const services = Array.from(contactForm.querySelectorAll('input[name="services"]:checked'))
+				.map(cb => cb.value).slice(0, 10);
+
+			// Prepare payload
+			const payload = {
+				firstName: sanitizeText(contactForm.firstName.value),
+				lastName: sanitizeText(contactForm.lastName.value),
+				company: sanitizeText(contactForm.company.value || ''),
+				phone: sanitizeText(contactForm.phone.value),
+				email: sanitizeText(contactForm.email.value || ''),
+				description: sanitizeText(contactForm.description.value),
+				services
+			};
+
+			// Determine API endpoint. In dev when frontend not served by the Express server (different port or file://) use explicit localhost:4000
+			let endpoint;
+			try {
+				if (window.location.protocol === 'file:' || (window.location.hostname === 'localhost' && window.location.port && window.location.port !== '4000')) {
+					endpoint = 'http://localhost:4000/api/contact';
+				} else if (window.location.hostname === '127.0.0.1' && window.location.port && window.location.port !== '4000') {
+					endpoint = 'http://127.0.0.1:4000/api/contact';
+				} else {
+					endpoint = '/api/contact'; // same-origin (production or backend already serving the static assets)
+				}
+			} catch(_) {
+				endpoint = '/api/contact';
+			}
+
+			try {
+				setStatus('Sending...', 'info');
+				const res = await fetch(endpoint, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(payload)
+				});
+				const data = await res.json().catch(() => ({ success: false, message: 'Unexpected server response' }));
+				if (!res.ok || !data.success) {
+					throw new Error(data.message || 'Submission failed');
+				}
+				setStatus(data.message || 'Message sent successfully!', 'success');
+				contactForm.reset();
+			} catch (err) {
+				console.error('Contact form error:', err);
+				setStatus(err.message || 'An error occurred. Please try again later.', 'error');
+			} finally {
+				submitBtn.disabled = false;
+				submitBtn.textContent = 'Submit';
+			}
+		});
+	}
 });
