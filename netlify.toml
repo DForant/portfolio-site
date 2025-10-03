@@ -1,0 +1,20 @@
+[build]
+  publish = "frontend" # directory with index.html
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["nodemailer", "xss"]
+  included_files = []
+
+[dev]
+  framework = "#static"
+  command = "" # no build step needed for static site
+  port = 8888 # serve directly on 8888 for consistency with README
+
+# Redirect API style path to function (optional convenience)
+[[redirects]]
+  from = "/api/contact"
+  to = "/.netlify/functions/contact"
+  status = 200
+  force = true

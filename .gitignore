@@ -45,3 +45,5 @@ Thumbs.db
 
 # VS Code Workspace files
 *.code-workspace
+# Local Netlify folder
+.netlify

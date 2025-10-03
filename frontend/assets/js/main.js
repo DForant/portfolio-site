@@ -402,14 +402,16 @@ document.addEventListener('DOMContentLoaded', () => {
 			// Determine API endpoint. In dev when frontend not served by the Express server (different port or file://) use explicit localhost:4000
 			let endpoint;
 			try {
-				if (window.location.protocol === 'file:' || (window.location.hostname === 'localhost' && window.location.port && window.location.port !== '4000')) {
+				const host = window.location.hostname;
+				const port = window.location.port;
+				// If explicit backend dev server scenario (different port than 4000) -> use backend
+				if ((host === 'localhost' || host === '127.0.0.1') && port && port !== '4000' && port !== '8888' && port !== '8889') {
 					endpoint = 'http://localhost:4000/api/contact';
-				} else if (window.location.hostname === '127.0.0.1' && window.location.port && window.location.port !== '4000') {
-					endpoint = 'http://127.0.0.1:4000/api/contact';
 				} else {
-					endpoint = '/api/contact'; // same-origin (production or backend already serving the static assets)
+					// Default to Netlify redirect ( /api/contact -> /.netlify/functions/contact )
+					endpoint = '/api/contact';
 				}
-			} catch(_) {
+			} catch (_) {
 				endpoint = '/api/contact';
 			}
 

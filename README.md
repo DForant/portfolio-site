@@ -1,10 +1,20 @@
 # Dean Forant Portfolio Website
 
-A professional portfolio website with separated frontend and backend architecture.
+Professional portfolio site with a static frontend (Sass → CSS) and two backend runtime options:
+1. Netlify Functions (primary / recommended)
+2. Stand‑alone Express server (optional / alternative hosting)
 
-## 🏗️ Project Architecture
+This README focuses on crystal‑clear, copy‑paste friendly steps for:
+- Local development & testing
+- Staging (draft) deployments on Netlify
+- Production deployments on Netlify
+- Optional Express (cPanel / VPS) deployment
 
-This project is organized into two main components:
+If you previously read older guides, treat this as the source of truth.
+
+## 🏗️ Project Architecture & Folders
+
+Monorepo using npm workspaces.
 
 ```
 portfolio-site/
@@ -31,177 +41,343 @@ portfolio-site/
 - **Process Tabs**: Interactive workflow demonstration
 - **Security**: Helmet, rate limiting, CORS, input sanitization (xss), spam heuristics
 
-## 🛠️ Quick Start
+## 🔀 Backend Runtime Options (Decision Matrix)
 
-### **Install All Dependencies**
-```bash
-npm run install:all
+| Use Case | Recommended Mode | Why |
+|----------|------------------|-----|
+| Fast local development (frontend + function) | Netlify Functions | Same infra as production; zero CORS config |
+| Need to debug server middleware deeply | Express Server | Direct control & live reload via nodemon |
+| Deploy to Netlify (staging / production) | Netlify Functions | Native build + routing + env management |
+| Deploy to cPanel / traditional host | Express Server | Functions unsupported there |
+
+Frontend JS points to one of two API bases (auto or manual override):
+- Netlify mode: relative `/api/contact` (rewritten by `netlify.toml`)
+- Express mode: `http://localhost:4000/api/contact` (or your production domain)
+
+See sections below for explicit command sets.
+
+---
+
+## 📜 Available npm Scripts (Root + Workspaces)
+
+Run these from the repository root unless a folder column is specified.
+
+| Command | Run From | Purpose |
+|---------|----------|---------|
+| `npm run install:all` | root | Install dependencies in all workspaces (frontend + backend) |
+| `npm run dev:frontend` | root | Start Sass watcher in `frontend/` |
+| `npm run dev:backend` | root | Start Express backend (nodemon, port 4000 by default) |
+| `npm run dev` | root | Run backend + frontend watchers in parallel (Express path) |
+| `npm run build:frontend` | root | Production Sass build (compressed CSS) |
+| `npm run sass:watch` | frontend | (Workspace direct) Watch Sass |
+| `npm run sass:build` | frontend | (Workspace direct) Build Sass once compressed |
+| `npm run dev` | frontend | Alias → watch Sass |
+| `npm run dev` | backend | Run nodemon server (port 4000) |
+| `npm start` | backend | Run production Express server |
+
+---
+
+## 🧪 Local Development (Two Paths)
+
+### Option A (Recommended): Netlify Functions Local
+Use the Netlify CLI to emulate the production environment (static + functions + redirects).
+
+1. Install global tools (first time only):
+   ```powershell
+   npm install -g netlify-cli
+   netlify --version
+   netlify login
+   ```
+2. Install monorepo dependencies (root):
+   ```powershell
+   npm run install:all
+   ```
+3. (Optional) Build CSS once OR start a watcher:
+   ```powershell
+   # One-off build
+   npm run build:frontend
+   # OR in separate terminal: watcher only
+   npm run dev:frontend
+   ```
+4. Start Netlify dev (run from repository ROOT):
+   ```powershell
+   netlify dev
+   ```
+   When prompted (because this repo has multiple workspaces), choose:
+   - `dean-forant-portfolio-frontend`
+   (That matches the `publish = "frontend"` setting in `netlify.toml`.)
+
+   Skip future prompts (optional):
+   ```powershell
+   netlify dev --filter=dean-forant-portfolio-frontend
+   ```
+
+5. Local URLs:
+   - Site: http://localhost:8888
+   - Function (direct): http://localhost:8888/.netlify/functions/contact
+   - Function (frontend uses via redirect): http://localhost:8888/api/contact
+
+6. Environment variable loading precedence during `netlify dev` (highest → lowest):
+   1. Values you export inline before the command (e.g. `SMTP_HOST=foo netlify dev`)
+   2. Root `.env` file (if present; good for temporary local creds) – DO NOT commit real secrets
+   3. `[build.environment]` in `netlify.toml` (avoid putting secrets here; repo visible)
+   4. Netlify UI environment variables (used in actual deploy builds, not auto-fetched for local unless linked and cached)
+
+   Recommended practice:
+   - Put production/staging secrets ONLY in Netlify UI
+   - Use a gitignored `.env` locally for throwaway or test SMTP creds
+   - Leave `netlify.toml` for non-sensitive settings
+
+7. Quick verification after startup:
+   1. Open the site (http://localhost:8888)
+   2. Open DevTools > Network
+   3. Submit form with valid data → expect 200 JSON success
+   4. Submit again with a very short description → expect 400 with validation errors
+   5. (If no SMTP vars) Check terminal logs for JSON transport output
+   6. (If SMTP vars) Confirm email delivered
+
+Troubleshooting:
+   - No request logged? Check browser console for JS errors.
+   - 500 response? Inspect function log in terminal; verify SMTP creds.
+   - Validation 400: Inspect `errors` array to confirm expected rule triggers.
+
+### Option B: Express + Static Frontend
+Use this if you want to run the standalone server or you're deploying to a non‑Netlify host later.
+
+1. Install dependencies:
+   ```powershell
+   npm run install:all
+   ```
+2. Start backend (root):
+   ```powershell
+   npm run dev:backend
+   ```
+   Express listens on http://localhost:4000
+3. In a second terminal, watch Sass (root or inside frontend):
+   ```powershell
+   npm run dev:frontend
+   # or (cd frontend; npm run dev)
+   ```
+4. Serve `frontend/index.html`:
+   - Option 1: Use VS Code Live Server (opens on port 5500)
+   - Option 2 (quick static):
+     ```powershell
+     # from frontend folder
+     npx serve .
+     ```
+5. Confirm API is reachable: `curl http://localhost:4000/api/contact/health` (if such health route added) or submit form.
+
+Frontend script should point to `http://localhost:4000/api/contact` in this mode (update logic in `frontend/assets/js/main.js` if needed).
+
+---
+
+## 🌱 Environment Variables (All Modes)
+
+Define in Netlify UI (recommended) or `.env` for Express local development.
+
+| Variable | Required? | Used By | Notes |
+|----------|-----------|---------|-------|
+| `SMTP_HOST` | Optional (fallback to JSON transport) | Email | Real SMTP strongly recommended in prod |
+| `SMTP_PORT` | If SMTP used | Email | 465 (SSL) or 587 (TLS) |
+| `SMTP_USER` | If SMTP used | Email | Auth username |
+| `SMTP_PASS` | If SMTP used | Email | Auth password |
+| `EMAIL_USER` | Optional | Gmail fallback | Only if using Gmail transport |
+| `EMAIL_PASS` | Optional | Gmail fallback | Gmail App Password |
+| `NODE_ENV` | Yes (prod) | All | `production` enables optimizations |
+| `PORT` | Express only | Express | Default 4000 locally (if not set) |
+| `FRONTEND_URL` | Express CORS | Express | Comma separated origins |
+| `APP_PATH` | Path-based hosting alt | Express prod (cPanel) | See advanced section |
+
+`.env.example` in `backend/` is the reference for Express mode.
+
+---
+
+## 🧪 Testing Matrix per Environment
+
+| Test | Local (Netlify) | Local (Express) | Staging Draft | Production |
+|------|-----------------|-----------------|---------------|------------|
+| Form valid submission | ✅ | ✅ | ✅ | ✅ |
+| Validation errors (short msg) | ✅ | ✅ | ✅ | ✅ |
+| Spam phrase blocked | ✅ | ✅ | ✅ | ✅ |
+| SMTP success (if configured) | ✅ | ✅ | ✅ | ✅ |
+| Fallback JSON transport | ✅ | ✅ | ✅ | ✅ |
+| CORS headers correct | N/A (same origin) | ✅ | ✅ | ✅ |
+| Document title / UI loads | ✅ | ✅ | ✅ | ✅ |
+
+---
+
+## 🚀 Deploying to Netlify
+
+### 0. One-Time Setup
+From repo root:
+```powershell
+netlify login
+netlify init
+```
+Prompts:
+- Choose existing site OR create new
+- Build command: (leave blank)
+- Publish directory: `frontend`
+- Functions directory (auto from `netlify.toml` if present) or enter: `netlify/functions`
+
+### 1. Staging / Preview Deploy (Draft URL)
+Used for QA before promoting to production.
+```powershell
+# From repo root
+netlify deploy --build
+```
+Output will include:  
+Draft URL: `https://<hash>--<yoursite>.netlify.app`
+
+Smoke test on draft URL: navigate to site → submit test form.
+
+### 2. Production Deploy
+```powershell
+netlify deploy --prod --build
+```
+Production URL: `https://<yoursite>.netlify.app` (or custom domain if attached).
+
+### 3. Updating Environment Variables
+Netlify Dashboard → Site Settings → Build & Deploy → Environment.  
+Edit variables → Trigger new production deploy:
+```powershell
+netlify deploy --prod --build
 ```
 
-### **Development**
-```bash
-# Frontend
-cd frontend
-npm install
-npm run dev   # runs SASS watcher
+### 4. Local Emulation Notes
+`netlify dev` respects `.env` at project root IF `NETLIFY_DEV` loads them. If you need local secrets, create a non‑committed `.env` (gitignored) with the same keys.
 
-# Backend (in a second terminal)
-cd ../backend
-npm install
-cp .env.example .env   # add your SMTP credentials
-npm run dev             # nodemon server on :4000
-```
+### 5. Logs & Debugging
+Functions logs (UI): Deploys → Functions → `contact`  
+CLI (while running dev): output appears inline when invoking the function.
 
-During local development the frontend static file can be opened directly or served via a simple static server. The form POSTs to `/api/contact` (relative). If the backend runs on a different port (e.g. 4000) configure a proxy or change `endpoint` in `assets/js/main.js` to `http://localhost:4000/api/contact`.
+---
 
-### **Production Build**
-```bash
-# Build frontend for production
-npm run build:frontend
+## ✅ Post-Deploy Verification Checklist (Netlify)
 
-# Prepare backend for production
-npm run deploy:backend
-```
+Run this after each staging & production deploy:
+1. Page loads without console errors
+2. Fonts & images load (no 404s)
+3. Form:
+   - Valid submission returns success message
+   - Intentionally short description triggers validation error
+   - Spam phrase (e.g. "win bitcoin now") rejected
+4. Email arrives (if SMTP configured) OR JSON transport log visible in function logs
+5. Responsive layout OK (mobile width ≤ 420px)
+6. Lighthouse performance > 90 (optional)
 
-## 🌐 Production Deployment to hosting.com
+---
 
-### Step 1: Prepare Files for Upload
+## 🧵 Optional: Express Deployment (cPanel / VPS)
 
-1. **Build production CSS**
+If not using Netlify for backend logic, deploy the Express server. Summary (full details previously in `DEPLOYMENT.md`):
+
+1. Place frontend static files under hosting `public_html/` (or serve with Nginx/Apache).
+2. Place backend code outside public root (e.g. `~/portfolio-api/`).
+3. Install dependencies on server:
    ```bash
-   npm run sass:build
-   ```
-
-2. **Update environment variables**
-   - Create `.env` file on server with production settings
-   - Use production email credentials
-   - Set `NODE_ENV=production`
-
-3. **Files to upload to hosting.com:**
-   ```
-   ✅ Upload these files/folders:
-   - assets/ (entire folder)
-   - index.html
-   - server.js
-   - package.json
-   - .env (create on server)
-   
-   ❌ Do NOT upload:
-   - node_modules/ (will be installed on server)
-   - .git/
-   - .github/
-   - .env.example
-   - implementation-plan.md
-   - README.md
-   ```
-
-### Step 2: Server Configuration on hosting.com
-
-#### Option A: If hosting.com supports Node.js hosting
-
-1. **Upload files via FTP/SFTP or File Manager**
-   - Upload all required files to your domain's root directory
-   - Ensure `server.js` and `package.json` are in the root
-
-2. **Install Node.js dependencies**
-   ```bash
+   cd ~/portfolio-api
    npm install --production
    ```
-
-3. **Configure environment variables**
-   Create `.env` file on server:
-   ```env
-   SMTP_HOST=mail.deanforantdesigns.com
-   SMTP_PORT=465
-   SMTP_USER=dean@deanforantdesigns.com
-   SMTP_PASS=your_production_password
-   PORT=3000
-   NODE_ENV=production
+4. Create `.env` (see variable table). Include `FRONTEND_URL` with all allowed domains.
+5. Path-based app? Set `APP_PATH=api` and prefix routes using logic:
+   ```js
+   const routePrefix = process.env.APP_PATH ? `/${process.env.APP_PATH}` : '';
+   app.post(`${routePrefix}/api/contact/submit`, handler);
    ```
+6. Subdomain setup (preferred): point `api.yourdomain.com` → app; leave `APP_PATH` unset.
+7. Use a process manager (Passenger/cPanel, PM2, systemd) to keep app running.
 
-4. **Start the Node.js application**
-   - Use hosting.com's Node.js control panel
-   - Set startup file to `server.js`
-   - Configure port (usually 3000 or as specified by hosting.com)
+Health check endpoints (add if needed):
+```js
+app.get(`${routePrefix}/api/health`, (_,res)=>res.json({ok:true,timestamp:Date.now()}));
+```
 
-#### Option B: If hosting.com only supports static hosting
+Frontend JS base URL examples:
+```js
+// Path based
+const apiBase = 'https://yourdomain.com/api'; // becomes /api/contact/submit
+// Subdomain
+const apiBase = 'https://api.yourdomain.com';
+```
 
-If your hosting provider doesn't support Node.js, you'll need to modify the contact form to use a third-party service:
+---
 
-1. **Upload static files only:**
-   ```
-   - assets/
-   - index.html
-   ```
+## 🧰 Previous Sections (Features, Security, Troubleshooting)
+The remainder of this document retains original details with light edits for consistency.
 
-2. **Modify contact form to use external service:**
-   
-   **Option 1: Formspree**
-   - Sign up at [formspree.io](https://formspree.io)
-   - Replace form action in `index.html`:
-   ```html
-   <form class="contact__form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-   ```
+## 🔍 Netlify Function Troubleshooting (Quick Reference)
 
-   **Option 2: Netlify Forms (if moving to Netlify)**
-   - Add `netlify` attribute to form:
-   ```html
-   <form class="contact__form" netlify name="contact">
-   ```
+| Symptom | Likely Cause | Fix |
+|---------|--------------|-----|
+| 500 + generic message | SMTP timeout / auth error | Check Functions logs; verify credentials |
+| 400 validation | Bad field lengths / pattern | Read `errors` array in JSON response |
+| No network request | JS error halted submit | Browser console → fix script |
+| Works locally not in prod | Missing env var in Netlify | Add in dashboard → redeploy |
+| CORS error (Express only) | FRONTEND_URL mismatch | Update `FRONTEND_URL` and restart |
 
-   **Option 3: EmailJS**
-   - Sign up at [emailjs.com](https://www.emailjs.com)
-   - Replace the fetch call in `main.js` with EmailJS integration
+Files relevant to serverless mode:
+```
+netlify.toml
+netlify/functions/contact.js
+netlify/functions/lib/validation.js
+```
 
-### Step 3: Email Configuration
+---
 
-1. **Verify email settings with hosting.com**
-   - Confirm SMTP server details
-   - Check if port 465 (SSL) or 587 (TLS) is supported
-   - Verify authentication method
+## 🛠️ Quick Start (Condensed)
 
-2. **Test email functionality**
-   - Submit a test form after deployment
-   - Check server logs for any errors
-   - Verify emails are received at dean@deanforantdesigns.com
+```powershell
+# Clone & install
+git clone <repo>
+cd portfolio-site
+npm run install:all
 
-### Step 4: Domain Configuration
+# Local (Netlify mode)
+netlify dev
 
-1. **Point domain to hosting.com**
-   - Update DNS A records to point to hosting.com's IP
-   - Configure CNAME if using subdomain
+# OR Local (Express mode)
+npm run dev
 
-2. **SSL Certificate**
-   - Enable SSL through hosting.com control panel
-   - Update any hardcoded HTTP links to HTTPS
+# Build CSS only
+npm run build:frontend
 
-### Step 5: Final Testing
+# Draft deploy (staging)
+netlify deploy --build
 
-1. **Test all functionality:**
-   - [ ] Website loads correctly
-   - [ ] Navigation works
-   - [ ] Contact form submits successfully
-   - [ ] Emails are received
-   - [ ] Auto-reply emails work
-   - [ ] Mobile responsiveness
-   - [ ] Client carousel functions
-   - [ ] Process tabs work
+# Production deploy
+netlify deploy --prod --build
+```
 
-2. **Performance optimization:**
-   - Enable gzip compression (if available)
-   - Configure caching headers
-   - Optimize images if needed
+## 🌐 (Alternative) Production Deployment – Static Only Providers
 
-## 🔧 Environment Variables
+If you move to a provider that can host only static files (no Node runtime):
+1. Deploy `frontend/` only.
+2. Replace form with third‑party solution:
+   - Formspree
+   - Netlify Forms
+   - EmailJS (client key)
+3. Remove or disable JS that calls `/api/contact`.
+
+Example (Formspree):
+```html
+<form class="contact__form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+```
+
+## 🔧 (Supplement) Environment Variables Table (Express Recap)
 
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `SMTP_HOST` | Email server hostname | `mail.deanforantdesigns.com` |
-| `SMTP_PORT` | Email server port | `465` (SSL) or `587` (TLS) |
+| `SMTP_PORT` | Email server port | `465` |
 | `SMTP_USER` | Email username | `dean@deanforantdesigns.com` |
 | `SMTP_PASS` | Email password | `your_secure_password` |
-| `PORT` | Server port | `3000` |
-| `NODE_ENV` | Environment | `production` |
+| `PORT` | Express server port | `4000` |
+| `NODE_ENV` | Env mode | `production` |
+| `FRONTEND_URL` | Allowed origins (CORS) | `https://example.com,https://www.example.com` |
+| `APP_PATH` | (Optional) Path base prefix | `api` |
+
+Netlify Functions ignore `PORT`/`FRONTEND_URL` (handled internally) but still require email credentials if you want real delivery.
 
 ## 📧 Email Configuration Details
 
