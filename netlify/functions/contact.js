@@ -48,6 +48,19 @@ exports.handler = async (event) => {
 
   const fullName = `${data.firstName} ${data.lastName}`.trim();
   const submittedAt = new Date();
+  function formatTimestamp(d) {
+    const pad = (n) => n.toString().padStart(2, '0');
+    let hrs = d.getHours();
+    const mins = pad(d.getMinutes());
+    const ampm = hrs >= 12 ? 'PM' : 'AM';
+    hrs = hrs % 12;
+    if (hrs === 0) hrs = 12; // 12-hour clock adjustment
+    const month = pad(d.getMonth() + 1);
+    const day = pad(d.getDate());
+    const year = d.getFullYear();
+    return `${month}/${day}/${year} ${hrs}:${mins} ${ampm}`;
+  }
+  const submittedFormatted = formatTimestamp(submittedAt);
 
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;padding:20px;background:#f8f9fa;">
@@ -57,7 +70,7 @@ exports.handler = async (event) => {
       <p><strong>Phone:</strong> ${data.phone}</p>
       <p><strong>Email:</strong> ${data.email}</p>
       <p><strong>Services:</strong> ${(data.services || []).join(', ') || '—'}</p>
-      <p><strong>Submitted:</strong> ${submittedAt.toISOString()}</p>
+  <p><strong>Submitted:</strong> ${submittedFormatted}</p>
       <hr />
       <p style="white-space:pre-wrap;line-height:1.5;">${data.description}</p>
       <hr />
