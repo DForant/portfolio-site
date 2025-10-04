@@ -42,3 +42,10 @@
   force = true
   conditions = { Host = ["staging.deanforantdesigns.com"] }
   headers = { X-Robots-Tag = "noindex, nofollow" }
+
+# Force canonical www on production apex (if apex is attached to this site)
+[[redirects]]
+  from = "/*"
+  to = "https://www.deanforantdesigns.com/:splat"
+  status = 301
+  conditions = { Host = ["deanforantdesigns.com"] }
