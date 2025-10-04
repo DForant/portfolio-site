@@ -19,3 +19,26 @@
   to = "/.netlify/functions/contact"
   status = 200
   force = true
+
+# Serve a blocking robots.txt on the staging domain; allow on others
+[[redirects]]
+  from = "/robots.txt"
+  to = "/robots-staging.txt"
+  status = 200
+  force = true
+  conditions = { Host = ["staging.deanforantdesigns.com"] }
+
+[[redirects]]
+  from = "/robots.txt"
+  to = "/robots-prod.txt"
+  status = 200
+  force = true
+
+# Add X-Robots-Tag noindex,nofollow for all pages on staging domain
+[[redirects]]
+  from = "/*"
+  to = "/:splat"
+  status = 200
+  force = true
+  conditions = { Host = ["staging.deanforantdesigns.com"] }
+  headers = { X-Robots-Tag = "noindex, nofollow" }

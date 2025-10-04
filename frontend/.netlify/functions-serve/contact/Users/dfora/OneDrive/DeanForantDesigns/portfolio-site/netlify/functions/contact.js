@@ -103,6 +103,7 @@ var require_validation = __commonJS({
 // netlify/functions/contact.js
 var nodemailer = require("nodemailer");
 var { validatePayload, basicSpamCheck } = require_validation();
+var TO_ADDRESS = process.env.CONTACT_TO || "dean@deanforantdesigns.com";
 function buildTransporter() {
   let mode = "json";
   let transporter;
@@ -181,9 +182,12 @@ exports.handler = async (event) => {
         console.warn("[contact:function] Transport verify failed (continuing):", verErr.message);
       }
     }
+    if (process.env.ENABLE_EMAIL_DEBUG === "1" || process.env.NODE_ENV !== "production") {
+      console.log("[contact:function] Sending to:", TO_ADDRESS);
+    }
     const info = await transporter.sendMail({
       from: `Portfolio Inquiry <${process.env.SMTP_USER || process.env.EMAIL_USER || "noreply@deanforantdesigns.com"}>`,
-      to: "dean@deanforantdesigns.com",
+      to: TO_ADDRESS,
       subject: "New Inquiry from Website",
       html,
       replyTo: data.email
