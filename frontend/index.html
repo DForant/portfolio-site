@@ -347,14 +347,85 @@
 
         <!-- Contact -->
         <section id="contact" class="contact" aria-labelledby="contact-title">
-            <div class="section__container" style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:2rem;">
-                <div>
+            <div class="section__container contact__container">
+                <div class="contact__heading-row">
                     <h2 id="contact-title" class="section__title">Ready to Win? Let's Build Your Brand.</h2>
                 </div>
-                <div class="contact__action">
-                    <p class="contact__description">I'd love to learn about your project and how I can help bring your vision to life.</p>
-                    <a href="mailto:dean@deanforantdesigns.com?subject=New Project Inquiry&body=Hi Dean,%0D%0A%0D%0AI'm interested in discussing a project with you. Here are the details:%0D%0A%0D%0AProject Type: %0D%0ATimeline: %0D%0ABudget Range: %0D%0A%0D%0AMessage: %0D%0A%0D%0ABest regards," class="contact__form__submit contact__mailto-btn">Send Email</a>
-                    <p class="contact__note">Clicking this button will open your default email client (Outlook, Apple Mail, etc.)</p>
+                <div class="contact__layout">
+                    <div class="contact__content">
+                        <p class="contact__lead">I’d love to learn about your goals, challenges, and what success looks like for you. Share as much context as you can—this helps me prepare meaningful next steps.</p>
+                        <ul class="contact__bullets" aria-label="What to include">
+                            <li class="contact__bullet">Project type or problem you’re solving</li>
+                            <li class="contact__bullet">Any timeline considerations</li>
+                            <li class="contact__bullet">Brand maturity (new / refresh / expansion)</li>
+                            <li class="contact__bullet">Links or references (if relevant)</li>
+                        </ul>
+                        <p class="contact__assurance">Your info is kept private and only used to respond to your inquiry.</p>
+                    </div>
+                    <form id="contact-form" class="contact__form" novalidate aria-describedby="contact-form-status">
+                    <div class="contact__form__row">
+                        <div class="contact__form__group">
+                            <label for="firstName" class="contact__form__label">First Name *</label>
+                            <input id="firstName" name="firstName" type="text" inputmode="text" autocomplete="given-name" required minlength="2" pattern="^[A-Za-z]{2,}$" class="contact__form__input" placeholder="Jane" aria-required="true" />
+                            <p class="contact__form__error" data-error-for="firstName" aria-live="polite"></p>
+                        </div>
+                        <div class="contact__form__group">
+                            <label for="lastName" class="contact__form__label">Last Name *</label>
+                            <input id="lastName" name="lastName" type="text" inputmode="text" autocomplete="family-name" required minlength="2" pattern="^[A-Za-z]{2,}$" class="contact__form__input" placeholder="Doe" aria-required="true" />
+                            <p class="contact__form__error" data-error-for="lastName" aria-live="polite"></p>
+                        </div>
+                    </div>
+                    <div class="contact__form__row">
+                        <div class="contact__form__group">
+                            <label for="company" class="contact__form__label">Company</label>
+                            <input id="company" name="company" type="text" autocomplete="organization" maxlength="100" class="contact__form__input" placeholder="Company Name" />
+                            <p class="contact__form__error" data-error-for="company" aria-live="polite"></p>
+                        </div>
+                        <div class="contact__form__group">
+                            <label for="phone" class="contact__form__label">Phone Number *</label>
+                            <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required class="contact__form__input" placeholder="(555) 123-4567" aria-required="true" pattern="^[+]?[(]?[0-9]{1,4}[)]?[-\s0-9]*$" />
+                            <p class="contact__form__error" data-error-for="phone" aria-live="polite"></p>
+                        </div>
+                    </div>
+                    <div class="contact__form__row">
+                        <div class="contact__form__group">
+                            <label for="email" class="contact__form__label">Email *</label>
+                            <input id="email" name="email" type="email" autocomplete="email" required aria-required="true" class="contact__form__input" placeholder="you@example.com" />
+                            <p class="contact__form__error" data-error-for="email" aria-live="polite"></p>
+                        </div>
+                    </div>
+                    <div class="contact__form__row contact__form__row--full">
+                        <fieldset class="contact__form__group contact__form__services contact__form__services--boxed">
+                            <legend class="contact__form__label contact__form__label--legend">Services Interested In</legend>
+                            <div class="contact__form__checkboxes">
+                                <label class="contact__form__checkbox">
+                                    <input type="checkbox" name="services" value="Brand Design" />
+                                    <span>Brand Design</span>
+                                </label>
+                                <label class="contact__form__checkbox">
+                                    <input type="checkbox" name="services" value="Web Design" />
+                                    <span>Web Design</span>
+                                </label>
+                                <label class="contact__form__checkbox">
+                                    <input type="checkbox" name="services" value="Creative Direction" />
+                                    <span>Creative Direction<br />&amp; Consultation</span>
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="contact__form__group">
+                        <label for="description" class="contact__form__label">Description of work needed * <span class="contact__form__hint">(10–5000 characters)</span></label>
+                        <textarea id="description" name="description" required minlength="10" maxlength="5000" class="contact__form__textarea" placeholder="Tell me about your project goals, timeline, and any specifics you'd like to share." aria-required="true"></textarea>
+                        <p class="contact__form__error" data-error-for="description" aria-live="polite"></p>
+                    </div>
+                    <div class="contact__form__meta">
+                        <small class="contact__form__required-note">* Required fields</small>
+                    </div>
+                    <div class="contact__form__actions">
+                        <button type="submit" class="btn btn--primary contact__form__submit" id="contact-submit">Submit</button>
+                        <div class="contact__form__status" id="contact-form-status" role="status" aria-live="polite"></div>
+                    </div>
+                </form>
                 </div>
             </div>
         </section>
