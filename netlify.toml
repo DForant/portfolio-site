@@ -33,6 +33,7 @@
   to = "/robots-prod.txt"
   status = 200
   force = true
+  conditions = { Host = ["www.deanforantdesigns.com", "deanforantdesigns.com"] }
 
 # Add X-Robots-Tag noindex,nofollow for all pages on staging domain
 [[redirects]]
