@@ -26,7 +26,7 @@
   to = "/robots-staging.txt"
   status = 200
   force = true
-  conditions = { Host = ["staging.deanforantdesigns.com"] }
+  conditions = { Host = ["staging.deanforantdesigns.com", "deanforantdesigns-staging.netlify.app"] }
 
 [[redirects]]
   from = "/robots.txt"
@@ -40,7 +40,7 @@
   to = "/:splat"
   status = 200
   force = true
-  conditions = { Host = ["staging.deanforantdesigns.com"] }
+  conditions = { Host = ["staging.deanforantdesigns.com", "deanforantdesigns-staging.netlify.app"] }
   headers = { X-Robots-Tag = "noindex, nofollow" }
 
 # Force canonical www on production apex (if apex is attached to this site)

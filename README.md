@@ -41,6 +41,16 @@ portfolio-site/
 - **Process Tabs**: Interactive workflow demonstration
 - **Security**: Helmet, rate limiting, CORS, input sanitization (xss), spam heuristics
 
+## ⚙️ Preconfigured Netlify & SEO behavior
+
+This repo ships with production-grade Netlify config and SEO safeguards baked in:
+
+- Build config: `publish = frontend`, `functions = netlify/functions`, and build command `npm --workspace frontend run build` to compile Sass on deploy.
+- API route: `/api/contact` redirected to `/.netlify/functions/contact` via `netlify.toml`.
+- Staging no-indexing: For host `staging.deanforantdesigns.com`, all pages send `X-Robots-Tag: noindex, nofollow` and `/robots.txt` resolves to `frontend/robots-staging.txt` (Disallow all).
+- Production indexing: Other hosts serve `frontend/robots-prod.txt` (Allow all) and include a `Sitemap: https://www.deanforantdesigns.com/sitemap.xml`. A basic `frontend/sitemap.xml` is included.
+- Canonical host: Requests to apex `deanforantdesigns.com` 301-redirect to `https://www.deanforantdesigns.com/`.
+
 ## 🔀 Backend Runtime Options (Decision Matrix)
 
 | Use Case | Recommended Mode | Why |
@@ -125,7 +135,7 @@ Use the Netlify CLI to emulate the production environment (static + functions + 
 
    Recommended practice:
    - Put production/staging secrets ONLY in Netlify UI
-   - Use a gitignored `.env` locally for throwaway or test SMTP creds
+   - Use a gitignored `.env` locally for throwaway or test SMTP creds (e.g., `ENABLE_EMAIL_DEBUG=1`)
    - Leave `netlify.toml` for non-sensitive settings
 
 7. Quick verification after startup:
@@ -183,6 +193,9 @@ Define in Netlify UI (recommended) or `.env` for Express local development.
 | `SMTP_PASS` | If SMTP used | Email | Auth password |
 | `EMAIL_USER` | Optional | Gmail fallback | Only if using Gmail transport |
 | `EMAIL_PASS` | Optional | Gmail fallback | Gmail App Password |
+| `ENABLE_EMAIL_DEBUG` | Optional | Functions | `1` to print extra logs (use on staging only) |
+| `CONTACT_TO` | Optional | Functions | Override recipient address (useful on staging) |
+| `NODE_VERSION` | Optional | Build/Functions | Pin Node engine on Netlify (e.g., `20`) |
 | `NODE_ENV` | Yes (prod) | All | `production` enables optimizations |
 | `PORT` | Express only | Express | Default 4000 locally (if not set) |
 | `FRONTEND_URL` | Express CORS | Express | Comma separated origins |
@@ -231,11 +244,21 @@ Draft URL: `https://<hash>--<yoursite>.netlify.app`
 
 Smoke test on draft URL: navigate to site → submit test form.
 
+Indexing on staging:
+- If you deploy the staging site to `staging.deanforantdesigns.com` (recommended), Netlify config already sets:
+   - `X-Robots-Tag: noindex, nofollow` for all pages on that host
+   - `/robots.txt` → `robots-staging.txt` (Disallow all)
+   No manual toggles are needed between environments.
+
 ### 2. Production Deploy
 ```powershell
 netlify deploy --prod --build
 ```
 Production URL: `https://<yoursite>.netlify.app` (or custom domain if attached).
+
+Indexing on production:
+- Production hosts serve `robots-prod.txt` (Allow) and `frontend/sitemap.xml`.
+- Apex requests are redirected to `https://www.deanforantdesigns.com/` to enforce canonical URLs.
 
 ### 3. Updating Environment Variables
 Netlify Dashboard → Site Settings → Build & Deploy → Environment.  
@@ -265,6 +288,9 @@ Run this after each staging & production deploy:
 4. Email arrives (if SMTP configured) OR JSON transport log visible in function logs
 5. Responsive layout OK (mobile width ≤ 420px)
 6. Lighthouse performance > 90 (optional)
+7. Indexing behavior:
+   - Staging: https://staging.deanforantdesigns.com/robots.txt → `Disallow: /`; pages include `X-Robots-Tag: noindex, nofollow`
+   - Production: https://www.deanforantdesigns.com/robots.txt → `Allow: /`; https://www.deanforantdesigns.com/sitemap.xml loads
 
 ---
 
