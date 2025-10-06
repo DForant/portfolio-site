@@ -35,14 +35,12 @@
   force = true
   conditions = { Host = ["www.deanforantdesigns.com", "deanforantdesigns.com"] }
 
-# Add X-Robots-Tag noindex,nofollow for all pages on staging domain
-[[redirects]]
-  from = "/*"
-  to = "/:splat"
-  status = 200
-  force = true
-  conditions = { Host = ["staging.deanforantdesigns.com", "deanforantdesigns-staging.netlify.app"] }
-  headers = { X-Robots-Tag = "noindex, nofollow" }
+## X-Robots-Tag noindex for staging
+# Set this header via Netlify UI on the STAGING site:
+# Site → Web security → Response headers → Add header →
+#   Name: X-Robots-Tag
+#   Value: noindex, nofollow
+# This avoids identity rewrites that can interfere with static file serving.
 
 # Force canonical www on production apex (if apex is attached to this site)
 [[redirects]]
