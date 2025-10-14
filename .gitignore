@@ -1,4 +1,10 @@
-# Dependencies
+# DFD CMS
+
+# ignore the entire dfd-cms folder so that we can whitelist
+# the items that we need.
+dfd-cms/
+
+# Dependenciess
 node_modules/
 */node_modules/
 frontend/node_modules/
@@ -47,3 +53,7 @@ Thumbs.db
 *.code-workspace
 # Local Netlify folder
 .netlify
+
+# whitelist the items we need in the dfd-cms folder
+# whitelist only composer.json in the app/public folder under dfd-cms
+!dfd-cms/app/public/composer.json

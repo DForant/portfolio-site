@@ -1,0 +1,17 @@
+{
+    "name": "dfd/cms",
+    "description": "Headless CMS for Dean Forant Designs Portfolio",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Dfd\\Cms\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "DForant",
+            "email": "dforant@gmail.com"
+        }
+    ],
+    "require": {}
+}
