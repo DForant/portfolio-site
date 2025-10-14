@@ -7,9 +7,15 @@
             "Dfd\\Cms\\": "src/"
         }
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://wpackagist.org"
+        }
+    ],
     "authors": [
         {
-            "name": "DForant",
+            "name": "Dean Forant",
             "email": "dforant@gmail.com"
         }
     ],
