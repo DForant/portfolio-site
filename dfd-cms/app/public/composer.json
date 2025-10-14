@@ -19,5 +19,12 @@
             "email": "dforant@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "wpackagist-plugin/wordfence": "*@dev"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
 }
