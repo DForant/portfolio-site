@@ -307,3 +307,63 @@ Column 2: Quick Links (Home, About, Services, Portfolio, Contact).
 Column 3 (Social Media): Icons for Facebook, LinkedIn, Behance, Youtube, Github, and Instagram.
 
 Sub-Footer: Centered copyright text.
+
+## Content Creation via Headless CMS Integration with WordPress
+
+We will set up a headless CMS using WordPress to manage and create content for the portfolio website. This will allow for easy updates and management of portfolio items, services, and other content without needing to modify the code directly.
+
+### WordPress Setup
+1. Install WordPress: Set up a WordPress instance on a server or local environment.
+2. Install Necessary Plugins:
+   - WPGraphQL: To enable GraphQL API for content querying.
+   - Advanced Custom Fields (ACF): To create custom fields for portfolio items and services.
+   - WPGraphQL ACF: To expose ACF fields in the GraphQL API.
+   - Application Passwords: To securely authenticate API requests.
+    - Disable REST API: To enhance security by limiting access to the REST API.
+### Content Structure
+1. Custom Post Types:
+   - Portfolio: For managing portfolio items.
+   - Services: For managing the services offered.
+2. Custom Fields (using ACF):
+Portfolio:
+- Project Title (Text)
+- Project Description (Textarea)
+- Project Image (Image)
+- Project URL (URL)
+- Behance Embed Code (Textarea)
+Services:
+- Service Title (Text)
+- Service Description (Textarea)
+- Service Icon (Text) - Font Awesome class name
+### Fetching Content
+1. GraphQL Queries: Use GraphQL queries to fetch content from WordPress.
+Example Query for Portfolio Items:
+```graphql
+{
+  portfolios {
+    nodes {
+      title
+      projectDescription
+      projectImage {
+        sourceUrl
+      }
+      projectUrl
+      behanceEmbedCode
+    }
+  }
+}
+```
+2. JavaScript Integration: Use JavaScript (e.g., Fetch API or Axios) to call the GraphQL endpoint and retrieve content dynamically.
+### Security Measures
+1. Application Passwords: Use WordPress application passwords for secure API authentication.
+2. Disable REST API: Limit access to the REST API to enhance security.
+### Environment Variables
+1. Store sensitive information such as API endpoints and application passwords in environment variables.
+### Example Environment Variables
+```WP_API_URL=https://your-wordpress-site.com/graphql
+WP_APP_PASSWORD=your_application_password
+```
+# Security Instructions for WordPress Headless CMS
+To enhance the security of your WordPress headless CMS, consider implementing the following measures:
+1. Change API Endpoint: Use a plugin or custom code to change the default REST API endpoint from wp-json to a unique, custom URL. This makes it harder for attackers to find and exploit the API.
+   - Plugin Suggestion: "WordFence"
