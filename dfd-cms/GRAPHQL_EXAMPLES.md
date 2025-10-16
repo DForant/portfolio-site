@@ -457,10 +457,22 @@ Create a `.env` file in your frontend:
 
 ```env
 # WordPress GraphQL API Configuration
+# IMPORTANT: Replace with your actual domain and use HTTPS in production
 VITE_WP_GRAPHQL_URL=https://yourdomain.com/graphql
-VITE_WP_API_USER=admin
+
+# Authentication credentials
+# WARNING: Never commit this file to version control
+# Use a non-admin username for better security
+VITE_WP_API_USER=your_wp_username
 VITE_WP_APP_PASSWORD=your_application_password_here
 ```
+
+**Security Notes:**
+- Always use HTTPS in production
+- Never use the 'admin' username - create a dedicated API user
+- Keep your Application Password secure and rotate it regularly
+- Never commit `.env` files to version control
+- Use environment-specific `.env` files (`.env.local`, `.env.production`)
 
 Then use it in your code:
 
