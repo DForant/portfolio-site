@@ -56,4 +56,16 @@ Thumbs.db
 
 # whitelist the items we need in the dfd-cms folder
 # whitelist only composer.json in the app/public folder under dfd-cms
+!dfd-cms/
+!dfd-cms/README.md
+!dfd-cms/app/
+!dfd-cms/app/public/
 !dfd-cms/app/public/composer.json
+!dfd-cms/app/public/composer.lock
+!dfd-cms/app/public/wp-config-sample.php
+!dfd-cms/app/public/wp-config.php
+!dfd-cms/app/public/.htaccess
+!dfd-cms/app/public/wp-content/
+!dfd-cms/app/public/wp-content/themes/
+!dfd-cms/app/public/wp-content/mu-plugins/
+!dfd-cms/app/public/wp-content/mu-plugins/*.php
