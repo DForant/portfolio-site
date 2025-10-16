@@ -462,8 +462,8 @@ VITE_WP_GRAPHQL_URL=https://yourdomain.com/graphql
 
 # Authentication credentials
 # WARNING: Never commit this file to version control
-# Use a non-admin username for better security
-VITE_WP_API_USER=your_wp_username
+# Use a non-admin username for better security - create a dedicated API user
+VITE_WP_API_USER=api_user
 VITE_WP_APP_PASSWORD=your_application_password_here
 ```
 
