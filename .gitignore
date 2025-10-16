@@ -58,6 +58,7 @@ Thumbs.db
 # whitelist only composer.json in the app/public folder under dfd-cms
 !dfd-cms/
 !dfd-cms/README.md
+!dfd-cms/GRAPHQL_EXAMPLES.md
 !dfd-cms/install.sh
 !dfd-cms/app/
 !dfd-cms/app/public/

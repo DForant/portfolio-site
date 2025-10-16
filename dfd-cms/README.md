@@ -125,6 +125,7 @@ After installation, activate the required plugins:
 1. Go to **GraphQL** → **Settings** in the WordPress admin
 2. Enable GraphQL Debug Mode (for development only)
 3. Note your GraphQL endpoint: `https://yourdomain.com/graphql`
+4. See [GRAPHQL_EXAMPLES.md](GRAPHQL_EXAMPLES.md) for example queries and frontend integration
 
 ### 8. Set Up Custom Post Types
 
@@ -276,6 +277,7 @@ dfd-cms/app/public/
 - [Advanced Custom Fields Documentation](https://www.advancedcustomfields.com/resources/)
 - [WordPress Codex](https://codex.wordpress.org/)
 - [Composer for WordPress](https://roots.io/using-composer-with-wordpress/)
+- [GraphQL Query Examples](GRAPHQL_EXAMPLES.md) - Example queries for frontend integration
 
 ## Support
 
