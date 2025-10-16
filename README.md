@@ -27,6 +27,12 @@ portfolio-site/
 │   ├── package.json
 │   ├── .env
 │   └── .env.example
+├── dfd-cms/                  # 📝 WordPress Headless CMS (content management)
+│   ├── app/public/
+│   │   ├── composer.json     # WordPress & plugin dependencies
+│   │   ├── wp-config-sample.php
+│   │   └── wp-content/       # Custom themes, plugins, uploads
+│   └── README.md             # CMS setup instructions
 ├── DEPLOYMENT-SEPARATED.md   # 📋 Deployment guide
 └── README.md
 ```
@@ -37,9 +43,57 @@ portfolio-site/
 - **Interactive Contact Form**: Client + server validation, spam filtering, graceful error handling
 - **Email Integration**: SMTP / Gmail fallback with development JSON transport
 - **Separated Architecture**: Independent frontend (`/frontend`) & backend (`/backend`)
+- **Headless CMS**: WordPress-powered content management with GraphQL API
 - **Client Carousel**: Interactive showcase of client logos
 - **Process Tabs**: Interactive workflow demonstration
 - **Security**: Helmet, rate limiting, CORS, input sanitization (xss), spam heuristics
+
+## 📝 WordPress Headless CMS
+
+The portfolio uses WordPress as a headless CMS to manage portfolio items and services through a GraphQL API.
+
+### Quick Setup
+
+For detailed setup instructions, see [`dfd-cms/README.md`](dfd-cms/README.md).
+
+1. Install WordPress and plugins via Composer:
+   ```bash
+   cd dfd-cms/app/public
+   composer install
+   ```
+
+2. Configure WordPress:
+   ```bash
+   cp wp-config-sample.php wp-config.php
+   # Edit wp-config.php with your database credentials
+   ```
+
+3. Complete WordPress installation at `/wp/wp-admin/`
+
+4. Activate required plugins:
+   - WPGraphQL
+   - Advanced Custom Fields
+   - WPGraphQL for ACF
+
+5. GraphQL endpoint will be available at `/graphql`
+
+### What's Included
+
+- **WPGraphQL**: GraphQL API for WordPress content
+- **Advanced Custom Fields (ACF)**: Custom fields for portfolio and services
+- **WPGraphQL for ACF**: Exposes ACF fields via GraphQL
+- **Wordfence**: Security plugin
+- **Custom Configuration**: Must-use plugin for automatic headless setup
+
+### Content Structure
+
+The CMS is pre-configured with:
+- **Portfolio** custom post type with GraphQL support
+- **Services** custom post type with GraphQL support
+- Custom fields for project details, images, and Behance embeds
+- CORS headers for API access from frontend
+
+See the [CMS README](dfd-cms/README.md) for complete documentation.
 
 ## ⚙️ Preconfigured Netlify & SEO behavior
 
