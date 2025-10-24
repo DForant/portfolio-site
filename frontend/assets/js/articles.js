@@ -53,35 +53,101 @@ document.addEventListener('DOMContentLoaded', () => {
 			return;
 		}
 		
-		articlesContainer.innerHTML = articles.map(article => {
+		// Clear container
+		articlesContainer.innerHTML = '';
+		
+		articles.forEach(article => {
 			const thumbnail = getArticleThumbnail(article);
-			const title = article.title.rendered;
-			const excerpt = article.excerpt.rendered.replace(/<\/?[^>]+(>|$)/g, ''); // Strip HTML tags
-			const date = formatDate(article.date);
-			const author = getAuthorName(article);
-			const link = article.link;
+			const title = escapeHtml(article.title.rendered);
+			const excerpt = escapeHtml(article.excerpt.rendered.replace(/<\/?[^>]+(>|$)/g, '')); // Strip HTML tags and escape
+			const date = escapeHtml(formatDate(article.date));
+			const author = escapeHtml(getAuthorName(article));
+			const link = sanitizeUrl(article.link);
 			
-			return `
-				<article class="article-card">
-					<div class="article-card__image">
-						<img src="${thumbnail}" alt="${title}" loading="lazy" />
-					</div>
-					<div class="article-card__content">
-						<h2 class="article-card__title">${title}</h2>
-						<div class="article-card__meta">
-							<span class="article-card__date">
-								<i class="far fa-calendar"></i> ${date}
-							</span>
-							<span class="article-card__author">
-								<i class="far fa-user"></i> ${author}
-							</span>
-						</div>
-						<div class="article-card__excerpt">${excerpt}</div>
-						<a href="${link}" class="btn btn--primary article-card__btn">Read More</a>
-					</div>
-				</article>
-			`;
-		}).join('');
+			// Create article card element
+			const articleCard = document.createElement('article');
+			articleCard.className = 'article-card';
+			
+			// Create image container
+			const imageDiv = document.createElement('div');
+			imageDiv.className = 'article-card__image';
+			const img = document.createElement('img');
+			img.src = sanitizeUrl(thumbnail);
+			img.alt = title;
+			img.loading = 'lazy';
+			imageDiv.appendChild(img);
+			
+			// Create content container
+			const contentDiv = document.createElement('div');
+			contentDiv.className = 'article-card__content';
+			
+			// Create title
+			const titleH2 = document.createElement('h2');
+			titleH2.className = 'article-card__title';
+			titleH2.textContent = title;
+			
+			// Create meta container
+			const metaDiv = document.createElement('div');
+			metaDiv.className = 'article-card__meta';
+			
+			const dateSpan = document.createElement('span');
+			dateSpan.className = 'article-card__date';
+			dateSpan.innerHTML = '<i class="far fa-calendar"></i> ';
+			dateSpan.appendChild(document.createTextNode(date));
+			
+			const authorSpan = document.createElement('span');
+			authorSpan.className = 'article-card__author';
+			authorSpan.innerHTML = '<i class="far fa-user"></i> ';
+			authorSpan.appendChild(document.createTextNode(author));
+			
+			metaDiv.appendChild(dateSpan);
+			metaDiv.appendChild(authorSpan);
+			
+			// Create excerpt
+			const excerptDiv = document.createElement('div');
+			excerptDiv.className = 'article-card__excerpt';
+			excerptDiv.textContent = excerpt;
+			
+			// Create button
+			const btn = document.createElement('a');
+			btn.href = link;
+			btn.className = 'btn btn--primary article-card__btn';
+			btn.textContent = 'Read More';
+			
+			// Assemble content
+			contentDiv.appendChild(titleH2);
+			contentDiv.appendChild(metaDiv);
+			contentDiv.appendChild(excerptDiv);
+			contentDiv.appendChild(btn);
+			
+			// Assemble article card
+			articleCard.appendChild(imageDiv);
+			articleCard.appendChild(contentDiv);
+			
+			// Add to container
+			articlesContainer.appendChild(articleCard);
+		});
+	}
+	
+	// Escape HTML to prevent XSS
+	function escapeHtml(text) {
+		const div = document.createElement('div');
+		div.textContent = text;
+		return div.innerHTML;
+	}
+	
+	// Sanitize URL to prevent XSS
+	function sanitizeUrl(url) {
+		// Only allow http and https protocols
+		try {
+			const urlObj = new URL(url);
+			if (urlObj.protocol === 'http:' || urlObj.protocol === 'https:') {
+				return url;
+			}
+		} catch (e) {
+			// Invalid URL
+		}
+		return '#'; // Return safe fallback
 	}
 	
 	// Get article thumbnail or placeholder
