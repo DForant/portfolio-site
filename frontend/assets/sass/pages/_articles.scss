@@ -1,0 +1,295 @@
+// _articles.scss - Styles for articles listing page
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+// Articles Hero Section
+.articles-hero {
+  background: v.$gradient-hero;
+  padding: calc(v.$header-height + v.$spacing-3xl) v.$section-padding-x v.$spacing-3xl;
+  text-align: center;
+  
+  &__title {
+    font-family: v.$font-heading;
+    font-size: v.$font-size-4xl;
+    color: v.$primary-blue;
+    margin: 0 0 v.$spacing-md;
+    
+    @media (max-width: v.$breakpoint-sm) {
+      font-size: v.$font-size-3xl;
+    }
+  }
+  
+  &__subtitle {
+    font-size: v.$font-size-lg;
+    color: v.$charcoal;
+    margin: 0;
+    
+    @media (max-width: v.$breakpoint-sm) {
+      font-size: v.$font-size-base;
+    }
+  }
+}
+
+// Articles Section
+.articles-section {
+  padding: v.$spacing-3xl v.$section-padding-x;
+  background: v.$white;
+}
+
+// Articles List Container
+.articles__list {
+  display: flex;
+  flex-direction: column;
+  gap: v.$spacing-xl;
+  margin-bottom: v.$spacing-3xl;
+}
+
+// Empty State
+.articles__empty {
+  text-align: center;
+  font-size: v.$font-size-lg;
+  color: v.$charcoal;
+  padding: v.$spacing-3xl;
+}
+
+// Loading Indicator
+.articles__loading {
+  text-align: center;
+  padding: v.$spacing-3xl;
+  
+  i {
+    font-size: v.$font-size-4xl;
+    color: v.$primary-blue;
+    margin-bottom: v.$spacing-md;
+  }
+  
+  p {
+    font-size: v.$font-size-lg;
+    color: v.$charcoal;
+    margin: 0;
+  }
+}
+
+// Error Message
+.articles__error {
+  background: rgba(220, 53, 69, 0.1);
+  border: 0.1rem solid rgba(220, 53, 69, 0.3);
+  border-radius: v.$border-radius-base;
+  padding: v.$spacing-lg;
+  color: #721c24;
+  text-align: center;
+  margin-bottom: v.$spacing-xl;
+}
+
+// Article Card - BEM Block
+.article-card {
+  display: flex;
+  gap: v.$spacing-xl;
+  background: v.$white;
+  border: 0.1rem solid rgba(74, 108, 155, 0.1);
+  border-radius: v.$border-radius-lg;
+  overflow: hidden;
+  box-shadow: 0 0.2rem 0.8rem rgba(74, 108, 155, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY(-0.2rem);
+      box-shadow: 0 0.4rem 1.6rem rgba(74, 108, 155, 0.15);
+    }
+  }
+  
+  @media (max-width: v.$breakpoint-sm) {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  // Article Image - BEM Element
+  &__image {
+    flex-shrink: 0;
+    width: 30rem;
+    height: 20rem;
+    overflow: hidden;
+    
+    @media (max-width: v.$breakpoint-md) {
+      width: 25rem;
+      height: 18rem;
+    }
+    
+    @media (max-width: v.$breakpoint-sm) {
+      width: 100%;
+      height: 20rem;
+    }
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    
+    @media (hover: hover) and (pointer: fine) {
+      .article-card:hover & img {
+        transform: scale(1.05);
+      }
+    }
+  }
+  
+  // Article Content - BEM Element
+  &__content {
+    flex: 1;
+    padding: v.$spacing-xl;
+    display: flex;
+    flex-direction: column;
+    
+    @media (max-width: v.$breakpoint-sm) {
+      padding: v.$spacing-lg;
+    }
+  }
+  
+  // Article Title - BEM Element
+  &__title {
+    font-family: v.$font-heading;
+    font-size: v.$font-size-2xl;
+    color: v.$primary-blue;
+    margin: 0 0 v.$spacing-md;
+    line-height: 1.3;
+    
+    @media (max-width: v.$breakpoint-sm) {
+      font-size: v.$font-size-xl;
+    }
+  }
+  
+  // Article Meta - BEM Element
+  &__meta {
+    display: flex;
+    gap: v.$spacing-lg;
+    margin-bottom: v.$spacing-md;
+    font-size: v.$font-size-sm;
+    color: rgba(v.$charcoal, 0.7);
+    
+    @media (max-width: v.$breakpoint-sm) {
+      flex-direction: column;
+      gap: v.$spacing-xs;
+    }
+    
+    span {
+      display: flex;
+      align-items: center;
+      gap: v.$spacing-xs;
+    }
+    
+    i {
+      color: v.$accent-gold;
+    }
+  }
+  
+  // Article Date - BEM Element
+  &__date {
+    // Inherits styles from meta
+  }
+  
+  // Article Author - BEM Element
+  &__author {
+    // Inherits styles from meta
+  }
+  
+  // Article Excerpt - BEM Element
+  &__excerpt {
+    flex: 1;
+    color: v.$charcoal;
+    line-height: 1.6;
+    margin-bottom: v.$spacing-lg;
+    font-size: v.$font-size-base;
+    
+    // Limit to 3 lines
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  // Article Button - BEM Element
+  &__btn {
+    align-self: flex-start;
+  }
+}
+
+// Pagination - BEM Block
+.pagination {
+  margin-top: v.$spacing-3xl;
+  
+  &__list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: v.$spacing-sm;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-wrap: wrap;
+  }
+  
+  &__item {
+    // No additional styles needed, flexbox handles layout
+  }
+  
+  // Pagination Button - BEM Element
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: v.$spacing-xs;
+    min-width: 4rem;
+    height: 4rem;
+    padding: 0 v.$spacing-md;
+    background: v.$white;
+    border: 0.1rem solid rgba(74, 108, 155, 0.2);
+    border-radius: v.$border-radius-base;
+    color: v.$primary-blue;
+    font-size: v.$font-size-base;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &:hover:not(&--active) {
+      background: v.$off-white;
+      border-color: v.$primary-blue;
+      transform: translateY(-0.1rem);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+    
+    // Active State - BEM Modifier
+    &--active {
+      background: v.$primary-blue;
+      color: v.$white;
+      border-color: v.$primary-blue;
+      cursor: default;
+    }
+    
+    // Previous/Next Buttons - BEM Modifiers
+    &--prev,
+    &--next {
+      font-size: v.$font-size-sm;
+      
+      @media (max-width: v.$breakpoint-xs) {
+        padding: 0 v.$spacing-sm;
+        min-width: auto;
+      }
+    }
+  }
+  
+  // Ellipsis - BEM Element
+  &__ellipsis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 4rem;
+    height: 4rem;
+    color: v.$charcoal;
+    font-size: v.$font-size-lg;
+  }
+}
