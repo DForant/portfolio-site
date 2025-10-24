@@ -167,12 +167,6 @@
                 renderArticles(result.data);
                 updatePagination(result.pagination);
                 showState('success');
-                
-                // Scroll to top of articles section
-                document.querySelector('.articles-list').scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
             }
         } catch (error) {
             console.error('Error fetching articles:', error);
