@@ -103,19 +103,28 @@ var require_validation = __commonJS({
 // ../netlify/functions/contact.js
 var nodemailer = require("nodemailer");
 var { validatePayload, basicSpamCheck } = require_validation();
+var TO_ADDRESS = process.env.CONTACT_TO || "dean@deanforantdesigns.com";
 function buildTransporter() {
+  let mode = "json";
+  let transporter;
   if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-    return nodemailer.createTransport({
+    mode = "smtp";
+    transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || "587", 10),
       secure: process.env.SMTP_PORT === "465",
       auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
     });
+  } else if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    mode = "gmail";
+    transporter = nodemailer.createTransport({ service: "gmail", auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS } });
+  } else {
+    transporter = nodemailer.createTransport({ jsonTransport: true });
   }
-  if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-    return nodemailer.createTransport({ service: "gmail", auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS } });
+  if (process.env.ENABLE_EMAIL_DEBUG === "1" || process.env.NODE_ENV !== "production") {
+    console.log(`[contact:function] Email transport mode: ${mode}`);
   }
-  return nodemailer.createTransport({ jsonTransport: true });
+  return { transporter, mode };
 }
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
@@ -137,6 +146,19 @@ exports.handler = async (event) => {
   }
   const fullName = `${data.firstName} ${data.lastName}`.trim();
   const submittedAt = /* @__PURE__ */ new Date();
+  function formatTimestamp(d) {
+    const pad = (n) => n.toString().padStart(2, "0");
+    let hrs = d.getHours();
+    const mins = pad(d.getMinutes());
+    const ampm = hrs >= 12 ? "PM" : "AM";
+    hrs = hrs % 12;
+    if (hrs === 0) hrs = 12;
+    const month = pad(d.getMonth() + 1);
+    const day = pad(d.getDate());
+    const year = d.getFullYear();
+    return `${month}/${day}/${year} ${hrs}:${mins} ${ampm}`;
+  }
+  const submittedFormatted = formatTimestamp(submittedAt);
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:640px;margin:0 auto;padding:20px;background:#f8f9fa;">
       <h2 style="color:#4A6C9B;margin-top:0;">New Project Inquiry</h2>
@@ -145,23 +167,39 @@ exports.handler = async (event) => {
       <p><strong>Phone:</strong> ${data.phone}</p>
       <p><strong>Email:</strong> ${data.email}</p>
       <p><strong>Services:</strong> ${(data.services || []).join(", ") || "\u2014"}</p>
-      <p><strong>Submitted:</strong> ${submittedAt.toISOString()}</p>
+  <p><strong>Submitted:</strong> ${submittedFormatted}</p>
       <hr />
       <p style="white-space:pre-wrap;line-height:1.5;">${data.description}</p>
       <hr />
       <small style="color:#555;">Spam score: ${spam.score} | Flags: ${spam.flags.join(", ")}</small>
     </div>`;
   try {
-    const transporter = buildTransporter();
+    const { transporter, mode } = buildTransporter();
+    if (transporter.verify) {
+      try {
+        await transporter.verify();
+      } catch (verErr) {
+        console.warn("[contact:function] Transport verify failed (continuing):", verErr.message);
+      }
+    }
+    if (process.env.ENABLE_EMAIL_DEBUG === "1" || process.env.NODE_ENV !== "production") {
+      console.log("[contact:function] Sending to:", TO_ADDRESS);
+    }
     const info = await transporter.sendMail({
       from: `Portfolio Inquiry <${process.env.SMTP_USER || process.env.EMAIL_USER || "noreply@deanforantdesigns.com"}>`,
-      to: "dean@deanforantdesigns.com",
+      to: TO_ADDRESS,
       subject: "New Inquiry from Website",
       html,
       replyTo: data.email
     });
     console.log("Function email processed:", info.messageId || info);
-    return { statusCode: 200, body: JSON.stringify({ success: true, message: "Thank you! Your message was sent successfully." }) };
+    if (process.env.ENABLE_EMAIL_DEBUG === "1" || process.env.NODE_ENV !== "production") {
+      console.log("[contact:function] Debug envelope:", info.envelope || {});
+      console.log("[contact:function] Accepted:", info.accepted);
+      console.log("[contact:function] Rejected:", info.rejected);
+      console.log("[contact:function] Response:", info.response);
+    }
+    return { statusCode: 200, body: JSON.stringify({ success: true, message: "Thank you! Your message was sent successfully.", transportMode: mode }) };
   } catch (err) {
     console.error("Function email send failed:", err);
     const devExtras = process.env.NODE_ENV === "development" ? { detail: err.message } : {};

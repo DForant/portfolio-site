@@ -6,6 +6,9 @@ const xss = require('xss');
 
 // Get WordPress API base URL from environment variable
 const WP_API_BASE_URL = process.env.WP_API_BASE_URL || 'http://dfd-cms.local/wp-json/wp/v2';
+// REST base for the Articles custom post type (CPT). Must match register_post_type({ rest_base }) or CPT slug.
+// Defaults to 'article' (singular). You can override via env: WP_ARTICLES_REST_BASE=article|articles
+const ARTICLES_REST_BASE = process.env.WP_ARTICLES_REST_BASE || process.env.WP_ARTICLES_POST_TYPE || 'article';
 
 /**
  * Validates and sanitizes query parameters
@@ -52,14 +55,20 @@ function sanitizeArticle(article) {
 }
 
 /**
- * Fetches articles from WordPress API
+ * Fetches articles from WordPress API (Articles CPT)
  * @param {number} page - Page number
  * @param {number} perPage - Items per page
  * @returns {Promise<Object>} Articles and pagination metadata
  */
 async function fetchArticles(page, perPage) {
-  const url = `${WP_API_BASE_URL}/posts?page=${page}&per_page=${perPage}&_embed=true`;
-  
+  // Helper to build endpoint URL
+  const buildUrl = (restBase) => `${WP_API_BASE_URL}/${restBase}?page=${page}&per_page=${perPage}&_embed=true`;
+
+  const primaryBase = ARTICLES_REST_BASE;
+  const fallbackBase = primaryBase === 'article' ? 'articles' : 'article';
+
+  // Try primary
+  let url = buildUrl(primaryBase);
   if (process.env.ENABLE_API_DEBUG === '1' || process.env.NODE_ENV !== 'production') {
     console.log(`[articles:function] Fetching from: ${url}`);
   }
@@ -69,7 +78,7 @@ async function fetchArticles(page, perPage) {
   const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
   try {
-    const response = await fetch(url, {
+    let response = await fetch(url, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
@@ -78,20 +87,37 @@ async function fetchArticles(page, perPage) {
       signal: controller.signal,
     });
 
+    // If the primary endpoint 404s, attempt the alternate rest base automatically
+    if (response.status === 404) {
+      const altUrl = buildUrl(fallbackBase);
+      if (process.env.ENABLE_API_DEBUG === '1' || process.env.NODE_ENV !== 'production') {
+        console.log(`[articles:function] Primary REST base '${primaryBase}' 404. Retrying with '${fallbackBase}': ${altUrl}`);
+      }
+      response = await fetch(altUrl, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'User-Agent': 'DeanForant-Portfolio/1.0'
+        },
+        signal: controller.signal,
+      });
+      url = altUrl; // for logging/pagination consistency
+    }
+
     clearTimeout(timeoutId);
 
     if (!response.ok) {
       if (response.status === 400) {
         throw new Error('Invalid request to WordPress API');
       } else if (response.status === 404) {
-        throw new Error('No articles found');
+        throw new Error('Articles endpoint not found or returned no results');
       } else {
         throw new Error(`WordPress API error: ${response.status}`);
       }
     }
 
     const articles = await response.json();
-    
+
     // Get pagination info from headers
     const totalPosts = parseInt(response.headers.get('X-WP-Total') || '0', 10);
     const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '1', 10);
@@ -109,7 +135,7 @@ async function fetchArticles(page, perPage) {
     };
   } catch (error) {
     clearTimeout(timeoutId);
-    
+
     // Handle abort error specifically
     if (error.name === 'AbortError') {
       throw new Error('Request timeout');
@@ -160,7 +186,7 @@ exports.handler = async (event) => {
     let statusCode = 500;
     if (error.message.includes('Invalid')) {
       statusCode = 400;
-    } else if (error.message.includes('not found')) {
+    } else if (error.message.includes('not found') || error.message.includes('endpoint not found')) {
       statusCode = 404;
     } else if (error.message.includes('timeout')) {
       statusCode = 504;

@@ -5,6 +5,7 @@
     'use strict';
 
     // Configuration
+    // Use Netlify redirect-friendly API route
     const API_ENDPOINT = '/api/articles';
     const PER_PAGE = 10;
     
@@ -138,7 +139,17 @@
 
         try {
             const url = `${API_ENDPOINT}?page=${page}&per_page=${PER_PAGE}`;
-            const response = await fetch(url);
+            let response = await fetch(url);
+
+            // Fallback to direct functions path if redirect/route not present
+            if (response.status === 404) {
+                const fnUrl = `/.netlify/functions/articles?page=${page}&per_page=${PER_PAGE}`;
+                try {
+                    response = await fetch(fnUrl);
+                } catch (_) {
+                    // ignore, will be handled below
+                }
+            }
 
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
