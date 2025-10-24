@@ -64,43 +64,58 @@ async function fetchArticles(page, perPage) {
     console.log(`[articles:function] Fetching from: ${url}`);
   }
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'User-Agent': 'DeanForant-Portfolio/1.0'
-    },
-    // Add timeout to prevent hanging requests
-    signal: AbortSignal.timeout(10000), // 10 second timeout
-  });
+  // Create abort controller for timeout
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-  if (!response.ok) {
-    if (response.status === 400) {
-      throw new Error('Invalid request to WordPress API');
-    } else if (response.status === 404) {
-      throw new Error('No articles found');
-    } else {
-      throw new Error(`WordPress API error: ${response.status}`);
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'DeanForant-Portfolio/1.0'
+      },
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      if (response.status === 400) {
+        throw new Error('Invalid request to WordPress API');
+      } else if (response.status === 404) {
+        throw new Error('No articles found');
+      } else {
+        throw new Error(`WordPress API error: ${response.status}`);
+      }
     }
+
+    const articles = await response.json();
+    
+    // Get pagination info from headers
+    const totalPosts = parseInt(response.headers.get('X-WP-Total') || '0', 10);
+    const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '1', 10);
+
+    return {
+      articles: articles.map(sanitizeArticle),
+      pagination: {
+        page,
+        perPage,
+        totalPosts,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+      }
+    };
+  } catch (error) {
+    clearTimeout(timeoutId);
+    
+    // Handle abort error specifically
+    if (error.name === 'AbortError') {
+      throw new Error('Request timeout');
+    }
+    throw error;
   }
-
-  const articles = await response.json();
-  
-  // Get pagination info from headers
-  const totalPosts = parseInt(response.headers.get('X-WP-Total') || '0', 10);
-  const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '1', 10);
-
-  return {
-    articles: articles.map(sanitizeArticle),
-    pagination: {
-      page,
-      perPage,
-      totalPosts,
-      totalPages,
-      hasNextPage: page < totalPages,
-      hasPrevPage: page > 1,
-    }
-  };
 }
 
 /**
