@@ -36,6 +36,7 @@ portfolio-site/
 - **Responsive Design**: Mobile-first approach with modern CSS Grid and Flexbox
 - **Interactive Contact Form**: Client + server validation, spam filtering, graceful error handling
 - **Email Integration**: SMTP / Gmail fallback with development JSON transport
+- **Articles Listing Page**: Paginated list of articles from WordPress CMS with secure API proxy
 - **Separated Architecture**: Independent frontend (`/frontend`) & backend (`/backend`)
 - **Client Carousel**: Interactive showcase of client logos
 - **Process Tabs**: Interactive workflow demonstration
@@ -46,7 +47,7 @@ portfolio-site/
 This repo ships with production-grade Netlify config and SEO safeguards baked in:
 
 - Build config: `publish = frontend`, `functions = netlify/functions`, and build command `npm --workspace frontend run build` to compile Sass on deploy.
-- API route: `/api/contact` redirected to `/.netlify/functions/contact` via `netlify.toml`.
+- API routes: `/api/contact` redirected to `/.netlify/functions/contact` and `/api/articles` redirected to `/.netlify/functions/articles` via `netlify.toml`.
 - Staging no-indexing: For host `staging.deanforantdesigns.com`, all pages send `X-Robots-Tag: noindex, nofollow` and `/robots.txt` resolves to `frontend/robots-staging.txt` (Disallow all).
 - Production indexing: Other hosts serve `frontend/robots-prod.txt` (Allow all) and include a `Sitemap: https://www.deanforantdesigns.com/sitemap.xml`. A basic `frontend/sitemap.xml` is included.
 - Canonical host: Requests to apex `deanforantdesigns.com` 301-redirect to `https://www.deanforantdesigns.com/`.
@@ -193,7 +194,9 @@ Define in Netlify UI (recommended) or `.env` for Express local development.
 | `SMTP_PASS` | If SMTP used | Email | Auth password |
 | `EMAIL_USER` | Optional | Gmail fallback | Only if using Gmail transport |
 | `EMAIL_PASS` | Optional | Gmail fallback | Gmail App Password |
+| `WP_API_BASE_URL` | Optional | Articles Function | WordPress API endpoint (default: `http://dfd-cms.local/wp-json/wp/v2`) |
 | `ENABLE_EMAIL_DEBUG` | Optional | Functions | `1` to print extra logs (use on staging only) |
+| `ENABLE_API_DEBUG` | Optional | Functions | `1` to print API request logs (use on staging only) |
 | `CONTACT_TO` | Optional | Functions | Override recipient address (useful on staging) |
 | `NODE_VERSION` | Optional | Build/Functions | Pin Node engine on Netlify (e.g., `20`) |
 | `NODE_ENV` | Yes (prod) | All | `production` enables optimizations |
@@ -423,6 +426,58 @@ The system sends HTML emails with:
 - Timestamp and reference
 - Responsive design
 
+## 📰 Articles Listing Feature
+
+The articles page (`/articles.html`) displays blog content from a WordPress CMS via a secure API proxy:
+
+### How It Works
+
+1. **Frontend Page**: Visit `/articles.html` to view the articles listing
+2. **API Proxy**: JavaScript calls `/api/articles` which proxies to WordPress REST API
+3. **WordPress CMS**: Content is managed in WordPress and served via the REST API
+4. **Pagination**: Display up to 10 articles per page with navigation controls
+
+### Security Features
+
+- **Input Validation**: Page and per_page parameters are validated and sanitized
+- **XSS Protection**: All article content is sanitized before display
+- **Timeout Protection**: API requests timeout after 10 seconds
+- **Rate Limiting**: Netlify Functions automatically rate limit requests
+- **Error Handling**: Graceful fallback for API failures
+
+### Configuration
+
+Set the WordPress API endpoint via environment variable:
+
+```bash
+# Local development
+WP_API_BASE_URL=http://dfd-cms.local/wp-json/wp/v2
+
+# Production
+WP_API_BASE_URL=https://your-production-cms.com/wp-json/wp/v2
+```
+
+Add this to:
+- `.env` file for local development
+- Netlify UI → Site Settings → Environment Variables for deployed sites
+
+### Article Display
+
+Each article card shows:
+- **Thumbnail**: Featured image or placeholder if none exists
+- **Title**: Article headline
+- **Date**: Publication date in readable format
+- **Author**: Article author name
+- **Excerpt**: Brief preview (3 lines max)
+- **Read More Button**: Links to the full article on WordPress
+
+### Testing
+
+1. Ensure WordPress REST API is accessible
+2. Test with: `curl http://dfd-cms.local/wp-json/wp/v2/posts`
+3. Visit `/articles.html` locally via `netlify dev`
+4. Test pagination with multiple articles
+
 ## 🛡️ Security Features
 
 - **Helmet.js**: Security headers
@@ -487,6 +542,14 @@ For deployment issues or questions:
 - Contact hosting.com support for server-specific issues
 
 ## 📝 Changelog
+
+### v1.2.0
+- **Articles Listing Page**: Added `/articles.html` page displaying blog posts from WordPress CMS
+- **Articles API Function**: Secure Netlify Function (`/api/articles`) that proxies WordPress REST API
+- **Pagination**: Supports up to 10 articles per page with prev/next navigation
+- **Security**: Input validation, XSS sanitization, request timeout protection
+- **Responsive Design**: Mobile-optimized article cards with thumbnails and excerpts
+- **Environment Configuration**: `WP_API_BASE_URL` environment variable for easy endpoint switching
 
 ### v1.1.0
 - Rebuilt contact form (first/last name, company, phone, email, services, description)
