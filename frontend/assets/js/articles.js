@@ -69,6 +69,8 @@
         const excerpt = stripHtml(article.excerpt);
         const date = formatDate(article.date);
         const author = article.author_name;
+        // Generate local article page URL using slug or id
+        const articleUrl = article.slug ? `article.html?slug=${article.slug}` : `article.html?id=${article.id}`;
 
         card.innerHTML = `
             <div class="article-card__image">
@@ -87,7 +89,7 @@
                     </span>
                 </div>
                 <div class="article-card__excerpt">${excerpt}</div>
-                <a href="${article.link}" class="btn btn--secondary article-card__btn" target="_blank" rel="noopener noreferrer">
+                <a href="${articleUrl}" class="btn btn--secondary article-card__btn">
                     Read More
                     <i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>

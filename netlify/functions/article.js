@@ -1,13 +1,12 @@
-// Netlify Function: articles list handler
-// Path: /.netlify/functions/articles
-// This function acts as a secure proxy for WordPress API requests
+// Netlify Function: single article handler
+// Path: /.netlify/functions/article
+// This function acts as a secure proxy for WordPress API requests for a single article
 
 const xss = require('xss');
 
 // Get WordPress API base URL from environment variable
 const WP_API_BASE_URL = process.env.WP_API_BASE_URL || 'http://dfd-cms.local/wp-json/wp/v2';
-// REST base for the Articles custom post type (CPT). Must match register_post_type({ rest_base }) or CPT slug.
-// Defaults to 'article' (singular). You can override via env: WP_ARTICLES_REST_BASE=article|articles
+// REST base for the Articles custom post type (CPT)
 const ARTICLES_REST_BASE = process.env.WP_ARTICLES_REST_BASE || process.env.WP_ARTICLES_POST_TYPE || 'article';
 
 /**
@@ -16,20 +15,25 @@ const ARTICLES_REST_BASE = process.env.WP_ARTICLES_REST_BASE || process.env.WP_A
  * @returns {Object} Validated parameters
  */
 function validateParams(queryParams) {
-  const page = parseInt(queryParams.page || '1', 10);
-  const perPage = parseInt(queryParams.per_page || '10', 10);
+  const slug = queryParams.slug || '';
+  const id = queryParams.id ? parseInt(queryParams.id, 10) : null;
 
-  // Validate page number
-  if (isNaN(page) || page < 1 || page > 1000) {
-    throw new Error('Invalid page number. Must be between 1 and 1000.');
+  // Must have either slug or id
+  if (!slug && !id) {
+    throw new Error('Either slug or id parameter is required');
   }
 
-  // Validate per_page (max 10 per requirements)
-  if (isNaN(perPage) || perPage < 1 || perPage > 10) {
-    throw new Error('Invalid per_page value. Must be between 1 and 10.');
+  // Validate id if provided
+  if (id && (isNaN(id) || id < 1)) {
+    throw new Error('Invalid id parameter');
   }
 
-  return { page, perPage };
+  // Validate slug if provided (basic sanitization)
+  if (slug && !/^[a-z0-9-]+$/.test(slug)) {
+    throw new Error('Invalid slug parameter. Must contain only lowercase letters, numbers, and hyphens.');
+  }
+
+  return { slug, id };
 }
 
 /**
@@ -42,6 +46,7 @@ function sanitizeArticle(article) {
     id: article.id,
     slug: article.slug,
     title: xss(article.title?.rendered || ''),
+    content: xss(article.content?.rendered || ''),
     excerpt: xss(article.excerpt?.rendered || ''),
     date: article.date,
     modified: article.modified,
@@ -52,18 +57,31 @@ function sanitizeArticle(article) {
     featured_image_url: article._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
     // Include author name if available
     author_name: xss(article._embedded?.author?.[0]?.name || 'Unknown'),
+    // ACF fields for additional metadata
+    reading_time: article.acf?.reading_time || null,
+    difficulty: article.acf?.difficulty || null,
+    seo_meta_description: xss(article.acf?.seo_meta_description || ''),
+    og_image_url: article.acf?.og_image_url || null,
+    demo_url: article.acf?.demo_url || null,
+    source_code_url: article.acf?.source_code_url || null,
   };
 }
 
 /**
- * Fetches articles from WordPress API (Articles CPT)
- * @param {number} page - Page number
- * @param {number} perPage - Items per page
- * @returns {Promise<Object>} Articles and pagination metadata
+ * Fetches a single article from WordPress API
+ * @param {string} slug - Article slug
+ * @param {number} id - Article ID
+ * @returns {Promise<Object>} Article data
  */
-async function fetchArticles(page, perPage) {
+async function fetchArticle(slug, id) {
   // Helper to build endpoint URL
-  const buildUrl = (restBase) => `${WP_API_BASE_URL}/${restBase}?page=${page}&per_page=${perPage}&_embed=true`;
+  const buildUrl = (restBase) => {
+    if (id) {
+      return `${WP_API_BASE_URL}/${restBase}/${id}?_embed=true`;
+    } else {
+      return `${WP_API_BASE_URL}/${restBase}?slug=${slug}&_embed=true`;
+    }
+  };
 
   const primaryBase = ARTICLES_REST_BASE;
   const fallbackBase = primaryBase === 'article' ? 'articles' : 'article';
@@ -71,7 +89,7 @@ async function fetchArticles(page, perPage) {
   // Try primary
   let url = buildUrl(primaryBase);
   if (process.env.ENABLE_API_DEBUG === '1' || process.env.NODE_ENV !== 'production') {
-    console.log(`[articles:function] Fetching from: ${url}`);
+    console.log(`[article:function] Fetching from: ${url}`);
   }
 
   // Create abort controller for timeout
@@ -92,7 +110,7 @@ async function fetchArticles(page, perPage) {
     if (response.status === 404) {
       const altUrl = buildUrl(fallbackBase);
       if (process.env.ENABLE_API_DEBUG === '1' || process.env.NODE_ENV !== 'production') {
-        console.log(`[articles:function] Primary REST base '${primaryBase}' 404. Retrying with '${fallbackBase}': ${altUrl}`);
+        console.log(`[article:function] Primary REST base '${primaryBase}' 404. Retrying with '${fallbackBase}': ${altUrl}`);
       }
       response = await fetch(altUrl, {
         method: 'GET',
@@ -102,7 +120,7 @@ async function fetchArticles(page, perPage) {
         },
         signal: controller.signal,
       });
-      url = altUrl; // for logging/pagination consistency
+      url = altUrl;
     }
 
     clearTimeout(timeoutId);
@@ -111,29 +129,22 @@ async function fetchArticles(page, perPage) {
       if (response.status === 400) {
         throw new Error('Invalid request to WordPress API');
       } else if (response.status === 404) {
-        throw new Error('Articles endpoint not found or returned no results');
+        throw new Error('Article not found');
       } else {
         throw new Error(`WordPress API error: ${response.status}`);
       }
     }
 
-    const articles = await response.json();
+    const data = await response.json();
+    
+    // If we queried by slug, the response is an array
+    const article = Array.isArray(data) ? data[0] : data;
+    
+    if (!article) {
+      throw new Error('Article not found');
+    }
 
-    // Get pagination info from headers
-    const totalPosts = parseInt(response.headers.get('X-WP-Total') || '0', 10);
-    const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '1', 10);
-
-    return {
-      articles: articles.map(sanitizeArticle),
-      pagination: {
-        page,
-        perPage,
-        totalPosts,
-        totalPages,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1,
-      }
-    };
+    return sanitizeArticle(article);
   } catch (error) {
     clearTimeout(timeoutId);
 
@@ -163,31 +174,30 @@ exports.handler = async (event) => {
 
   try {
     // Validate and sanitize query parameters
-    const { page, perPage } = validateParams(event.queryStringParameters || {});
+    const { slug, id } = validateParams(event.queryStringParameters || {});
 
-    // Fetch articles from WordPress API
-    const data = await fetchArticles(page, perPage);
+    // Fetch article from WordPress API
+    const article = await fetchArticle(slug, id);
 
     return {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'public, max-age=300', // Cache for 5 minutes
+        'Cache-Control': 'public, max-age=600', // Cache for 10 minutes
       },
       body: JSON.stringify({
         success: true,
-        data: data.articles,
-        pagination: data.pagination,
+        data: article,
       })
     };
   } catch (error) {
-    console.error('[articles:function] Error:', error.message);
+    console.error('[article:function] Error:', error.message);
 
     // Determine appropriate status code based on error
     let statusCode = 500;
-    if (error.message.includes('Invalid')) {
+    if (error.message.includes('Invalid') || error.message.includes('required')) {
       statusCode = 400;
-    } else if (error.message.includes('not found') || error.message.includes('endpoint not found')) {
+    } else if (error.message.includes('not found')) {
       statusCode = 404;
     } else if (error.message.includes('timeout')) {
       statusCode = 504;
@@ -198,7 +208,7 @@ exports.handler = async (event) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         success: false,
-        message: error.message || 'Failed to fetch articles',
+        message: error.message || 'Failed to fetch article',
       })
     };
   }
