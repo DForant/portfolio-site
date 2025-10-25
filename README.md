@@ -21,13 +21,22 @@ portfolio-site/
 ├── frontend/                 # 🌐 Static website (HTML, CSS, JS, images)
 │   ├── assets/
 │   ├── index.html
+│   ├── robots-prod.txt
+│   ├── robots-staging.txt
+│   ├── sitemap.xml
 │   └── package.json
 ├── backend/                  # 🚀 Node.js API server (contact form, email)
 │   ├── server.js
-│   ├── package.json
-│   ├── .env
-│   └── .env.example
-├── DEPLOYMENT-SEPARATED.md   # 📋 Deployment guide
+│   ├── validation.js
+│   └── package.json
+├── netlify/                  # ⚡ Netlify Functions
+│   └── functions/
+│       ├── contact.js
+│       └── lib/
+│           └── validation.js
+├── .env.example              # 📝 Environment variables template
+├── netlify.toml              # ⚙️ Netlify configuration
+├── package.json              # 📦 Monorepo root
 └── README.md
 ```
 
@@ -204,7 +213,7 @@ Define in Netlify UI (recommended) or `.env` for Express local development.
 | `FRONTEND_URL` | Express CORS | Express | Comma separated origins |
 | `APP_PATH` | Path-based hosting alt | Express prod (cPanel) | See advanced section |
 
-`.env.example` in `backend/` is the reference for Express mode.
+`.env.example` in the repository root is the reference for Express mode.
 
 ---
 
@@ -543,13 +552,17 @@ For deployment issues or questions:
 
 ## 📝 Changelog
 
-### v1.2.0
+### v1.1.4
 - **Articles Listing Page**: Added `/articles.html` page displaying blog posts from WordPress CMS
 - **Articles API Function**: Secure Netlify Function (`/api/articles`) that proxies WordPress REST API
 - **Pagination**: Supports up to 10 articles per page with prev/next navigation
 - **Security**: Input validation, XSS sanitization, request timeout protection
 - **Responsive Design**: Mobile-optimized article cards with thumbnails and excerpts
 - **Environment Configuration**: `WP_API_BASE_URL` environment variable for easy endpoint switching
+- Updated monorepo structure with npm workspaces
+- Refined Netlify Functions configuration with esbuild bundler
+- Improved environment variable handling
+- Documentation updates and clarifications
 
 ### v1.1.0
 - Rebuilt contact form (first/last name, company, phone, email, services, description)
