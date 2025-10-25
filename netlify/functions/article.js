@@ -5,6 +5,7 @@
 const xss = require('xss');
 
 // Get WordPress API base URL from environment variable
+// Note: Default uses http for local development only. Production must use HTTPS via env var.
 const WP_API_BASE_URL = process.env.WP_API_BASE_URL || 'http://dfd-cms.local/wp-json/wp/v2';
 // REST base for the Articles custom post type (CPT)
 const ARTICLES_REST_BASE = process.env.WP_ARTICLES_REST_BASE || process.env.WP_ARTICLES_POST_TYPE || 'article';
@@ -94,7 +95,7 @@ async function fetchArticle(slug, id) {
 
   // Create abort controller for timeout
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+  const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
 
   try {
     let response = await fetch(url, {

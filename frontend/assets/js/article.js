@@ -55,11 +55,14 @@
     }
 
     /**
-     * Strip HTML tags from string
+     * Strip HTML tags from string safely
      */
     function stripHtml(html) {
+        if (!html) return '';
         const tmp = document.createElement('div');
+        // First, set innerHTML to parse the HTML string
         tmp.innerHTML = html;
+        // Then extract only text content (this strips all HTML tags)
         return tmp.textContent || tmp.innerText || '';
     }
 
@@ -130,6 +133,8 @@
         }
 
         // Update article body content
+        // Note: Content is already sanitized server-side with xss library
+        // WordPress content needs to be rendered as HTML for proper formatting
         elements.bodyContent.innerHTML = article.content;
 
         // Update demo and source code links
