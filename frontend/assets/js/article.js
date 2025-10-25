@@ -56,13 +56,16 @@
 
     /**
      * Strip HTML tags from string safely
+     * Note: This function uses innerHTML to properly decode HTML entities (e.g., &amp;)
+     * The input is already sanitized server-side with xss library, so this is safe
+     * to use for parsing WordPress titles and excerpts.
      */
     function stripHtml(html) {
         if (!html) return '';
         const tmp = document.createElement('div');
-        // First, set innerHTML to parse the HTML string
+        // Set innerHTML to parse HTML entities and tags
         tmp.innerHTML = html;
-        // Then extract only text content (this strips all HTML tags)
+        // Extract only text content (strips all HTML tags)
         return tmp.textContent || tmp.innerText || '';
     }
 
