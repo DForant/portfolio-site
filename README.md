@@ -497,7 +497,7 @@ For deployment issues or questions:
 
 ## 📝 Changelog
 
-### v1.1.3 (Current)
+### v1.1.4 (Current)
 - Updated monorepo structure with npm workspaces
 - Refined Netlify Functions configuration with esbuild bundler
 - Improved environment variable handling
