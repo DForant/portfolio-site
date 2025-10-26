@@ -124,7 +124,7 @@ This is the fastest way to develop with hot module replacement for React compone
    npm run install:all
    ```
 
-3. **Option 3a: Netlify Dev (Recommended for testing functions)**
+3. **Option 3a: Netlify Dev (For testing production build + functions)**
    
    Build the React app first, then start Netlify dev:
    ```bash
@@ -133,9 +133,10 @@ This is the fastest way to develop with hot module replacement for React compone
    ```
    - Site: http://localhost:8888
    - Function (via redirect): http://localhost:8888/api/contact
-   - React HMR: Not available in this mode (need to rebuild)
+   - React HMR: ❌ No (need to rebuild after each change)
+   - **Best for**: Testing final build before deployment
 
-4. **Option 3b: Vite Dev Only (Fastest for UI development)**
+4. **Option 3b: Vite Dev Only (⭐ Recommended for active development)**
    
    Start Vite dev server directly:
    ```bash
@@ -145,8 +146,9 @@ This is the fastest way to develop with hot module replacement for React compone
    - Site: http://localhost:3000
    - Hot Module Replacement (HMR): ✅ Yes
    - Functions: ❌ Not available (form will fail unless backend is running)
+   - **Best for**: Fast UI/component development with instant updates
 
-5. **Option 3c: Vite Dev + Express Backend (Full stack without Netlify)**
+5. **Option 3c: Vite Dev + Express Backend (Full stack local development)**
    
    Terminal 1 - Start backend:
    ```bash
