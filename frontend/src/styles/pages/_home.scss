@@ -5,7 +5,8 @@
 // Hero Section - BEM Block
 .hero {
   height: 60rem;
-  background: url('../images/web-banner-80.jpg') bottom right/cover no-repeat;
+  // Background banner will be applied on the inner container for desktop viewports
+  background: none;
   display: flex;
   align-items: center;
   position: relative;
@@ -40,6 +41,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
+    height: 100%; // ensure background fills the hero height when applied
     
     @media (max-width: v.$breakpoint-md) {
       grid-template-columns: 1fr;
@@ -144,8 +146,16 @@
     }
   }
 
+  // Mobile: keep optional mobile banner on the hero itself
   @media (max-width: v.$breakpoint-sm){
-      background: url('../images/mobile-web-banner-80.jpg') center center/cover no-repeat;
+      background: url('/images/mobile-web-banner-80.jpg') center center/cover no-repeat;
+  }
+
+  // Desktop and tablet: show banner image as background on the inner container
+  @media (min-width: 769px){
+    .section__container{
+      background: url('/images/web-banner-80.jpg') bottom right/cover no-repeat;
+    }
   }
 }
 

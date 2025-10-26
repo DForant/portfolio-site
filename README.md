@@ -568,7 +568,7 @@ For deployment issues or questions:
 
 ## 📝 Changelog
 
-### v1.1.4 - React + Vite Migration
+### v1.1.4ne - React + Vite Migration
 - **⚛️ React Frontend**: Converted entire static site to React with component-based architecture
 - **⚡ Vite Build Tool**: Fast dev server with Hot Module Replacement (HMR)
 - **🔀 React Router**: Client-side routing for seamless navigation between pages
