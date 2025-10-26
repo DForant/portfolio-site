@@ -48,5 +48,8 @@ Thumbs.db
 
 # VS Code Workspace files
 *.code-workspace
-# Local Netlify folder
+
+# Local Netlify folder - MUST be ignored
+# Contains auto-generated function wrappers that fail in ESM context
+# Netlify regenerates this during deployment and local dev
 .netlify
