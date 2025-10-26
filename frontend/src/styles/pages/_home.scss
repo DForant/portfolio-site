@@ -5,8 +5,7 @@
 // Hero Section - BEM Block
 .hero {
   height: 60rem;
-  // Background banner will be applied on the inner container for desktop viewports
-  background: none;
+  background: url('/images/web-banner-80.jpg') bottom right/cover no-repeat;
   display: flex;
   align-items: center;
   position: relative;
@@ -151,12 +150,6 @@
       background: url('/images/mobile-web-banner-80.jpg') center center/cover no-repeat;
   }
 
-  // Desktop and tablet: show banner image as background on the inner container
-  @media (min-width: 769px){
-    .section__container{
-      background: url('/images/web-banner-80.jpg') bottom right/cover no-repeat;
-    }
-  }
 }
 
 // Dean portrait styling
