@@ -1,0 +1,103 @@
+// _buttons.scss
+@use 'sass:color';
+@use '../abstracts/variables' as v;
+@use '../abstracts/mixins' as m;
+
+// Button Base - BEM Block
+.btn {
+  @include m.flex-center;
+  display: inline-flex;
+  padding: v.$spacing-sm v.$spacing-lg; 
+  border: 0.125rem solid transparent; 
+  border-radius: v.$border-radius-base;
+  font-family: v.$font-body;
+  font-weight: 500;
+  font-size: v.$font-size-base; 
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  line-height: 1.5;
+  
+  // Primary Button - BEM Modifier
+  &--primary {
+    background: v.$gradient-primary;
+    color: v.$white;
+    border-color: v.$primary-blue;
+    box-shadow: 0 0.25rem 0.75rem rgba(74, 108, 155, 0.3);
+    
+    &:hover, &:focus {
+      background: linear-gradient(135deg, #5A7BCF 0%, #2A4A7A 100%);
+      border-color: color.adjust(v.$primary-blue, $lightness: -10%);
+      color: v.$white;
+      text-decoration: none;
+      transform: translateY(-0.1rem);
+      box-shadow: 0 0.5rem 1.5rem rgba(74, 108, 155, 0.4);
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 0.25rem 0.75rem rgba(74, 108, 155, 0.3);
+    }
+  }
+  
+  // Secondary Button - BEM Modifier
+  &--secondary {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 249, 250, 0.8) 100%);
+    color: v.$primary-blue;
+    border-color: v.$primary-blue;
+    
+    &:hover, &:focus {
+      background: v.$gradient-primary;
+      color: v.$white;
+      text-decoration: none;
+      transform: translateY(-0.1rem);
+      box-shadow: 0 0.5rem 1.5rem rgba(74, 108, 155, 0.25);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+  
+  // Accent Button - BEM Modifier
+  &--accent {
+    background: v.$gradient-accent;
+    color: v.$charcoal;
+    border-color: v.$accent-gold;
+    box-shadow: 0 0.25rem 0.75rem rgba(253, 184, 19, 0.3);
+    
+    &:hover, &:focus {
+      background: linear-gradient(135deg, #FFC030 0%, #D69510 100%);
+      border-color: color.adjust(v.$accent-gold, $lightness: -10%);
+      color: v.$charcoal;
+      text-decoration: none;
+      transform: translateY(-0.1rem);
+      box-shadow: 0 0.5rem 1.5rem rgba(253, 184, 19, 0.4);
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 0.25rem 0.75rem rgba(253, 184, 19, 0.3);
+    }
+  }
+  
+  // Large Button - BEM Modifier
+  &--large {
+    padding: v.$spacing-md v.$spacing-2xl;
+    font-size: v.$font-size-lg;
+  }
+  
+  // Small Button - BEM Modifier
+  &--small {
+    padding: v.$spacing-xs v.$spacing-md; 
+    font-size: v.$font-size-sm; 
+  }
+}
+
+@media (max-width: v.$breakpoint-xs) {
+  .btn {
+    font-size: v.$font-size-xs;
+    padding: v.$spacing-sm; 
+  }
+}

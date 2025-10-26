@@ -1,0 +1,164 @@
+// _sections.scss
+@use 'sass:color';
+@use '../abstracts/variables' as v;
+
+// Section Base
+section {
+  padding: v.$section-padding-y 0;
+  
+  &:nth-of-type(even) {
+    background: v.$white;
+  }
+}
+
+// Section Container Override for specific sections
+.about, .services, .portfolio, .contact, .clients {
+  .section__container {
+    max-width: v.$container-max-width;
+    margin: 0 auto;
+    padding: 0 v.$section-padding-x;
+  }
+}
+
+// Section Title - BEM Element for consistent section headings
+.section__title {
+  text-align: center;
+  margin-bottom: v.$spacing-2xl; // 3.2rem
+  font-size: v.$font-size-4xl; // 3.6rem
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: v.$primary-blue;
+  
+  @media (max-width: v.$breakpoint-md) {
+    font-size: v.$font-size-3xl; // 3rem
+    margin-bottom: v.$spacing-xl; // 2.4rem
+  }
+  
+  @media (max-width: v.$breakpoint-sm) {
+    font-size: v.$font-size-2xl; // 2.4rem
+  }
+}
+
+// Legacy support for section h2 (maintain backward compatibility)
+section h2 {
+  text-align: center;
+  margin-bottom: v.$spacing-2xl; // 3.2rem
+  font-size: v.$font-size-4xl; // 3.6rem
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  color: v.$primary-blue;
+  
+  @media (max-width: v.$breakpoint-md) {
+    font-size: v.$font-size-3xl; // 3rem
+    margin-bottom: v.$spacing-xl; // 2.4rem
+  }
+  
+  @media (max-width: v.$breakpoint-sm) {
+    font-size: v.$font-size-2xl; // 2.4rem
+  }
+}
+
+// About Section
+.about {
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: v.$spacing-2xl; // 3.2rem
+    align-items: start;
+    
+    @media (max-width: v.$breakpoint-lg) {
+      gap: v.$spacing-xl; // 2.4rem
+    }
+    
+    @media (max-width: v.$breakpoint-md) {
+      grid-template-columns: 1fr;
+      gap: v.$spacing-lg; // 2rem
+    }
+  }
+  
+  &__media {
+    img {
+      width: 100%;
+      border-radius: v.$border-radius-lg; // 1.2rem
+      box-shadow: 0 1rem 3rem rgba(74, 108, 155, 0.15);
+    }
+  }
+  
+  &__content {
+    .section__title,
+    h2 {
+      text-align: left;
+      margin-bottom: v.$spacing-lg; // 2rem
+      
+      @media (max-width: v.$breakpoint-md) {
+        text-align: center;
+      }
+    }
+    
+    p {
+      font-size: v.$font-size-sm; // 1.4rem
+      line-height: 1.7;
+      margin-bottom: v.$spacing-md; // 1.6rem
+      color: v.$charcoal;
+      
+      &:last-of-type {
+        margin-bottom: v.$spacing-lg; // 2rem
+      }
+    }
+  }
+  
+  &__process {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    
+    h3 {
+      font-size: v.$font-size-lg; // 1.8rem
+      color: v.$primary-blue;
+      margin-bottom: v.$spacing-lg; // 2.4rem
+      font-family: v.$font-heading;
+      text-align: center;
+      
+      @media (max-width: v.$breakpoint-md) {
+        text-align: center;
+        margin-bottom: v.$spacing-md; // 1.6rem
+      }
+    }
+  }
+}
+
+// Services Section
+.services {
+  background: v.$light-background;
+  
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+    gap: v.$spacing-xl; // 2.4rem
+    
+    @media (max-width: v.$breakpoint-md) {
+      grid-template-columns: 1fr;
+      gap: v.$spacing-lg; // 2rem
+    }
+  }
+}
+
+// Portfolio Section
+.portfolio {
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(32rem, 1fr));
+    gap: v.$spacing-xl; // 2.4rem
+    
+    @media (max-width: v.$breakpoint-lg) {
+      grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+    }
+    
+    @media (max-width: v.$breakpoint-md) {
+      grid-template-columns: 1fr;
+      gap: v.$spacing-lg; // 2rem
+    }
+  }
+}

@@ -12,6 +12,9 @@ frontend/.env
 # Build outputs
 frontend/assets/css/style.css
 frontend/assets/css/style.css.map
+frontend/dist/
+frontend/index-old.html
+frontend/articles-old.html
 
 # Logs
 *.log
