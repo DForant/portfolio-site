@@ -145,7 +145,7 @@ This is the fastest way to develop with hot module replacement for React compone
    ```
    - Site: http://localhost:3000
    - Hot Module Replacement (HMR): ✅ Yes
-   - Functions: ❌ Not available (form will fail unless backend is running)
+   - Functions: ❌ Not available (Contact form will fail unless backend is running)
    - **Best for**: Fast UI/component development with instant updates
 
 5. **Option 3c: Vite Dev + Express Backend (Full stack local development)**
@@ -568,7 +568,7 @@ For deployment issues or questions:
 
 ## 📝 Changelog
 
-### v2.0.0 - React + Vite Migration
+### v1.1.4 - React + Vite Migration
 - **⚛️ React Frontend**: Converted entire static site to React with component-based architecture
 - **⚡ Vite Build Tool**: Fast dev server with Hot Module Replacement (HMR)
 - **🔀 React Router**: Client-side routing for seamless navigation between pages
@@ -579,8 +579,6 @@ For deployment issues or questions:
 - **📱 Mobile Support**: Touch/swipe gestures maintained in React carousel component
 - **🏗️ Build Output**: `frontend/dist/` contains production-ready optimized bundle
 - **🔧 Developer Experience**: Fast refresh, better debugging, modern tooling
-
-### v1.1.4
 - **Articles Listing Page**: Added `/articles.html` page displaying blog posts from WordPress CMS
 - **Articles API Function**: Secure Netlify Function (`/api/articles`) that proxies WordPress REST API
 - **Pagination**: Supports up to 10 articles per page with prev/next navigation
