@@ -9,9 +9,10 @@
   included_files = []
 
 [dev]
-  framework = "#static"
-  command = "" # no build step needed for static site
-  port = 8888 # serve directly on 8888 for consistency with README
+  framework = "#custom"
+  command = "npm --workspace frontend run dev"
+  targetPort = 3000 # Vite dev server port
+  port = 8888 # Netlify dev port
 
 # Redirect API style path to function (optional convenience)
 [[redirects]]
@@ -54,3 +55,9 @@
   to = "https://www.deanforantdesigns.com/:splat"
   status = 301
   conditions = { Host = ["deanforantdesigns.com"] }
+
+# SPA fallback - must be last
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

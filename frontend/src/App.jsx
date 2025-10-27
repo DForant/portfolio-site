@@ -4,11 +4,14 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import ArticlesPage from './pages/ArticlesPage';
+import { useScrollToHash } from './hooks/useScrollToHash';
 import '../assets/sass/main.scss';
 
-function App() {
+function AppContent() {
+  useScrollToHash();
+  
   return (
-    <Router>
+    <>
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -16,6 +19,14 @@ function App() {
         <Route path="/articles" element={<ArticlesPage />} />
       </Routes>
       <Footer />
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
