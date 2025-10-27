@@ -1,7 +1,7 @@
 [build]
-  publish = "frontend" # directory with index.html
+  publish = "frontend/dist" # Vite build output directory
   functions = "netlify/functions"
-  command = "npm --workspace frontend run build" # compile Sass → CSS during Netlify build
+  command = "npm --workspace frontend run build" # Vite build during Netlify build
 
 [functions]
   node_bundler = "esbuild"
@@ -9,9 +9,10 @@
   included_files = []
 
 [dev]
-  framework = "#static"
-  command = "" # no build step needed for static site
-  port = 8888 # serve directly on 8888 for consistency with README
+  framework = "#custom"
+  command = "npm --workspace frontend run dev"
+  targetPort = 3000 # Vite dev server port
+  port = 8888 # Netlify dev port
 
 # Redirect API style path to function (optional convenience)
 [[redirects]]
@@ -54,3 +55,9 @@
   to = "https://www.deanforantdesigns.com/:splat"
   status = 301
   conditions = { Host = ["deanforantdesigns.com"] }
+
+# SPA fallback - must be last
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

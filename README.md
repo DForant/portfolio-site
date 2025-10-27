@@ -1,6 +1,6 @@
 # Dean Forant Portfolio Website
 
-Professional portfolio site with a static frontend (Sass → CSS) and two backend runtime options:
+Professional portfolio site built with **React + Vite** frontend and backend runtime options:
 1. Netlify Functions (primary / recommended)
 2. Stand‑alone Express server (optional / alternative hosting)
 
@@ -18,12 +18,20 @@ Monorepo using npm workspaces.
 
 ```
 portfolio-site/
-├── frontend/                 # 🌐 Static website (HTML, CSS, JS, images)
+├── frontend/                 # ⚛️ React + Vite SPA
+│   ├── src/
+│   │   ├── components/      # React components
+│   │   ├── pages/           # Page components (Home, Articles)
+│   │   ├── hooks/           # Custom React hooks
+│   │   └── main.jsx         # App entry point
 │   ├── assets/
-│   ├── index.html
-│   ├── robots-prod.txt
-│   ├── robots-staging.txt
-│   ├── sitemap.xml
+│   │   ├── sass/            # Sass stylesheets
+│   │   └── images/          # Source images
+│   ├── public/              # Static assets (copied to dist)
+│   │   └── assets/images/   # Images for production
+│   ├── dist/                # Build output (gitignored)
+│   ├── index.html           # HTML template
+│   ├── vite.config.js       # Vite configuration
 │   └── package.json
 ├── backend/                  # 🚀 Node.js API server (contact form, email)
 │   ├── server.js
@@ -32,6 +40,7 @@ portfolio-site/
 ├── netlify/                  # ⚡ Netlify Functions
 │   └── functions/
 │       ├── contact.js
+│       ├── articles.js
 │       └── lib/
 │           └── validation.js
 ├── .env.example              # 📝 Environment variables template
@@ -42,23 +51,27 @@ portfolio-site/
 
 ## 🚀 Features
 
+- **React SPA**: Modern React application with client-side routing
+- **Vite Build Tool**: Lightning-fast HMR and optimized production builds
+- **React Router**: Client-side routing with smooth hash navigation
 - **Responsive Design**: Mobile-first approach with modern CSS Grid and Flexbox
-- **Interactive Contact Form**: Client + server validation, spam filtering, graceful error handling
+- **Interactive Contact Form**: React state management with client + server validation
 - **Email Integration**: SMTP / Gmail fallback with development JSON transport
 - **Articles Listing Page**: Paginated list of articles from WordPress CMS with secure API proxy
 - **Separated Architecture**: Independent frontend (`/frontend`) & backend (`/backend`)
-- **Client Carousel**: Interactive showcase of client logos
-- **Process Tabs**: Interactive workflow demonstration
+- **Client Carousel**: Interactive React component with touch gestures and autoplay
+- **Process Tabs**: Interactive workflow demonstration with React state
 - **Security**: Helmet, rate limiting, CORS, input sanitization (xss), spam heuristics
 
 ## ⚙️ Preconfigured Netlify & SEO behavior
 
 This repo ships with production-grade Netlify config and SEO safeguards baked in:
 
-- Build config: `publish = frontend`, `functions = netlify/functions`, and build command `npm --workspace frontend run build` to compile Sass on deploy.
+- Build config: `publish = frontend/dist`, `functions = netlify/functions`, and build command `npm --workspace frontend run build` to run Vite build on deploy.
 - API routes: `/api/contact` redirected to `/.netlify/functions/contact` and `/api/articles` redirected to `/.netlify/functions/articles` via `netlify.toml`.
-- Staging no-indexing: For host `staging.deanforantdesigns.com`, all pages send `X-Robots-Tag: noindex, nofollow` and `/robots.txt` resolves to `frontend/robots-staging.txt` (Disallow all).
-- Production indexing: Other hosts serve `frontend/robots-prod.txt` (Allow all) and include a `Sitemap: https://www.deanforantdesigns.com/sitemap.xml`. A basic `frontend/sitemap.xml` is included.
+- SPA routing: Client-side routing with fallback to `/index.html` for deep links.
+- Staging no-indexing: For host `staging.deanforantdesigns.com`, all pages send `X-Robots-Tag: noindex, nofollow` and `/robots.txt` resolves to `robots-staging.txt` (Disallow all).
+- Production indexing: Other hosts serve `robots-prod.txt` (Allow all) and include a `Sitemap: https://www.deanforantdesigns.com/sitemap.xml`. A basic `sitemap.xml` is included.
 - Canonical host: Requests to apex `deanforantdesigns.com` 301-redirect to `https://www.deanforantdesigns.com/`.
 
 ## 🔀 Backend Runtime Options (Decision Matrix)
@@ -70,7 +83,7 @@ This repo ships with production-grade Netlify config and SEO safeguards baked in
 | Deploy to Netlify (staging / production) | Netlify Functions | Native build + routing + env management |
 | Deploy to cPanel / traditional host | Express Server | Functions unsupported there |
 
-Frontend JS points to one of two API bases (auto or manual override):
+Frontend React app calls:
 - Netlify mode: relative `/api/contact` (rewritten by `netlify.toml`)
 - Express mode: `http://localhost:4000/api/contact` (or your production domain)
 
@@ -85,13 +98,14 @@ Run these from the repository root unless a folder column is specified.
 | Command | Run From | Purpose |
 |---------|----------|---------|
 | `npm run install:all` | root | Install dependencies in all workspaces (frontend + backend) |
-| `npm run dev:frontend` | root | Start Sass watcher in `frontend/` |
+| `npm run dev:frontend` | root | Start Vite dev server in `frontend/` (port 3000) |
 | `npm run dev:backend` | root | Start Express backend (nodemon, port 4000 by default) |
-| `npm run dev` | root | Run backend + frontend watchers in parallel (Express path) |
-| `npm run build:frontend` | root | Production Sass build (compressed CSS) |
-| `npm run sass:watch` | frontend | (Workspace direct) Watch Sass |
-| `npm run sass:build` | frontend | (Workspace direct) Build Sass once compressed |
-| `npm run dev` | frontend | Alias → watch Sass |
+| `npm run dev` | root | Run backend + Vite dev server in parallel |
+| `npm run build:frontend` | root | Production Vite build (optimized bundle to `frontend/dist`) |
+| `npm run preview:frontend` | root | Preview production build locally (port 4173) |
+| `npm run dev` | frontend | (Workspace direct) Start Vite dev server |
+| `npm run build` | frontend | (Workspace direct) Build for production |
+| `npm run preview` | frontend | (Workspace direct) Preview production build |
 | `npm run dev` | backend | Run nodemon server (port 4000) |
 | `npm start` | backend | Run production Express server |
 
@@ -100,44 +114,39 @@ Run these from the repository root unless a folder column is specified.
 ## 🧪 Local Development (Two Paths)
 
 ### Option A (Recommended): Netlify Functions Local
-Use the Netlify CLI to emulate the production environment (static + functions + redirects).
+Use the Netlify CLI to emulate the production environment (React SPA + functions + redirects).
 
 1. Install global tools (first time only):
-   ```powershell
+   ```bash
    npm install -g netlify-cli
    netlify --version
    netlify login
    ```
+
 2. Install monorepo dependencies (root):
-   ```powershell
+   ```bash
    npm run install:all
    ```
-3. (Optional) Build CSS once OR start a watcher:
-   ```powershell
-   # One-off build
-   npm run build:frontend
-   # OR in separate terminal: watcher only
-   npm run dev:frontend
-   ```
-4. Start Netlify dev (run from repository ROOT):
-   ```powershell
+
+3. Start Netlify dev (run from repository ROOT):
+   ```bash
    netlify dev
    ```
-   When prompted (because this repo has multiple workspaces), choose:
-   - `dean-forant-portfolio-frontend`
-   (That matches the `publish = "frontend"` setting in `netlify.toml`.)
+   
+   Netlify dev will automatically:
+   - Start Vite dev server on port 3000 (with HMR for React)
+   - Proxy it through port 8888
+   - Enable Netlify Functions
+   - Apply redirects and routing rules
 
-   Skip future prompts (optional):
-   ```powershell
-   netlify dev --filter=dean-forant-portfolio-frontend
-   ```
-
-5. Local URLs:
-   - Site: http://localhost:8888
+4. Local URLs:
+   - Site: http://localhost:8888 (proxies to Vite on 3000)
+   - Vite HMR: Automatic - changes appear instantly
    - Function (direct): http://localhost:8888/.netlify/functions/contact
    - Function (frontend uses via redirect): http://localhost:8888/api/contact
+   - React Router: All client-side routes work (/, /articles)
 
-6. Environment variable loading precedence during `netlify dev` (highest → lowest):
+5. Environment variable loading precedence during `netlify dev` (highest → lowest):
    1. Values you export inline before the command (e.g. `SMTP_HOST=foo netlify dev`)
    2. Root `.env` file (if present; good for temporary local creds) – DO NOT commit real secrets
    3. `[build.environment]` in `netlify.toml` (avoid putting secrets here; repo visible)
@@ -148,42 +157,54 @@ Use the Netlify CLI to emulate the production environment (static + functions + 
    - Use a gitignored `.env` locally for throwaway or test SMTP creds (e.g., `ENABLE_EMAIL_DEBUG=1`)
    - Leave `netlify.toml` for non-sensitive settings
 
-7. Quick verification after startup:
+6. Quick verification after startup:
    1. Open the site (http://localhost:8888)
-   2. Open DevTools > Network
-   3. Submit form with valid data → expect 200 JSON success
-   4. Submit again with a very short description → expect 400 with validation errors
-   5. (If no SMTP vars) Check terminal logs for JSON transport output
-   6. (If SMTP vars) Confirm email delivered
+   2. React app should load with full navigation
+   3. Open DevTools > Network
+   4. Test navigation: Click "Articles" link → should route client-side
+   5. Test hash navigation: Click "Services" → should smooth scroll
+   6. Submit contact form with valid data → expect 200 JSON success
+   7. Submit form with short description → expect 400 with validation errors
+   8. Visit /articles page → should load article list from API
 
 Troubleshooting:
-   - No request logged? Check browser console for JS errors.
-   - 500 response? Inspect function log in terminal; verify SMTP creds.
-   - Validation 400: Inspect `errors` array to confirm expected rule triggers.
+   - Vite not starting? Check if port 3000 is available
+   - No HMR? Refresh browser or restart netlify dev
+   - React errors? Check browser console for component errors
+   - 500 response? Inspect function log in terminal; verify SMTP creds
+   - Validation 400: Inspect `errors` array to confirm expected rule triggers
 
-### Option B: Express + Static Frontend
+### Option B: Express + Vite Dev Server
 Use this if you want to run the standalone server or you're deploying to a non‑Netlify host later.
 
 1. Install dependencies:
-   ```powershell
+   ```bash
    npm run install:all
    ```
+
 2. Start backend (root):
-   ```powershell
+   ```bash
    npm run dev:backend
    ```
    Express listens on http://localhost:4000
-3. In a second terminal, watch Sass (root or inside frontend):
-   ```powershell
+
+3. In a second terminal, start Vite dev server:
+   ```bash
    npm run dev:frontend
-   # or (cd frontend; npm run dev)
    ```
-4. Serve `frontend/index.html`:
-   - Option 1: Use VS Code Live Server (opens on port 5500)
-   - Option 2 (quick static):
-     ```powershell
-     # from frontend folder
-     npx serve .
+   Vite dev server runs on http://localhost:3000 with HMR
+
+4. Access the site:
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:4000/api/contact
+   
+   The React app is configured to detect localhost development and will automatically call the Express server at localhost:4000 for API requests.
+
+5. Quick verification:
+   - Visit http://localhost:3000
+   - React app loads with full navigation
+   - Form submission hits Express server
+   - Changes to React components hot-reload instantly
      ```
 5. Confirm API is reachable: `curl http://localhost:4000/api/contact/health` (if such health route added) or submit form.
 
@@ -537,20 +558,36 @@ Each article card shows:
 ## 🚀 Performance
 
 - **Lighthouse Score**: Optimized for 90+ scores
+- **Vite Build**: Code splitting and tree-shaking for optimal bundle size
+- **React**: Component-based architecture with efficient updates
 - **Image Optimization**: WebP format where possible
-- **CSS**: Minified and compressed
-- **JavaScript**: Minified and efficient
+- **CSS**: Sass compiled and minified via Vite
+- **JavaScript**: Minified and compressed bundles
 - **Fonts**: Optimized loading with font-display: swap
 
 ## 📞 Support
 
 For deployment issues or questions:
-- Check hosting.com documentation for Node.js hosting
-- Review server logs for error messages
+- Check Netlify documentation for deployment issues
+- Review browser console for React errors
+- Check Vite documentation for build issues
+- Review server logs for backend errors
 - Test locally first to isolate issues
-- Contact hosting.com support for server-specific issues
 
 ## 📝 Changelog
+
+### v2.0.0 (Current - React + Vite Migration)
+- **React Migration**: Converted entire frontend from vanilla JavaScript to React
+- **Vite Build Tool**: Replaced Sass-only build with Vite for lightning-fast HMR
+- **Component Architecture**: Created modular React components for all sections
+- **React Router**: Implemented client-side routing (/, /articles, /articles.html)
+- **Custom Hooks**: Added useScrollToHash for smooth navigation
+- **State Management**: React state for forms, carousels, tabs, and articles
+- **Touch Gestures**: Enhanced carousel with React-based touch event handling
+- **Form Handling**: React-controlled forms with real-time validation
+- **Build Output**: Changed from `frontend/` to `frontend/dist/` for production
+- **Dev Experience**: Hot Module Replacement (HMR) for instant updates during development
+- **Backward Compatibility**: Maintains all existing functionality and APIs
 
 ### v1.1.4
 - **Articles Listing Page**: Added `/articles.html` page displaying blog posts from WordPress CMS
