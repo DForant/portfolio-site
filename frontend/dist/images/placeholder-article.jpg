@@ -1,0 +1,10 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="400" fill="#F8F9FA"/>
+  <g transform="translate(300, 200)">
+    <circle r="60" fill="#4A6C9B" opacity="0.3"/>
+    <path d="M-30,-20 L-30,20 L10,0 Z" fill="#4A6C9B"/>
+  </g>
+  <text x="300" y="280" font-family="Montserrat, sans-serif" font-size="18" fill="#212529" text-anchor="middle">
+    Article Image
+  </text>
+</svg>
