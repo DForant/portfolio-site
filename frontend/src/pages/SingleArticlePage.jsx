@@ -107,9 +107,12 @@ function SingleArticlePage() {
   };
 
   const stripHtml = (html) => {
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
+    // Use DOMPurify to strip HTML tags safely
+    const clean = DOMPurify.sanitize(html, { 
+      ALLOWED_TAGS: [], // No tags allowed, only text
+      KEEP_CONTENT: true // Keep text content
+    });
+    return clean;
   };
 
   const getDifficultyBadge = (difficulty) => {

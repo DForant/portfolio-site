@@ -17,13 +17,16 @@ const ARTICLES_REST_BASE = process.env.WP_ARTICLES_REST_BASE || process.env.WP_A
 function validateUrl(url) {
   if (!url) return null;
   
+  // First sanitize to remove any XSS attempts
+  const sanitized = xss(url);
+  
   try {
-    const parsedUrl = new URL(url);
+    const parsedUrl = new URL(sanitized);
     // Only allow http and https protocols
     if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
       return null;
     }
-    return xss(url);
+    return sanitized;
   } catch (error) {
     return null;
   }
