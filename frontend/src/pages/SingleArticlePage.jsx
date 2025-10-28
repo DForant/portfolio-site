@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 
 const API_ENDPOINT = '/api/article';
 
@@ -236,7 +237,7 @@ function SingleArticlePage() {
 
           <div 
             className="article-content__body"
-            dangerouslySetInnerHTML={{ __html: article.content }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.content) }}
           />
 
           {(article.acf?.demo_url || article.acf?.source_code_url) && (

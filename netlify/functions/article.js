@@ -10,6 +10,26 @@ const WP_API_BASE_URL = process.env.WP_API_BASE_URL || 'http://dfd-cms.local/wp-
 const ARTICLES_REST_BASE = process.env.WP_ARTICLES_REST_BASE || process.env.WP_ARTICLES_POST_TYPE || 'article';
 
 /**
+ * Validates and sanitizes URL
+ * @param {string} url - URL to validate
+ * @returns {string|null} Valid URL or null if invalid
+ */
+function validateUrl(url) {
+  if (!url) return null;
+  
+  try {
+    const parsedUrl = new URL(url);
+    // Only allow http and https protocols
+    if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+      return null;
+    }
+    return xss(url);
+  } catch (error) {
+    return null;
+  }
+}
+
+/**
  * Sanitizes article data to prevent XSS
  * @param {Object} article - Raw article data from WordPress
  * @returns {Object} Sanitized article data
@@ -25,9 +45,9 @@ function sanitizeArticle(article) {
     author: article.author,
     featured_media: article.featured_media,
     slug: article.slug,
-    link: xss(article.link || ''),
+    link: validateUrl(article.link) || '',
     // Include featured image URL if available
-    featured_image_url: article._embedded?.['wp:featuredmedia']?.[0]?.source_url || null,
+    featured_image_url: validateUrl(article._embedded?.['wp:featuredmedia']?.[0]?.source_url),
     // Include author name if available
     author_name: xss(article._embedded?.author?.[0]?.name || 'Unknown'),
     // Include custom fields if available
@@ -35,9 +55,9 @@ function sanitizeArticle(article) {
       reading_time: article.acf.reading_time || null,
       difficulty: xss(article.acf.difficulty || ''),
       seo_meta_description: xss(article.acf.seo_meta_description || ''),
-      og_image_url: xss(article.acf.og_image_url || ''),
-      demo_url: xss(article.acf.demo_url || ''),
-      source_code_url: xss(article.acf.source_code_url || '')
+      og_image_url: validateUrl(article.acf.og_image_url),
+      demo_url: validateUrl(article.acf.demo_url),
+      source_code_url: validateUrl(article.acf.source_code_url)
     } : null
   };
 }
