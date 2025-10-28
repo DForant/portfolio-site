@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 
 const API_ENDPOINT = '/api/articles';
 const PER_PAGE = 10;
@@ -130,6 +130,7 @@ function ArticlesPage() {
                   const excerpt = stripHtml(article.excerpt);
                   const date = formatDate(article.date);
                   const author = article.author_name;
+                  const articleSlug = article.slug;
 
                   return (
                     <article key={article.id} className="article-card">
@@ -153,15 +154,13 @@ function ArticlesPage() {
                           </span>
                         </div>
                         <div className="article-card__excerpt">{excerpt}</div>
-                        <a 
-                          href={article.link} 
-                          className="btn btn--secondary article-card__btn" 
-                          target="_blank" 
-                          rel="noopener noreferrer"
+                        <Link 
+                          to={`/articles/${articleSlug}`}
+                          className="btn btn--secondary article-card__btn"
                         >
                           Read More
                           <i className="fas fa-arrow-right" aria-hidden="true"></i>
-                        </a>
+                        </Link>
                       </div>
                     </article>
                   );
