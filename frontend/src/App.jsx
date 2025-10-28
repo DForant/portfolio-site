@@ -23,6 +23,7 @@ function AppContent() {
       <Footer />
     </>
   );
+        <Route path="/articles/:slug" element={<SingleArticlePage />} />
 }
 
 function App() {
