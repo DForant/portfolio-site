@@ -14,6 +14,11 @@ frontend/assets/css/style.css
 frontend/assets/css/style.css.map
 frontend/dist/
 
+# Ignore local Netlify configuration folders
+.netlify/
+frontend/.netlify/
+backend/.netlify/
+
 # Logs
 *.log
 npm-debug.log*
