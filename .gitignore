@@ -15,7 +15,7 @@ frontend/assets/css/style.css.map
 frontend/dist/
 
 # Ignore local Netlify configuration folders
-.netlify/
+netlify/
 frontend/.netlify/
 backend/.netlify/
 
