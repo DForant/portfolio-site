@@ -16,6 +16,7 @@
     "dev:backend": "npm --workspace backend run dev",
     "dev": "npm run dev:backend & npm run dev:frontend",
     "build:frontend": "npm --workspace frontend run build",
-    "preview:frontend": "npm --workspace frontend run preview"
+    "preview:frontend": "npm --workspace frontend run preview",
+    "launch:frontend": "netlify dev --filter dean-forant-portfolio-frontend"
   }
 }
