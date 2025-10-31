@@ -52,18 +52,20 @@ exports.handler = async (event) => {
     }
 
     const post = posts[0];
-    const author = post._embedded?.author?.[0];
+    
+    // Try to get author from embedded data first
+    const embeddedAuthor = post._embedded?.author?.[0];
 
     // Fetch additional author details if author ID is available
     let authorDetails = {
       id: post.author,
-      name: author?.name || 'Unknown',
-      description: author?.description || '',
-      avatar_url: author?.avatar_urls?.['96'] || null,
+      name: embeddedAuthor?.name || 'Unknown',
+      description: embeddedAuthor?.description || '',
+      avatar_url: embeddedAuthor?.avatar_urls?.['96'] || null,
       profile_image_url: null
     };
 
-    // Try to get extended author info from WordPress user meta
+    // Always try to get extended author info from WordPress user endpoint
     if (post.author) {
       try {
         const authorUrl = `${WP_API_BASE}/users/${post.author}`;
@@ -97,6 +99,17 @@ exports.handler = async (event) => {
       } catch (err) {
         if (ENABLE_DEBUG) {
           console.log('[Article Function] Could not fetch extended author info:', err.message);
+        }
+        // If fetching fails but we have embedded author, keep that data
+        if (embeddedAuthor) {
+          authorDetails = {
+            id: post.author,
+            name: embeddedAuthor.name,
+            description: embeddedAuthor.description || '',
+            avatar_url: embeddedAuthor.avatar_urls?.['96'] || null,
+            profile_image_url: null,
+            url: null
+          };
         }
       }
     }

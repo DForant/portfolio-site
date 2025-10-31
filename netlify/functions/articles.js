@@ -38,9 +38,32 @@ exports.handler = async (event) => {
     const totalPosts = parseInt(response.headers.get('X-WP-Total') || '0', 10);
     const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '1', 10);
 
+    // Fetch author details for all unique authors
+    const authorIds = [...new Set(posts.map(post => post.author).filter(Boolean))];
+    const authorsMap = new Map();
+    
+    for (const authorId of authorIds) {
+      try {
+        const authorUrl = `${WP_API_BASE}/users/${authorId}`;
+        const authorResponse = await fetch(authorUrl);
+        if (authorResponse.ok) {
+          const authorData = await authorResponse.json();
+          authorsMap.set(authorId, authorData);
+        }
+      } catch (err) {
+        if (ENABLE_DEBUG) {
+          console.log(`[Articles Function] Could not fetch author ${authorId}:`, err.message);
+        }
+      }
+    }
+
     // Transform WordPress data to our format
     const articles = posts.map(post => {
-      const author = post._embedded?.author?.[0];
+      // Try _embedded first (for standard posts), then fall back to our fetched authors
+      const embeddedAuthor = post._embedded?.author?.[0];
+      const fetchedAuthor = authorsMap.get(post.author);
+      const author = embeddedAuthor || fetchedAuthor;
+      
       return {
         id: post.id,
         title: post.title.rendered,

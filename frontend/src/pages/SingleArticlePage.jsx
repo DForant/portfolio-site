@@ -274,7 +274,7 @@ function SingleArticlePage() {
       </section>
 
       {/* About Author Section */}
-      {(article.author_description || article.author_profile_image || article.author_avatar_url) && (
+      {article.author_name && article.author_name !== 'Unknown' && (
         <section className="about-author">
           <div className="section__container">
             <h2 className="about-author__heading">About the Author</h2>
@@ -294,6 +294,9 @@ function SingleArticlePage() {
                     className="about-author__description"
                     dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.author_description) }}
                   />
+                )}
+                {!article.author_description && (
+                  <p className="about-author__description">Content creator and writer.</p>
                 )}
               </div>
             </div>
