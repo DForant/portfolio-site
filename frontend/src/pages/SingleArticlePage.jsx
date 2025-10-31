@@ -271,6 +271,34 @@ function SingleArticlePage() {
           )}
         </div>
       </section>
+
+      {/* About Author Section */}
+      {(article.author_description || article.author_profile_image || article.author_avatar_url) && (
+        <section className="about-author">
+          <div className="section__container">
+            <h2 className="about-author__heading">About the Author</h2>
+            <div className="about-author__content">
+              <div className="about-author__image-wrapper">
+                <img 
+                  src={article.author_profile_image || article.author_avatar_url || 'assets/images/default-avatar.png'} 
+                  alt={author}
+                  className="about-author__image"
+                  onError={(e) => { e.target.src = 'assets/images/default-avatar.png'; }}
+                />
+              </div>
+              <div className="about-author__bio">
+                <h3 className="about-author__name">{author}</h3>
+                {article.author_description && (
+                  <div 
+                    className="about-author__description"
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(article.author_description) }}
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }
