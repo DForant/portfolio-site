@@ -16,6 +16,7 @@ frontend/dist/
 
 # Ignore local Netlify configuration folders
 netlify/
+!netlify/functions/
 frontend/.netlify/
 backend/.netlify/
 
