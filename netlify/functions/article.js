@@ -4,6 +4,7 @@
  */
 
 const WP_API_BASE = process.env.WP_API_BASE_URL || 'http://dfd-cms.local/wp-json/wp/v2';
+const WP_POST_TYPE = process.env.WP_ARTICLE_POST_TYPE || 'article';
 const ENABLE_DEBUG = process.env.ENABLE_API_DEBUG === '1';
 
 // ACF field names for author profile
@@ -28,8 +29,8 @@ exports.handler = async (event) => {
       };
     }
 
-    // Build WordPress API URL with author embed
-    const wpUrl = `${WP_API_BASE}/posts?slug=${encodeURIComponent(slug)}&_embed`;
+    // Build WordPress API URL with custom post type and author embed
+    const wpUrl = `${WP_API_BASE}/${WP_POST_TYPE}?slug=${encodeURIComponent(slug)}&_embed`;
     
     if (ENABLE_DEBUG) {
       console.log('[Article Function] Fetching:', wpUrl);

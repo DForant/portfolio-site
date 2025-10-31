@@ -225,6 +225,7 @@ Define in Netlify UI (recommended) or `.env` for Express local development.
 | `EMAIL_USER` | Optional | Gmail fallback | Only if using Gmail transport |
 | `EMAIL_PASS` | Optional | Gmail fallback | Gmail App Password |
 | `WP_API_BASE_URL` | Optional | Articles Function | WordPress API endpoint (default: `http://dfd-cms.local/wp-json/wp/v2`) |
+| `WP_ARTICLE_POST_TYPE` | Optional | Articles Function | WordPress post type slug (default: `article`, use `posts` for standard posts) |
 | `ENABLE_EMAIL_DEBUG` | Optional | Functions | `1` to print extra logs (use on staging only) |
 | `ENABLE_API_DEBUG` | Optional | Functions | `1` to print API request logs (use on staging only) |
 | `CONTACT_TO` | Optional | Functions | Override recipient address (useful on staging) |
@@ -485,6 +486,11 @@ WP_API_BASE_URL=http://dfd-cms.local/wp-json/wp/v2
 
 # Production
 WP_API_BASE_URL=https://your-production-cms.com/wp-json/wp/v2
+
+# WordPress post type slug (default: 'article')
+# Use 'article' for custom post type registered as 'article'
+# Use 'posts' for standard WordPress posts
+WP_ARTICLE_POST_TYPE=article
 ```
 
 Add this to:
@@ -504,7 +510,7 @@ Each article card shows:
 ### Testing
 
 1. Ensure WordPress REST API is accessible
-2. Test with: `curl http://dfd-cms.local/wp-json/wp/v2/posts`
+2. Test with: `curl http://dfd-cms.local/wp-json/wp/v2/article` (or `/posts` if using standard posts)
 3. Visit `/articles.html` locally via `netlify dev`
 4. Test pagination with multiple articles
 
