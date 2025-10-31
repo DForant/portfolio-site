@@ -6,6 +6,9 @@
 const WP_API_BASE = process.env.WP_API_BASE_URL || 'http://dfd-cms.local/wp-json/wp/v2';
 const ENABLE_DEBUG = process.env.ENABLE_API_DEBUG === '1';
 
+// ACF field names for author profile
+const AUTHOR_PROFILE_IMAGE_FIELDS = ['author_profile_image', 'profile_image'];
+
 exports.handler = async (event) => {
   // Only allow GET requests
   if (event.httpMethod !== 'GET') {
@@ -70,13 +73,22 @@ exports.handler = async (event) => {
         const authorResponse = await fetch(authorUrl);
         if (authorResponse.ok) {
           const authorData = await authorResponse.json();
+          
+          // Look for profile image in ACF fields
+          let profileImageUrl = null;
+          for (const fieldName of AUTHOR_PROFILE_IMAGE_FIELDS) {
+            if (authorData.acf?.[fieldName]) {
+              profileImageUrl = authorData.acf[fieldName];
+              break;
+            }
+          }
+          
           authorDetails = {
             id: authorData.id,
             name: authorData.name,
             description: authorData.description || '',
             avatar_url: authorData.avatar_urls?.['96'] || null,
-            // Check for ACF fields or custom fields
-            profile_image_url: authorData.acf?.author_profile_image || authorData.acf?.profile_image || null,
+            profile_image_url: profileImageUrl,
             url: authorData.url || null,
             ...authorData.acf // Include any other ACF fields
           };

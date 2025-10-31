@@ -7,6 +7,7 @@ const nodemailer = require('nodemailer');
 const xss = require('xss');
 
 const ENABLE_DEBUG = process.env.ENABLE_EMAIL_DEBUG === '1';
+const SPAM_KEYWORDS = ['viagra', 'cialis', 'casino', 'lottery', 'winner', 'click here'];
 
 // Basic spam check
 function basicSpamCheck(data) {
@@ -26,9 +27,8 @@ function basicSpamCheck(data) {
   }
 
   // Check for common spam keywords
-  const spamKeywords = ['viagra', 'cialis', 'casino', 'lottery', 'winner', 'click here'];
   const text = `${firstName} ${lastName} ${description}`.toLowerCase();
-  spamKeywords.forEach(keyword => {
+  SPAM_KEYWORDS.forEach(keyword => {
     if (text.includes(keyword)) {
       score += 10;
       flags.push(`spam-keyword-${keyword}`);
@@ -55,7 +55,7 @@ function buildTransporter() {
     return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: parseInt(process.env.SMTP_PORT || '587', 10),
-      secure: (process.env.SMTP_PORT === '465'),
+      secure: (parseInt(process.env.SMTP_PORT, 10) === 465),
       auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS }
     });
   }

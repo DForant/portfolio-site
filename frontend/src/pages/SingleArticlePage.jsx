@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 
 const API_ENDPOINT = '/api/article';
+const DEFAULT_AVATAR_IMAGE = '/assets/images/dean-portrait-80.jpg';
 
 function SingleArticlePage() {
   const { slug } = useParams();
@@ -280,10 +281,10 @@ function SingleArticlePage() {
             <div className="about-author__content">
               <div className="about-author__image-wrapper">
                 <img 
-                  src={article.author_profile_image || article.author_avatar_url || 'assets/images/default-avatar.png'} 
+                  src={article.author_profile_image || article.author_avatar_url || DEFAULT_AVATAR_IMAGE} 
                   alt={author}
                   className="about-author__image"
-                  onError={(e) => { e.target.src = 'assets/images/default-avatar.png'; }}
+                  onError={(e) => { e.target.src = DEFAULT_AVATAR_IMAGE; }}
                 />
               </div>
               <div className="about-author__bio">
