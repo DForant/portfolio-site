@@ -34,15 +34,26 @@ exports.handler = async (event) => {
     
     if (ENABLE_DEBUG) {
       console.log('[Article Function] Fetching:', wpUrl);
+      console.log('[Article Function] Post type:', WP_POST_TYPE);
     }
 
     const response = await fetch(wpUrl);
     
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('[Article Function] WordPress API error:', response.status, errorText);
       throw new Error(`WordPress API error: ${response.status} ${response.statusText}`);
     }
 
     const posts = await response.json();
+    
+    if (ENABLE_DEBUG) {
+      console.log('[Article Function] Found posts:', posts.length);
+      if (posts.length > 0) {
+        console.log('[Article Function] Post author ID:', posts[0].author);
+        console.log('[Article Function] Embedded author:', posts[0]._embedded?.author?.[0]?.name);
+      }
+    }
 
     if (!posts || posts.length === 0) {
       return {
@@ -74,8 +85,22 @@ exports.handler = async (event) => {
         }
         
         const authorResponse = await fetch(authorUrl);
+        
+        if (ENABLE_DEBUG) {
+          console.log('[Article Function] Author response status:', authorResponse.status);
+        }
+        
         if (authorResponse.ok) {
           const authorData = await authorResponse.json();
+          
+          if (ENABLE_DEBUG) {
+            console.log('[Article Function] Author data:', {
+              id: authorData.id,
+              name: authorData.name,
+              hasDescription: !!authorData.description,
+              hasACF: !!authorData.acf
+            });
+          }
           
           // Look for profile image in ACF fields
           let profileImageUrl = null;
@@ -95,11 +120,18 @@ exports.handler = async (event) => {
             url: authorData.url || null,
             ...authorData.acf // Include any other ACF fields
           };
+          
+          if (ENABLE_DEBUG) {
+            console.log('[Article Function] Final author details:', {
+              name: authorDetails.name,
+              hasDescription: !!authorDetails.description,
+              hasProfileImage: !!authorDetails.profile_image_url,
+              hasAvatar: !!authorDetails.avatar_url
+            });
+          }
         }
       } catch (err) {
-        if (ENABLE_DEBUG) {
-          console.log('[Article Function] Could not fetch extended author info:', err.message);
-        }
+        console.error('[Article Function] Error fetching author info:', err.message);
         // If fetching fails but we have embedded author, keep that data
         if (embeddedAuthor) {
           authorDetails = {

@@ -26,11 +26,14 @@ exports.handler = async (event) => {
     
     if (ENABLE_DEBUG) {
       console.log('[Articles Function] Fetching:', wpUrl);
+      console.log('[Articles Function] Post type:', WP_POST_TYPE);
     }
 
     const response = await fetch(wpUrl);
     
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('[Articles Function] WordPress API error:', response.status, errorText);
       throw new Error(`WordPress API error: ${response.status} ${response.statusText}`);
     }
 
@@ -38,9 +41,18 @@ exports.handler = async (event) => {
     const totalPosts = parseInt(response.headers.get('X-WP-Total') || '0', 10);
     const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '1', 10);
 
+    if (ENABLE_DEBUG) {
+      console.log('[Articles Function] Found posts:', posts.length);
+      console.log('[Articles Function] Total posts:', totalPosts);
+    }
+
     // Fetch author details for all unique authors
     const authorIds = [...new Set(posts.map(post => post.author).filter(Boolean))];
     const authorsMap = new Map();
+    
+    if (ENABLE_DEBUG) {
+      console.log('[Articles Function] Fetching authors:', authorIds);
+    }
     
     for (const authorId of authorIds) {
       try {
@@ -49,11 +61,14 @@ exports.handler = async (event) => {
         if (authorResponse.ok) {
           const authorData = await authorResponse.json();
           authorsMap.set(authorId, authorData);
+          if (ENABLE_DEBUG) {
+            console.log(`[Articles Function] Fetched author ${authorId}:`, authorData.name);
+          }
+        } else {
+          console.error(`[Articles Function] Failed to fetch author ${authorId}:`, authorResponse.status);
         }
       } catch (err) {
-        if (ENABLE_DEBUG) {
-          console.log(`[Articles Function] Could not fetch author ${authorId}:`, err.message);
-        }
+        console.error(`[Articles Function] Error fetching author ${authorId}:`, err.message);
       }
     }
 
@@ -63,6 +78,10 @@ exports.handler = async (event) => {
       const embeddedAuthor = post._embedded?.author?.[0];
       const fetchedAuthor = authorsMap.get(post.author);
       const author = embeddedAuthor || fetchedAuthor;
+      
+      if (ENABLE_DEBUG && !author) {
+        console.warn(`[Articles Function] No author found for post ${post.id}, author ID: ${post.author}`);
+      }
       
       return {
         id: post.id,
