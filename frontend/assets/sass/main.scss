@@ -23,6 +23,8 @@
 @use 'components/carousel';
 @use 'components/tabs';
 @use 'components/forms';
+@use 'components/blog';
+@use 'components/article';
 
 // 5. Page-specific styles
 @use 'pages/home';

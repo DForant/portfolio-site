@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Article - Dean Forant Brand & Web Design</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../assets/images/Favicon.svg" />
+    <link rel="alternate icon" href="../assets/images/Favicon.svg" />
+    <link rel="mask-icon" href="../assets/images/Favicon.svg" color="#4A6C9B" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header__container">
+            <a class="header__logo" href="/" aria-label="Dean Forant Home">
+                <img src="../assets/images/banner-logo.png" alt="Dean Forant Brand & Web Design" />
+            </a>
+            
+            <button class="header__toggle" aria-label="Toggle navigation menu" aria-controls="header-nav" aria-expanded="false">
+                <span class="header__toggle-bar"></span>
+                <span class="header__toggle-bar"></span>
+                <span class="header__toggle-bar"></span>
+            </button>
+            
+            <nav id="header-nav" class="header__nav" aria-label="Primary Navigation">
+                <ul class="header__nav-list">
+                    <li class="header__nav-item">
+                        <a class="header__nav-link" href="/#home">Home</a>
+                    </li>
+                    <li class="header__nav-item">
+                        <a class="header__nav-link" href="/#clients">About</a>
+                    </li>
+                    <li class="header__nav-item">
+                        <a class="header__nav-link" href="/#services">Services</a>
+                    </li>
+                    <li class="header__nav-item">
+                        <a class="header__nav-link" href="/#portfolio-section">Portfolio</a>
+                    </li>
+                    <li class="header__nav-item">
+                        <a class="header__nav-link active" href="/blog/">Blog</a>
+                    </li>
+                    <li class="header__nav-item">
+                        <a class="header__nav-link" href="/#contact">Contact</a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <a class="btn btn--primary header__cta" href="tel:+1-904-323-1404">(904) 323-1404</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Loading State -->
+        <div class="article__loading" id="article-loading">
+            <div class="section__container">
+                <div class="spinner"></div>
+                <p>Loading article...</p>
+            </div>
+        </div>
+
+        <!-- Error State -->
+        <div class="article__error" id="article-error" style="display: none;">
+            <div class="section__container">
+                <div class="article__error-content">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h2>Article Not Found</h2>
+                    <p id="article-error-message">The article you're looking for doesn't exist or has been removed.</p>
+                    <a href="/blog/" class="btn btn--primary">Back to Blog</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Article Content -->
+        <article class="article" id="article-content" style="display: none;">
+            <!-- Article Header -->
+            <header class="article__header">
+                <div class="section__container">
+                    <div class="article__breadcrumb">
+                        <a href="/blog/">Blog</a>
+                        <span class="article__breadcrumb-separator">/</span>
+                        <span id="article-breadcrumb-title">Article</span>
+                    </div>
+                    <h1 class="article__title" id="article-title"></h1>
+                    <div class="article__meta">
+                        <div class="article__author">
+                            <img class="article__author-avatar" id="article-author-avatar" src="" alt="" />
+                            <span id="article-author"></span>
+                        </div>
+                        <time class="article__date" id="article-date"></time>
+                        <div class="article__categories" id="article-categories"></div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Featured Image -->
+            <div class="article__featured-image" id="article-featured-image-container" style="display: none;">
+                <div class="section__container">
+                    <img id="article-featured-image" src="" alt="" />
+                </div>
+            </div>
+
+            <!-- Article Body -->
+            <div class="article__body">
+                <div class="section__container">
+                    <div class="article__content" id="article-body"></div>
+                    
+                    <!-- Tags -->
+                    <div class="article__tags" id="article-tags"></div>
+                    
+                    <!-- Share Buttons -->
+                    <div class="article__share">
+                        <h3>Share this article</h3>
+                        <div class="article__share-buttons">
+                            <a href="#" class="article__share-btn article__share-btn--twitter" id="share-twitter" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </a>
+                            <a href="#" class="article__share-btn article__share-btn--linkedin" id="share-linkedin" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-linkedin"></i> LinkedIn
+                            </a>
+                            <a href="#" class="article__share-btn article__share-btn--facebook" id="share-facebook" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-facebook"></i> Facebook
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Back to Blog -->
+                    <div class="article__back">
+                        <a href="/blog/" class="btn btn--secondary">
+                            <i class="fas fa-arrow-left"></i> Back to Blog
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__container">
+            <div class="footer__content">
+                <div class="footer__section">
+                    <h3 class="footer__title">Dean Forant</h3>
+                    <p class="footer__text">Brand & Web Design</p>
+                </div>
+                <div class="footer__section">
+                    <h4 class="footer__subtitle">Quick Links</h4>
+                    <ul class="footer__links">
+                        <li><a href="/#home">Home</a></li>
+                        <li><a href="/#services">Services</a></li>
+                        <li><a href="/#portfolio-section">Portfolio</a></li>
+                        <li><a href="/blog/">Blog</a></li>
+                        <li><a href="/#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer__section">
+                    <h4 class="footer__subtitle">Contact</h4>
+                    <p class="footer__text">
+                        <a href="tel:+1-904-323-1404">(904) 323-1404</a><br>
+                        <a href="mailto:dean@deanforantdesigns.com">dean@deanforantdesigns.com</a>
+                    </p>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p>&copy; 2024 Dean Forant Brand & Web Design. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/article.js"></script>
+</body>
+</html>

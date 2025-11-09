@@ -20,6 +20,12 @@
   status = 200
   force = true
 
+[[redirects]]
+  from = "/api/wordpress"
+  to = "/.netlify/functions/wordpress"
+  status = 200
+  force = true
+
 # Serve a blocking robots.txt on the staging domain; allow on others
 [[redirects]]
   from = "/robots.txt"
