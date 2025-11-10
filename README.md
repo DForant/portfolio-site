@@ -48,6 +48,7 @@ portfolio-site/
 - **Separated Architecture**: Independent frontend (`/frontend`) & backend (`/backend`)
 - **Client Carousel**: Interactive showcase of client logos
 - **Process Tabs**: Interactive workflow demonstration
+- **Articles/Blog Listing**: Dynamic content listing from WordPress headless CMS with pagination
 - **Security**: Helmet, rate limiting, CORS, input sanitization (xss), spam heuristics
 
 ## ⚙️ Preconfigured Netlify & SEO behavior
@@ -204,6 +205,7 @@ Define in Netlify UI (recommended) or `.env` for Express local development.
 | `EMAIL_PASS` | Optional | Gmail fallback | Gmail App Password |
 | `ENABLE_EMAIL_DEBUG` | Optional | Functions | `1` to print extra logs (use on staging only) |
 | `CONTACT_TO` | Optional | Functions | Override recipient address (useful on staging) |
+| `CMS_API_URL` | Optional | Articles Function | WordPress CMS API endpoint (default: `http://dfd-cms.local/wp-json/wp/v2`) |
 | `NODE_VERSION` | Optional | Build/Functions | Pin Node engine on Netlify (e.g., `20`) |
 | `NODE_ENV` | Yes (prod) | All | `production` enables optimizations |
 | `PORT` | Express only | Express | Default 4000 locally (if not set) |
@@ -338,6 +340,121 @@ const apiBase = 'https://api.yourdomain.com';
 
 ---
 
+## 📰 Articles / Blog Feature
+
+The site includes a dynamic articles listing page that consumes content from a WordPress headless CMS.
+
+### Features
+- **WordPress Integration**: Fetches articles from WordPress REST API
+- **Pagination**: Displays maximum 10 articles per page with navigation controls
+- **Responsive Design**: Mobile-first layout matching portfolio style
+- **Smart Fallbacks**: Placeholder images when thumbnails are missing
+- **Security**: Rate limiting, input sanitization, and secure API proxy
+- **Environment-Aware**: Different API endpoints for local, staging, and production
+
+### Setup Instructions
+
+#### 1. WordPress CMS Setup (Backend)
+Set up a WordPress instance as a headless CMS:
+1. Install WordPress on your server or use a managed WordPress hosting
+2. Install and activate the **Custom Post Type UI** plugin (or similar)
+3. Create a custom post type called `article`
+4. Enable REST API access for the `article` post type
+5. Ensure the REST API is accessible at: `http://your-cms.com/wp-json/wp/v2/article`
+
+#### 2. Local Development
+Create a `.env` file in the root directory:
+```bash
+# Copy from .env.example
+cp .env.example .env
+
+# Add your local CMS URL
+CMS_API_URL=http://dfd-cms.local/wp-json/wp/v2
+```
+
+For local WordPress development:
+- Use a tool like **Local by Flywheel**, **XAMPP**, or **Docker**
+- Set up a local domain (e.g., `dfd-cms.local`)
+- Update your hosts file if needed
+
+#### 3. Staging Environment
+In Netlify Dashboard for your staging site:
+1. Go to **Site settings** → **Environment variables**
+2. Add variable:
+   - **Key**: `CMS_API_URL`
+   - **Value**: `https://staging-cms.deanforantdesigns.com/wp-json/wp/v2`
+3. Redeploy the staging site
+
+#### 4. Production Environment
+In Netlify Dashboard for your production site:
+1. Go to **Site settings** → **Environment variables**
+2. Add variable:
+   - **Key**: `CMS_API_URL`
+   - **Value**: `https://cms.deanforantdesigns.com/wp-json/wp/v2`
+3. Deploy to production
+
+### API Endpoint Configuration
+
+The articles feature uses the Netlify Function proxy pattern:
+- Frontend calls: `/api/articles`
+- Netlify redirects to: `/.netlify/functions/articles`
+- Function proxies to: WordPress CMS (configured via `CMS_API_URL`)
+
+### Security Features
+- **Rate Limiting**: 30 requests per minute per IP
+- **Input Validation**: All query parameters are sanitized
+- **Safe Parameters**: Only allows `page`, `per_page`, `search`, `orderby`, `order`
+- **Timeout Protection**: 10-second request timeout
+- **Error Handling**: Generic error messages in production (detailed in dev)
+
+### Testing the Articles Page
+
+1. **Local Testing**:
+   ```bash
+   # Start Netlify dev server
+   netlify dev
+   
+   # Visit the articles page
+   # http://localhost:8888/articles.html
+   ```
+
+2. **Create Sample Articles** in WordPress:
+   - Title: Your article title
+   - Content: Your article content
+   - Excerpt: Short summary (optional, auto-generated if missing)
+   - Featured Image: Upload a thumbnail image
+   - Author: Set the author
+   - Publish the article
+
+3. **Verify Pagination**:
+   - Create more than 10 articles
+   - Verify pagination controls appear
+   - Test next/previous navigation
+
+### Troubleshooting
+
+**Articles not loading:**
+- Check the browser console for errors
+- Verify `CMS_API_URL` is set correctly
+- Ensure WordPress REST API is accessible
+- Check Netlify Function logs for errors
+
+**CORS issues:**
+- The Netlify Function acts as a proxy, avoiding CORS
+- Ensure you're accessing via `/api/articles` not the WordPress URL directly
+
+**Rate limit errors:**
+- Wait 60 seconds and try again
+- Check if multiple requests are being made unnecessarily
+- Consider increasing rate limits in production if needed
+
+**Images not loading:**
+- Ensure WordPress featured images are set
+- Placeholder images will show if no image is available
+- Check image URLs in WordPress media library
+
+---
+
 ## 🧰 Previous Sections (Features, Security, Troubleshooting)
 The remainder of this document retains original details with light edits for consistency.
 
@@ -345,16 +462,19 @@ The remainder of this document retains original details with light edits for con
 
 | Symptom | Likely Cause | Fix |
 |---------|--------------|-----|
-| 500 + generic message | SMTP timeout / auth error | Check Functions logs; verify credentials |
+| 500 + generic message | SMTP timeout / auth error OR CMS API unreachable | Check Functions logs; verify credentials / CMS URL |
 | 400 validation | Bad field lengths / pattern | Read `errors` array in JSON response |
+| 429 rate limit | Too many requests | Wait 60 seconds; check for request loops |
 | No network request | JS error halted submit | Browser console → fix script |
 | Works locally not in prod | Missing env var in Netlify | Add in dashboard → redeploy |
 | CORS error (Express only) | FRONTEND_URL mismatch | Update `FRONTEND_URL` and restart |
+| Articles not loading | CMS_API_URL not set or wrong | Verify env var in Netlify dashboard |
 
 Files relevant to serverless mode:
 ```
 netlify.toml
 netlify/functions/contact.js
+netlify/functions/articles.js
 netlify/functions/lib/validation.js
 ```
 
@@ -497,7 +617,17 @@ For deployment issues or questions:
 
 ## 📝 Changelog
 
-### v1.1.4 (Current)
+### v1.2.0 (Current)
+- Added Articles/Blog listing page with WordPress headless CMS integration
+- Implemented secure API proxy via Netlify Functions for CMS data
+- Added pagination support (10 articles per page)
+- Implemented rate limiting and input validation for security
+- Added responsive article cards with thumbnail support and placeholders
+- Updated navigation and footer to include Articles link
+- Environment-specific CMS API endpoint configuration
+- Comprehensive documentation for setup across all environments
+
+### v1.1.4
 - Updated monorepo structure with npm workspaces
 - Refined Netlify Functions configuration with esbuild bundler
 - Improved environment variable handling
