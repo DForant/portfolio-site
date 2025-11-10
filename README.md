@@ -45,6 +45,7 @@ portfolio-site/
 - **Responsive Design**: Mobile-first approach with modern CSS Grid and Flexbox
 - **Interactive Contact Form**: Client + server validation, spam filtering, graceful error handling
 - **Email Integration**: SMTP / Gmail fallback with development JSON transport
+- **Headless WordPress CMS**: Blog/articles section powered by WordPress REST API
 - **Separated Architecture**: Independent frontend (`/frontend`) & backend (`/backend`)
 - **Client Carousel**: Interactive showcase of client logos
 - **Process Tabs**: Interactive workflow demonstration
@@ -55,7 +56,9 @@ portfolio-site/
 This repo ships with production-grade Netlify config and SEO safeguards baked in:
 
 - Build config: `publish = frontend`, `functions = netlify/functions`, and build command `npm --workspace frontend run build` to compile Sass on deploy.
-- API route: `/api/contact` redirected to `/.netlify/functions/contact` via `netlify.toml`.
+- API routes: 
+  - `/api/contact` redirected to `/.netlify/functions/contact` via `netlify.toml`
+  - `/api/wordpress` redirected to `/.netlify/functions/wordpress` for blog content
 - Staging no-indexing: For host `staging.deanforantdesigns.com`, all pages send `X-Robots-Tag: noindex, nofollow` and `/robots.txt` resolves to `frontend/robots-staging.txt` (Disallow all).
 - Production indexing: Other hosts serve `frontend/robots-prod.txt` (Allow all) and include a `Sitemap: https://www.deanforantdesigns.com/sitemap.xml`. A basic `frontend/sitemap.xml` is included.
 - Canonical host: Requests to apex `deanforantdesigns.com` 301-redirect to `https://www.deanforantdesigns.com/`.
@@ -204,6 +207,7 @@ Define in Netlify UI (recommended) or `.env` for Express local development.
 | `EMAIL_PASS` | Optional | Gmail fallback | Gmail App Password |
 | `ENABLE_EMAIL_DEBUG` | Optional | Functions | `1` to print extra logs (use on staging only) |
 | `CONTACT_TO` | Optional | Functions | Override recipient address (useful on staging) |
+| `WORDPRESS_URL` | Required for blog | WordPress API | URL to WordPress site (without trailing slash) |
 | `NODE_VERSION` | Optional | Build/Functions | Pin Node engine on Netlify (e.g., `20`) |
 | `NODE_ENV` | Yes (prod) | All | `production` enables optimizations |
 | `PORT` | Express only | Express | Default 4000 locally (if not set) |
@@ -413,6 +417,45 @@ Example (Formspree):
 | `APP_PATH` | (Optional) Path base prefix | `api` |
 
 Netlify Functions ignore `PORT`/`FRONTEND_URL` (handled internally) but still require email credentials if you want real delivery.
+
+## 📝 WordPress Headless CMS Integration
+
+The portfolio site includes a blog/articles section powered by WordPress as a headless CMS. This allows you to publish articles, tutorials, how-to guides, and case studies.
+
+### Quick Setup
+
+1. **Set up WordPress** (any WordPress installation works: self-hosted, WordPress.com, or managed hosting)
+
+2. **Configure Environment Variable**
+   ```bash
+   # Add to Netlify environment variables
+   WORDPRESS_URL=https://your-wordpress-site.com
+   ```
+
+3. **Create Content in WordPress**
+   - Write posts in WordPress
+   - Add featured images
+   - Assign categories and tags
+   - Publish
+
+4. **Content Appears Automatically**
+   - Blog listing: `https://your-site.com/blog/`
+   - Single article: `https://your-site.com/blog/article.html?slug=post-slug`
+
+### Features
+
+- **Automatic Caching**: 5-minute cache reduces API calls
+- **Category Filtering**: Filter posts by category
+- **Pagination**: Navigate through multiple pages of posts
+- **Responsive Design**: Mobile-first blog layout
+- **Social Sharing**: Built-in share buttons for Twitter, LinkedIn, Facebook
+- **SEO Friendly**: Meta tags and structured data support
+
+### Documentation
+
+For complete setup instructions, content publishing guidelines, and troubleshooting, see:
+
+**[WORDPRESS_SETUP.md](WORDPRESS_SETUP.md)**
 
 ## 📧 Email Configuration Details
 
