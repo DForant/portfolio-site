@@ -45,6 +45,7 @@ portfolio-site/
 - **Responsive Design**: Mobile-first approach with modern CSS Grid and Flexbox
 - **Interactive Contact Form**: Client + server validation, spam filtering, graceful error handling
 - **Email Integration**: SMTP / Gmail fallback with development JSON transport
+- **Articles Listing Page**: Paginated listing of articles from WordPress headless CMS
 - **Separated Architecture**: Independent frontend (`/frontend`) & backend (`/backend`)
 - **Client Carousel**: Interactive showcase of client logos
 - **Process Tabs**: Interactive workflow demonstration
@@ -204,6 +205,7 @@ Define in Netlify UI (recommended) or `.env` for Express local development.
 | `EMAIL_PASS` | Optional | Gmail fallback | Gmail App Password |
 | `ENABLE_EMAIL_DEBUG` | Optional | Functions | `1` to print extra logs (use on staging only) |
 | `CONTACT_TO` | Optional | Functions | Override recipient address (useful on staging) |
+| `WP_API_URL` | Required for articles | Articles function | WordPress REST API base URL (e.g., `http://dfd-cms.local/wp-json/wp/v2` for local, `https://cms.deanforantdesigns.com/wp-json/wp/v2` for prod) |
 | `NODE_VERSION` | Optional | Build/Functions | Pin Node engine on Netlify (e.g., `20`) |
 | `NODE_ENV` | Yes (prod) | All | `production` enables optimizations |
 | `PORT` | Express only | Express | Default 4000 locally (if not set) |
@@ -432,6 +434,51 @@ The system sends HTML emails with:
 - Timestamp and reference
 - Responsive design
 
+## 📰 Articles Page Configuration
+
+The Articles page displays blog posts from a WordPress headless CMS with pagination and responsive design.
+
+### WordPress CMS Setup
+
+1. **Install WordPress** with the REST API enabled (enabled by default in WordPress 4.7+)
+2. **Configure endpoints** for your environment:
+   - **Local**: `http://dfd-cms.local/wp-json/wp/v2`
+   - **Staging**: `https://staging-cms.deanforantdesigns.com/wp-json/wp/v2`
+   - **Production**: `https://cms.deanforantdesigns.com/wp-json/wp/v2`
+
+3. **Set environment variable** in your deployment:
+   ```bash
+   # For Netlify (in dashboard or CLI)
+   WP_API_URL=https://cms.deanforantdesigns.com/wp-json/wp/v2
+   
+   # For local development (in .env file)
+   WP_API_URL=http://dfd-cms.local/wp-json/wp/v2
+   ```
+
+### Articles Function Features
+
+- **Secure proxy**: Netlify function proxies requests to WordPress API
+- **Input validation**: Page and per_page parameters validated (1-1000 and 1-100)
+- **Caching**: Responses cached for 5 minutes
+- **Timeout protection**: 10-second timeout on API requests
+- **Error handling**: Graceful error messages for failed requests
+- **Data sanitization**: Only necessary fields exposed to frontend
+
+### Testing the Articles Page
+
+1. Access the articles page at `/articles.html`
+2. Verify pagination controls work correctly
+3. Check responsive design on mobile/tablet/desktop
+4. Test error handling by providing invalid WordPress API URL
+5. Verify placeholder images display when thumbnails are missing
+
+### Customization
+
+To change the number of articles per page, update the `perPage` constant in `frontend/assets/js/articles.js`:
+```javascript
+const perPage = 10; // Change to your preferred number (1-100)
+```
+
 ## 🛡️ Security Features
 
 - **Helmet.js**: Security headers
@@ -497,7 +544,16 @@ For deployment issues or questions:
 
 ## 📝 Changelog
 
-### v1.1.4 (Current)
+### v1.2.0 (Current)
+- Added Articles listing page with WordPress headless CMS integration
+- Created Netlify function for proxying WordPress REST API requests
+- Implemented pagination (10 articles per page)
+- Added environment-specific API endpoint configuration
+- Security features: input validation, rate limiting, request timeout
+- Responsive article cards with thumbnails, metadata, and excerpts
+- Updated navigation to include Articles link
+
+### v1.1.4
 - Updated monorepo structure with npm workspaces
 - Refined Netlify Functions configuration with esbuild bundler
 - Improved environment variable handling
