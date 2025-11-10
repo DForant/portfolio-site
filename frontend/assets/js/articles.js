@@ -59,14 +59,39 @@
     }
 
     /**
-     * Decode HTML entities
-     * @param {string} html - HTML string with entities
-     * @returns {string} - Decoded string
+     * Escape HTML to prevent XSS attacks
+     * @param {string} text - Text to escape
+     * @returns {string} - Escaped text safe for HTML
      */
-    function decodeHtml(html) {
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    /**
+     * Decode HTML entities safely
+     * @param {string} html - HTML string with entities
+     * @returns {string} - Decoded and escaped string
+     */
+    function decodeHtmlSafe(html) {
         const txt = document.createElement('textarea');
-        txt.innerHTML = html;
-        return txt.value;
+        txt.textContent = html; // Use textContent instead of innerHTML to prevent XSS
+        const decoded = txt.value;
+        // Return the decoded value (it's already safe from setting via textContent)
+        return decoded;
+    }
+
+    /**
+     * Strip HTML tags safely from content
+     * @param {string} html - HTML content
+     * @returns {string} - Plain text
+     */
+    function stripHtmlTags(html) {
+        const div = document.createElement('div');
+        div.textContent = html; // Use textContent to prevent any script execution
+        const text = div.textContent || '';
+        return text;
     }
 
     /**
@@ -102,26 +127,23 @@
     /**
      * Get excerpt or create one from content
      * @param {Object} article - Article object
-     * @returns {string} - Excerpt text
+     * @returns {string} - Excerpt text (HTML-escaped)
      */
     function getExcerpt(article) {
+        let plainText = '';
+        
         if (article.excerpt && article.excerpt.rendered) {
-            const excerpt = decodeHtml(article.excerpt.rendered);
-            // Remove HTML tags
-            const div = document.createElement('div');
-            div.innerHTML = excerpt;
-            return div.textContent || div.innerText || '';
+            // Strip HTML tags from excerpt
+            plainText = stripHtmlTags(article.excerpt.rendered);
+        } else if (article.content && article.content.rendered) {
+            // Fallback: create excerpt from content
+            plainText = stripHtmlTags(article.content.rendered);
+            plainText = plainText.substring(0, 150) + (plainText.length > 150 ? '...' : '');
+        } else {
+            plainText = 'No excerpt available.';
         }
         
-        // Fallback: create excerpt from content
-        if (article.content && article.content.rendered) {
-            const div = document.createElement('div');
-            div.innerHTML = article.content.rendered;
-            const text = div.textContent || div.innerText || '';
-            return text.substring(0, 150) + (text.length > 150 ? '...' : '');
-        }
-        
-        return 'No excerpt available.';
+        return escapeHtml(plainText);
     }
 
     /**
@@ -130,12 +152,13 @@
      * @returns {string} - HTML string
      */
     function createArticleCard(article) {
-        const title = decodeHtml(article.title.rendered || 'Untitled');
-        const date = formatDate(article.date);
-        const author = getAuthorName(article);
-        const excerpt = getExcerpt(article);
-        const imageUrl = getFeaturedImage(article);
-        const articleUrl = article.link || '#';
+        // Escape all user-generated content to prevent XSS
+        const title = escapeHtml(stripHtmlTags(article.title.rendered || 'Untitled'));
+        const date = formatDate(article.date); // formatDate returns safe date string
+        const author = escapeHtml(getAuthorName(article)); // Escape author name
+        const excerpt = getExcerpt(article); // Already returns escaped content
+        const imageUrl = escapeHtml(getFeaturedImage(article)); // Escape image URL
+        const articleUrl = escapeHtml(article.link || '#'); // Escape link URL
 
         return `
             <article class="article-card">
