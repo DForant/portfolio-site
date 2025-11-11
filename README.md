@@ -48,6 +48,7 @@ portfolio-site/
 - **Separated Architecture**: Independent frontend (`/frontend`) & backend (`/backend`)
 - **Client Carousel**: Interactive showcase of client logos
 - **Process Tabs**: Interactive workflow demonstration
+- **Articles/Content Listing**: Dynamic content listing page that consumes articles from WordPress headless CMS
 - **Security**: Helmet, rate limiting, CORS, input sanitization (xss), spam heuristics
 
 ## ⚙️ Preconfigured Netlify & SEO behavior
@@ -209,6 +210,7 @@ Define in Netlify UI (recommended) or `.env` for Express local development.
 | `PORT` | Express only | Express | Default 4000 locally (if not set) |
 | `FRONTEND_URL` | Express CORS | Express | Comma separated origins |
 | `APP_PATH` | Path-based hosting alt | Express prod (cPanel) | See advanced section |
+| `WP_API_URL` | Required for Articles | Netlify Functions | WordPress API endpoint (e.g., `http://dfd-cms.local/wp-json/wp/v2` for local, production URL for prod) |
 
 `.env.example` in the repository root is the reference for Express mode.
 
@@ -432,6 +434,94 @@ The system sends HTML emails with:
 - Timestamp and reference
 - Responsive design
 
+---
+
+## 📝 Articles/Content Listing Feature
+
+The articles page (`/articles.html`) displays content from a WordPress headless CMS.
+
+### WordPress CMS Setup
+
+The site consumes articles from a WordPress installation running in headless mode via the WordPress REST API.
+
+**WordPress API Endpoint Structure:**
+- Local: `http://dfd-cms.local/wp-json/wp/v2/articles`
+- Staging: `https://staging-cms.deanforantdesigns.com/wp-json/wp/v2/articles`
+- Production: `https://cms.deanforantdesigns.com/wp-json/wp/v2/articles`
+
+### Configuration for Each Environment
+
+#### Local Development
+
+1. Set up your local WordPress installation with the headless CMS
+2. Create a `.env` file in the project root (or add to Netlify UI for `netlify dev`):
+   ```env
+   WP_API_URL=http://dfd-cms.local/wp-json/wp/v2
+   ```
+3. Ensure your WordPress installation has a custom post type named `articles` or modify the endpoint in the function
+
+#### Staging Environment
+
+1. In Netlify Dashboard → Site Settings → Build & Deploy → Environment:
+   - Add variable `WP_API_URL` = `https://staging-cms.deanforantdesigns.com/wp-json/wp/v2`
+2. Deploy to staging:
+   ```bash
+   netlify deploy --build
+   ```
+
+#### Production Environment
+
+1. In Netlify Dashboard → Site Settings → Build & Deploy → Environment:
+   - Add/Update variable `WP_API_URL` = `https://cms.deanforantdesigns.com/wp-json/wp/v2`
+2. Deploy to production:
+   ```bash
+   netlify deploy --prod --build
+   ```
+
+### WordPress Requirements
+
+Your WordPress installation should:
+- Have the REST API enabled (default in WordPress)
+- Include a custom post type `articles` (or use standard `posts`)
+- Support `_embed` parameter to include featured images and author data
+- Be accessible from your Netlify Functions
+
+### Testing the Articles Feature
+
+1. **Local testing with netlify dev:**
+   ```bash
+   netlify dev
+   ```
+   Navigate to `http://localhost:8888/articles.html`
+
+2. **Verify the function directly:**
+   ```bash
+   curl http://localhost:8888/api/articles?page=1&per_page=10
+   ```
+
+3. **Expected response format:**
+   ```json
+   {
+     "success": true,
+     "data": {
+       "articles": [...],
+       "total": 25,
+       "totalPages": 3,
+       "currentPage": 1
+     }
+   }
+   ```
+
+### Security Features
+
+- **Rate limiting**: 30 requests per minute per IP
+- **Input validation**: Page and per_page parameters validated
+- **XSS prevention**: All content escaped on the client side
+- **Timeout protection**: 10-second timeout on WordPress API calls
+- **Error handling**: Graceful degradation if WordPress is unreachable
+
+---
+
 ## 🛡️ Security Features
 
 - **Helmet.js**: Security headers
@@ -497,7 +587,17 @@ For deployment issues or questions:
 
 ## 📝 Changelog
 
-### v1.1.4 (Current)
+### v1.2.0 (Current)
+- Added Articles/Content Listing page
+- Integrated WordPress headless CMS support via Netlify Functions
+- Implemented secure proxy for WordPress REST API
+- Added pagination for articles (10 per page)
+- Added environment-based configuration for API endpoints
+- Security: Rate limiting, input validation, XSS prevention for articles feature
+- Updated navigation to include Articles link
+- Documentation updates for WordPress CMS setup
+
+### v1.1.4
 - Updated monorepo structure with npm workspaces
 - Refined Netlify Functions configuration with esbuild bundler
 - Improved environment variable handling
