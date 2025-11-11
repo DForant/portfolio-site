@@ -48,6 +48,7 @@ portfolio-site/
 - **Separated Architecture**: Independent frontend (`/frontend`) & backend (`/backend`)
 - **Client Carousel**: Interactive showcase of client logos
 - **Process Tabs**: Interactive workflow demonstration
+- **Articles Page**: WordPress headless CMS integration for blog/articles with pagination
 - **Security**: Helmet, rate limiting, CORS, input sanitization (xss), spam heuristics
 
 ## ⚙️ Preconfigured Netlify & SEO behavior
@@ -204,6 +205,8 @@ Define in Netlify UI (recommended) or `.env` for Express local development.
 | `EMAIL_PASS` | Optional | Gmail fallback | Gmail App Password |
 | `ENABLE_EMAIL_DEBUG` | Optional | Functions | `1` to print extra logs (use on staging only) |
 | `CONTACT_TO` | Optional | Functions | Override recipient address (useful on staging) |
+| `WP_API_BASE_URL` | Required for articles | Articles Function | WordPress headless CMS base URL (e.g., `http://dfd-cms.local`) |
+| `ENABLE_ARTICLES_DEBUG` | Optional | Articles Function | `1` to print extra logs (use on staging/local only) |
 | `NODE_VERSION` | Optional | Build/Functions | Pin Node engine on Netlify (e.g., `20`) |
 | `NODE_ENV` | Yes (prod) | All | `production` enables optimizations |
 | `PORT` | Express only | Express | Default 4000 locally (if not set) |
@@ -211,6 +214,100 @@ Define in Netlify UI (recommended) or `.env` for Express local development.
 | `APP_PATH` | Path-based hosting alt | Express prod (cPanel) | See advanced section |
 
 `.env.example` in the repository root is the reference for Express mode.
+
+---
+
+## 📰 Articles Page & WordPress CMS Integration
+
+The portfolio site includes an articles listing page that integrates with a WordPress headless CMS.
+
+### Features
+
+- **Paginated Article List**: Displays 10 articles per page with next/previous navigation
+- **Secure API Proxy**: Netlify Function acts as a proxy to WordPress API with rate limiting
+- **Responsive Design**: Fully responsive layout matching the portfolio design system
+- **Fallback Handling**: Placeholder images and error states for robust UX
+- **SEO Friendly**: Proper meta tags and semantic HTML
+
+### WordPress CMS Setup
+
+1. **WordPress Installation**: Set up WordPress with REST API enabled
+2. **Create Posts**: Use the standard WordPress Posts feature for articles
+3. **Featured Images**: Set featured images for each post (or use placeholder)
+4. **Categories/Tags**: Organize content as needed
+
+### Environment Configuration
+
+Set the `WP_API_BASE_URL` environment variable for each environment:
+
+**Local Development:**
+```bash
+WP_API_BASE_URL=http://dfd-cms.local
+```
+
+**Staging:**
+```bash
+WP_API_BASE_URL=https://staging-cms.deanforantdesigns.com
+```
+
+**Production:**
+```bash
+WP_API_BASE_URL=https://cms.deanforantdesigns.com
+```
+
+### Netlify Environment Setup
+
+1. Navigate to Site Settings → Environment Variables
+2. Add `WP_API_BASE_URL` with the appropriate value
+3. Optionally add `ENABLE_ARTICLES_DEBUG=1` for staging to see detailed logs
+4. Redeploy the site for changes to take effect
+
+### Local Testing
+
+1. Set up local WordPress instance (e.g., using Local by Flywheel, MAMP, or Docker)
+2. Create a `.env` file in the repository root:
+   ```bash
+   WP_API_BASE_URL=http://dfd-cms.local
+   ENABLE_ARTICLES_DEBUG=1
+   ```
+3. Run `netlify dev` to test the articles page
+4. Navigate to http://localhost:8888/articles.html
+
+### API Endpoints
+
+The articles function is accessible at:
+- Direct: `/.netlify/functions/articles`
+- Rewritten: `/api/articles` (configured in `netlify.toml`)
+
+**Query Parameters:**
+- `page` (optional): Page number (default: 1, max: 1000)
+- `per_page` (optional): Articles per page (default: 10, max: 100)
+
+**Example:**
+```
+/api/articles?page=1&per_page=10
+```
+
+### Security Features
+
+- **Rate Limiting**: 100 requests per minute per IP
+- **Input Validation**: All query parameters are validated and sanitized
+- **Request Timeout**: 10-second timeout for WordPress API requests
+- **Error Handling**: Graceful degradation with user-friendly error messages
+
+### Customization
+
+**Change Articles Per Page:**
+Edit `frontend/assets/js/articles.js`:
+```javascript
+const ARTICLES_PER_PAGE = 10; // Change to desired number
+```
+
+**Customize Placeholder Image:**
+Replace `frontend/assets/images/article-placeholder.jpg` with your own image.
+
+**Styling:**
+Modify `frontend/assets/sass/pages/_articles.scss` for custom styling.
 
 ---
 
