@@ -218,7 +218,7 @@
                         ${escapeHtml(article.author)}
                     </span>
                 </div>
-                <div class="article-item__excerpt">${plainExcerpt}</div>
+                <div class="article-item__excerpt">${escapeHtml(plainExcerpt)}</div>
                 <a href="${escapeHtml(article.link)}" 
                    class="btn btn--primary article-item__read-more" 
                    target="_blank" 
