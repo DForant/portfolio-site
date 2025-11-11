@@ -190,7 +190,7 @@
                     </span>
                 </div>
                 <h2 class="article-card__title">${escapeHtml(article.title)}</h2>
-                <div class="article-card__excerpt">${cleanExcerpt}</div>
+                <div class="article-card__excerpt">${escapeHtml(cleanExcerpt)}</div>
                 <a href="${escapeHtml(article.link)}" class="btn btn--primary article-card__btn" target="_blank" rel="noopener noreferrer">
                     Read More
                     <i class="fas fa-arrow-right" aria-hidden="true"></i>
