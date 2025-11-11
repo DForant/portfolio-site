@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+  <rect fill="#f8f9fa" width="600" height="400"/>
+  <g fill="#4A6C9B" opacity="0.3">
+    <circle cx="300" cy="200" r="40"/>
+    <path d="M300 160 L300 120 M300 240 L300 280 M260 200 L220 200 M340 200 L380 200"/>
+  </g>
+  <text x="300" y="320" font-family="Arial, sans-serif" font-size="18" fill="#4A6C9B" text-anchor="middle" opacity="0.5">
+    Article Image
+  </text>
+</svg>
