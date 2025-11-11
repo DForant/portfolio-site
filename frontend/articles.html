@@ -35,22 +35,22 @@
             <nav id="header-nav" class="header__nav" aria-label="Primary Navigation">
                 <ul class="header__nav-list">
                     <li class="header__nav-item">
-                        <a class="header__nav-link" href="index.html">Home</a>
+                        <a class="header__nav-link" href="/">Home</a>
                     </li>
                     <li class="header__nav-item">
-                        <a class="header__nav-link" href="index.html#clients">About</a>
+                        <a class="header__nav-link" href="/#clients">About</a>
                     </li>
                     <li class="header__nav-item">
-                        <a class="header__nav-link" href="index.html#services">Services</a>
+                        <a class="header__nav-link" href="/#services">Services</a>
                     </li>
                     <li class="header__nav-item">
-                        <a class="header__nav-link" href="index.html#portfolio-section">Portfolio</a>
+                        <a class="header__nav-link" href="/#portfolio-section">Portfolio</a>
                     </li>
                     <li class="header__nav-item">
-                        <a class="header__nav-link" href="articles.html">Articles</a>
+                        <a class="header__nav-link" href="/articles.html">Articles</a>
                     </li>
                     <li class="header__nav-item">
-                        <a class="header__nav-link" href="index.html#contact">Contact</a>
+                        <a class="header__nav-link" href="/#contact">Contact</a>
                     </li>
                 </ul>
             </nav>
@@ -59,55 +59,52 @@
         </div>
     </header>
 
-    <main id="articles-main">
+    <main class="articles-page">
         <!-- Articles Hero Section -->
-        <section class="articles-hero" aria-label="Articles">
+        <section class="articles-hero" aria-label="Articles Header">
             <div class="section__container">
-                <h1 class="section__title">Articles & Insights</h1>
-                <p class="articles-hero__subtitle">Exploring brand design, web development, and creative strategy</p>
+                <h1 class="articles-hero__title">Articles & Insights</h1>
+                <p class="articles-hero__subtitle">Explore the latest thoughts on brand design, web development, and digital strategy.</p>
             </div>
         </section>
 
-        <!-- Articles Listing Section -->
-        <section class="articles-list" aria-labelledby="articles-list-title">
+        <!-- Articles List Section -->
+        <section class="articles-list" aria-label="Articles List">
             <div class="section__container">
                 <!-- Loading State -->
-                <div class="articles-list__loading" id="articles-loading" aria-live="polite">
-                    <div class="articles-list__spinner"></div>
+                <div id="articles-loading" class="articles-list__loading" aria-live="polite">
+                    <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
                     <p>Loading articles...</p>
                 </div>
 
                 <!-- Error State -->
-                <div class="articles-list__error" id="articles-error" style="display: none;" role="alert">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <p id="articles-error-message">Failed to load articles. Please try again later.</p>
+                <div id="articles-error" class="articles-list__error" aria-live="assertive" style="display: none;">
+                    <i class="fas fa-exclamation-triangle" aria-hidden="true"></i>
+                    <p class="articles-list__error-message">Unable to load articles. Please try again later.</p>
+                    <button class="btn btn--secondary" id="retry-button">Retry</button>
+                </div>
+
+                <!-- Empty State -->
+                <div id="articles-empty" class="articles-list__empty" style="display: none;">
+                    <i class="fas fa-inbox" aria-hidden="true"></i>
+                    <p>No articles found.</p>
                 </div>
 
                 <!-- Articles Container -->
-                <div class="articles-list__container" id="articles-container" style="display: none;">
+                <div id="articles-container" class="articles-list__container" style="display: none;">
                     <!-- Articles will be dynamically inserted here -->
                 </div>
 
                 <!-- Pagination -->
-                <nav class="articles-pagination" id="articles-pagination" style="display: none;" aria-label="Articles pagination">
-                    <button 
-                        class="articles-pagination__btn articles-pagination__btn--prev" 
-                        id="pagination-prev"
-                        aria-label="Previous page">
-                        <i class="fas fa-chevron-left"></i>
-                        Previous
+                <nav id="articles-pagination" class="articles-list__pagination" aria-label="Articles pagination" style="display: none;">
+                    <button class="btn btn--secondary articles-list__pagination-btn" id="prev-page" aria-label="Previous page">
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i> Previous
                     </button>
-                    
-                    <div class="articles-pagination__info" id="pagination-info" aria-live="polite">
+                    <div class="articles-list__pagination-info" id="pagination-info" aria-live="polite">
                         Page <span id="current-page">1</span> of <span id="total-pages">1</span>
                     </div>
-                    
-                    <button 
-                        class="articles-pagination__btn articles-pagination__btn--next" 
-                        id="pagination-next"
-                        aria-label="Next page">
-                        Next
-                        <i class="fas fa-chevron-right"></i>
+                    <button class="btn btn--secondary articles-list__pagination-btn" id="next-page" aria-label="Next page">
+                        Next <i class="fas fa-chevron-right" aria-hidden="true"></i>
                     </button>
                 </nav>
             </div>
@@ -115,26 +112,26 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer" role="contentinfo">
+    <footer class="footer">
         <div class="footer__container">
-            <div class="footer__grid">
-                <!-- Logo and Tagline -->
-                <div class="footer__brand">
-                    <img src="assets/images/Logo Light BG.png" alt="Dean Forant logo" class="footer__logo" />
-                    <p class="footer__tagline">Brand & web design rooted in strategy.</p>
+            <!-- Company Info -->
+            <div class="footer__content">
+                <div class="footer__info">
+                    <img src="assets/images/banner-logo.png" alt="Dean Forant Brand & Web Design" class="footer__logo" />
+                    <p class="footer__description">Creating impactful brands and websites that drive results.</p>
                 </div>
                 
                 <!-- Quick Links -->
-                <div class="footer__links">
+                <div class="footer__links-section">
                     <h3 class="footer__title">Quick Links</h3>
-                    <nav class="footer__nav">
-                        <ul class="footer__nav-list">
-                            <li class="footer__nav-item"><a href="index.html" class="footer__nav-link">Home</a></li>
-                            <li class="footer__nav-item"><a href="index.html#about" class="footer__nav-link">About</a></li>
-                            <li class="footer__nav-item"><a href="index.html#services" class="footer__nav-link">Services</a></li>
-                            <li class="footer__nav-item"><a href="index.html#portfolio-section" class="footer__nav-link">Portfolio</a></li>
-                            <li class="footer__nav-item"><a href="articles.html" class="footer__nav-link">Articles</a></li>
-                            <li class="footer__nav-item"><a href="index.html#contact" class="footer__nav-link">Contact</a></li>
+                    <nav aria-label="Footer Navigation">
+                        <ul class="footer__nav">
+                            <li class="footer__nav-item"><a href="/" class="footer__nav-link">Home</a></li>
+                            <li class="footer__nav-item"><a href="/#clients" class="footer__nav-link">About</a></li>
+                            <li class="footer__nav-item"><a href="/#services" class="footer__nav-link">Services</a></li>
+                            <li class="footer__nav-item"><a href="/#portfolio-section" class="footer__nav-link">Portfolio</a></li>
+                            <li class="footer__nav-item"><a href="/articles.html" class="footer__nav-link">Articles</a></li>
+                            <li class="footer__nav-item"><a href="/#contact" class="footer__nav-link">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
