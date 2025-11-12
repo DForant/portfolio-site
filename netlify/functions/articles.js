@@ -1,7 +1,8 @@
 // Netlify Function: articles fetcher from WordPress headless CMS
 // Path: /.netlify/functions/articles
 
-const WP_API_BASE = process.env.WP_API_URL || 'http://dfd-cms.local/wp-json/wp/v2';
+const CMS_BASE_URL = process.env.CMS_BASE_URL || 'http://dfd-cms.local';
+const WP_API_BASE = `${CMS_BASE_URL.replace(/\/+$/, '')}/wp-json/wp/v2`;
 
 // Rate limiting map (simple in-memory for demo; consider Redis for production)
 const rateLimitMap = new Map();
@@ -53,7 +54,9 @@ function validatePagination(page, perPage) {
 }
 
 async function fetchArticles(page = 1, perPage = 10) {
-  const url = `${WP_API_BASE}/articles?page=${page}&per_page=${perPage}&_embed=true`;
+  const url = `${WP_API_BASE}/article?page=${page}&per_page=${perPage}&status=publish&_embed=true`;
+  
+  console.log('[Articles Function] Fetching from:', url);
   
   try {
     const response = await fetch(url, {
@@ -65,6 +68,7 @@ async function fetchArticles(page = 1, perPage = 10) {
     });
     
     if (!response.ok) {
+      console.error('[Articles Function] Response not OK:', response.status);
       if (response.status === 404) {
         return { articles: [], total: 0, totalPages: 0 };
       }
@@ -75,31 +79,26 @@ async function fetchArticles(page = 1, perPage = 10) {
     const total = parseInt(response.headers.get('X-WP-Total') || '0', 10);
     const totalPages = parseInt(response.headers.get('X-WP-TotalPages') || '0', 10);
     
+    console.log('[Articles Function] Found', articles.length, 'articles. Total:', total, 'Pages:', totalPages);
+    
     // Transform articles to safe format
     const transformedArticles = articles.map(article => {
-      // Safely extract featured image
-      let featuredImage = null;
-      if (article._embedded && article._embedded['wp:featuredmedia']) {
-        const media = article._embedded['wp:featuredmedia'][0];
-        if (media && media.source_url) {
-          featuredImage = media.source_url;
-        }
-      }
+      // Use the custom REST field we added in WordPress plugin
+      const featuredImageUrl = article.featured_image_url || null;
       
-      // Safely extract author
-      let authorName = 'Unknown';
-      if (article._embedded && article._embedded.author && article._embedded.author[0]) {
-        authorName = article._embedded.author[0].name || 'Unknown';
-      }
+      // Use the custom author_name field we added
+      const authorName = article.author_name || 'Dean Forant';
       
       return {
         id: article.id,
-        title: article.title?.rendered || 'Untitled',
+        slug: article.slug || '',
+        title: article.title?.rendered || '',
         excerpt: article.excerpt?.rendered || '',
-        date: article.date || new Date().toISOString(),
-        author: authorName,
-        link: article.link || '#',
-        featuredImage: featuredImage
+        date: article.date || '',
+        modified: article.modified || '',
+        author_name: authorName,
+        featured_image_url: featuredImageUrl,
+        link: article.link || ''
       };
     });
     
@@ -164,10 +163,19 @@ exports.handler = async (event, context) => {
       headers: {
         'Content-Type': 'application/json',
         'Cache-Control': 'public, max-age=300', // Cache for 5 minutes
+        'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify({
         success: true,
-        data: result
+        data: result.articles, // Return articles array directly as 'data'
+        pagination: {
+          page: result.currentPage,
+          perPage: validation.perPage,
+          totalPages: result.totalPages,
+          totalPosts: result.total,
+          hasNextPage: result.currentPage < result.totalPages,
+          hasPrevPage: result.currentPage > 1
+        }
       })
     };
   } catch (error) {
