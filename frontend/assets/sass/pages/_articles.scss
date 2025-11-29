@@ -250,7 +250,7 @@
   }
   
   // Mobile layout - image on top
-  @media (max-width: 849px) {
+  @media (max-width: v.$breakpoint-articles) {
     flex-direction: column;
   }
   
@@ -259,7 +259,7 @@
     flex-shrink: 0;
     width: 28rem;
     
-    @media (max-width: 849px) {
+    @media (max-width: v.$breakpoint-articles) {
       width: 100%;
       display: flex;
       justify-content: center;
@@ -272,7 +272,7 @@
       object-fit: cover;
       display: block;
       
-      @media (max-width: 849px) {
+      @media (max-width: v.$breakpoint-articles) {
         // Responsive image sizing for mobile
         width: calc(100vw - 4rem);
         max-width: 50rem;
