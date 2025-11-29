@@ -1,1 +1,1 @@
-module.exports = require('./home/runner/work/portfolio-site/portfolio-site/netlify/functions/contact.js')
+module.exports = require('./Users/dfora/OneDrive/DeanForantDesigns/portfolio-site/netlify/functions/contact.js')
