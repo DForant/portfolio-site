@@ -247,9 +247,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ctaLink.rel = 'noopener';
         ctaLink.innerHTML = 'Read More <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>';
         
-        // Assemble content
-        contentDiv.appendChild(metaDiv);
+        // Assemble content - order: title, meta, excerpt, CTA
         contentDiv.appendChild(titleEl);
+        contentDiv.appendChild(metaDiv);
         contentDiv.appendChild(excerptEl);
         contentDiv.appendChild(ctaLink);
         

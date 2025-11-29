@@ -235,12 +235,24 @@
 
 // Article Card
 .article-card {
-  display: flex;
   background: v.$white;
   border-radius: v.$border-radius-lg;
   overflow: hidden;
   box-shadow: 0 0.4rem 1.2rem rgba(74, 108, 155, 0.1);
   transition: all 0.3s ease;
+  
+  // Desktop layout - 2 column grid (1fr | 2fr)
+  @media (min-width: v.$breakpoint-sm + 1) {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 0;
+  }
+  
+  // Mobile layout - stacked
+  @media (max-width: v.$breakpoint-sm) {
+    display: flex;
+    flex-direction: column;
+  }
   
   @media (hover: hover) and (pointer: fine) {
     &:hover {
@@ -249,17 +261,19 @@
     }
   }
   
-  // Mobile layout - image on top
-  @media (max-width: v.$breakpoint-articles) {
-    flex-direction: column;
-  }
-  
-  // Image container
+  // Image container (left column on desktop)
   &__image {
-    flex-shrink: 0;
-    width: 28rem;
+    // Desktop
+    @media (min-width: v.$breakpoint-sm + 1) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: v.$spacing-lg;
+      background: v.$off-white;
+    }
     
-    @media (max-width: v.$breakpoint-articles) {
+    // Mobile
+    @media (max-width: v.$breakpoint-sm) {
       width: 100%;
       display: flex;
       justify-content: center;
@@ -268,17 +282,22 @@
     
     img {
       width: 100%;
-      height: 20rem;
+      height: auto;
       object-fit: cover;
       display: block;
+      border-radius: v.$border-radius-base;
       
-      @media (max-width: v.$breakpoint-articles) {
-        // Responsive image sizing for mobile
+      // Desktop
+      @media (min-width: v.$breakpoint-sm + 1) {
+        max-height: 20rem;
+        aspect-ratio: 16 / 10;
+      }
+      
+      // Mobile - responsive image sizing
+      @media (max-width: v.$breakpoint-sm) {
         width: calc(100vw - 4rem);
         max-width: 50rem;
-        height: auto;
         aspect-ratio: 16 / 9;
-        border-radius: v.$border-radius-base;
         margin: 0 auto;
       }
       
@@ -288,24 +307,39 @@
     }
   }
   
-  // Content container
+  // Content container (right column on desktop)
   &__content {
-    flex: 1;
-    padding: v.$spacing-lg;
     display: flex;
     flex-direction: column;
+    padding: v.$spacing-lg;
     
     @media (max-width: v.$breakpoint-sm) {
       padding: v.$spacing-md;
     }
   }
   
-  // Meta info (date, author)
+  // Title (Row 1 on desktop)
+  &__title {
+    font-size: v.$font-size-xl;
+    font-family: v.$font-heading;
+    font-weight: 700;
+    color: v.$primary-blue;
+    margin: 0 0 v.$spacing-sm;
+    line-height: 1.3;
+    order: 1;
+    
+    @media (max-width: v.$breakpoint-sm) {
+      font-size: v.$font-size-lg;
+    }
+  }
+  
+  // Meta info - date, author (Row 2 on desktop)
   &__meta {
     display: flex;
     gap: v.$spacing-md;
-    margin-bottom: v.$spacing-sm;
+    margin-bottom: v.$spacing-md;
     flex-wrap: wrap;
+    order: 2;
     
     span {
       display: inline-flex;
@@ -320,39 +354,27 @@
     }
   }
   
-  // Title
-  &__title {
-    font-size: v.$font-size-xl;
-    font-family: v.$font-heading;
-    font-weight: 700;
-    color: v.$primary-blue;
-    margin: 0 0 v.$spacing-sm;
-    line-height: 1.3;
-    
-    @media (max-width: v.$breakpoint-sm) {
-      font-size: v.$font-size-lg;
-    }
-  }
-  
-  // Excerpt
+  // Excerpt (Row 3 on desktop)
   &__excerpt {
     font-size: v.$font-size-sm;
     color: v.$charcoal;
     line-height: 1.7;
     margin: 0 0 v.$spacing-md;
     flex-grow: 1;
+    order: 3;
     
     @media (max-width: v.$breakpoint-sm) {
       font-size: v.$font-size-xs;
     }
   }
   
-  // Read More CTA
+  // Read More CTA (Row 4 on desktop)
   &__cta {
     align-self: flex-start;
     display: inline-flex;
     align-items: center;
     gap: v.$spacing-xs;
+    order: 4;
     
     i {
       transition: transform 0.3s ease;
