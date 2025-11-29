@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Configuration constants
     const PLACEHOLDER_IMAGE = 'assets/images/article-placeholder.svg';
     const NETLIFY_DEV_PORTS = ['8888', '8889'];
+    const MAX_EXCERPT_LENGTH = 200;
 
     // Escape HTML to prevent XSS
     const escapeHtml = (str) => {
@@ -76,35 +77,89 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Strip HTML tags and decode entities from excerpt
-    const sanitizeExcerpt = (html) => {
+    // Decode HTML entities safely (for fallback scenarios)
+    // Note: This handles common HTML entities. For complete coverage, 
+    // DOMParser (the primary path) should be used.
+    const decodeHtmlEntities = (text) => {
+        if (!text) return '';
+        return text
+            // Standard HTML entities
+            .replace(/&lt;/g, '<')
+            .replace(/&gt;/g, '>')
+            .replace(/&amp;/g, '&')
+            .replace(/&quot;/g, '"')
+            .replace(/&#039;/g, "'")
+            .replace(/&apos;/g, "'")
+            .replace(/&nbsp;/g, ' ')
+            // Numeric character references (decimal)
+            .replace(/&#(\d+);/g, (_, num) => String.fromCharCode(parseInt(num, 10)))
+            // Numeric character references (hex)
+            .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+    };
+
+    // Strip HTML tags for fallback scenarios
+    // Note: This is only used when DOMParser fails (extremely rare in modern browsers).
+    // The output is always displayed as textContent, which provides an additional layer of safety.
+    const stripHtmlTags = (html) => {
         if (!html) return '';
-        
-        // Create a temporary element to decode HTML entities
-        const temp = document.createElement('div');
-        temp.innerHTML = html;
-        
-        // Get text content and trim
-        let text = temp.textContent || temp.innerText || '';
-        
-        // Remove extra whitespace and limit length
-        text = text.trim().replace(/\s+/g, ' ');
-        
-        // Truncate if too long
-        if (text.length > 200) {
-            text = text.substring(0, 200).trim() + '...';
-        }
-        
+        // First pass: remove script/style content entirely (greedy match)
+        let text = html.replace(/<(script|style|noscript|template)[^>]*>[\s\S]*?<\/\1>/gi, '');
+        // Second pass: remove all HTML-like patterns including malformed tags
+        // This handles <tag>, </tag>, <tag attr>, and unclosed < followed by letters
+        text = text.replace(/<\/?[a-z][^>]*>/gi, '');
+        text = text.replace(/<[a-z]/gi, ''); // Remove orphaned open tags
         return text;
     };
 
-    // Sanitize title from WordPress API
+    // Strip HTML tags and decode entities from excerpt using DOMParser (safer than innerHTML)
+    const sanitizeExcerpt = (html) => {
+        if (!html) return '';
+        
+        try {
+            // Use DOMParser for safer HTML parsing (doesn't execute scripts)
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Get text content and trim
+            let text = doc.body.textContent || '';
+            
+            // Remove extra whitespace and limit length
+            text = text.trim().replace(/\s+/g, ' ');
+            
+            // Truncate if too long
+            if (text.length > MAX_EXCERPT_LENGTH) {
+                text = text.substring(0, MAX_EXCERPT_LENGTH).trim() + '...';
+            }
+            
+            return text;
+        } catch (e) {
+            // Fallback: strip tags and decode entities if DOMParser fails
+            // This handles older browsers or edge cases
+            let text = stripHtmlTags(html);
+            text = decodeHtmlEntities(text);
+            text = text.trim().replace(/\s+/g, ' ');
+            if (text.length > MAX_EXCERPT_LENGTH) {
+                text = text.substring(0, MAX_EXCERPT_LENGTH).trim() + '...';
+            }
+            return text;
+        }
+    };
+
+    // Sanitize title from WordPress API using DOMParser (safer than innerHTML)
     const sanitizeTitle = (html) => {
         if (!html) return 'Untitled';
         
-        const temp = document.createElement('div');
-        temp.innerHTML = html;
-        return temp.textContent || temp.innerText || 'Untitled';
+        try {
+            // Use DOMParser for safer HTML parsing (doesn't execute scripts)
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            return doc.body.textContent || 'Untitled';
+        } catch (e) {
+            // Fallback: strip tags and decode entities if DOMParser fails
+            let text = stripHtmlTags(html);
+            text = decodeHtmlEntities(text);
+            return text.trim() || 'Untitled';
+        }
     };
 
     // Create article card using DOM manipulation (XSS safe)
