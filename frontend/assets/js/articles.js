@@ -80,13 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Decode HTML entities safely (for fallback scenarios)
     // Note: This handles common HTML entities. For complete coverage, 
     // DOMParser (the primary path) should be used.
+    // Important: &amp; must be decoded LAST to prevent double-unescaping
     const decodeHtmlEntities = (text) => {
         if (!text) return '';
         return text
-            // Standard HTML entities
+            // Standard HTML entities (decode &amp; last to prevent double-unescaping)
             .replace(/&lt;/g, '<')
             .replace(/&gt;/g, '>')
-            .replace(/&amp;/g, '&')
             .replace(/&quot;/g, '"')
             .replace(/&#039;/g, "'")
             .replace(/&apos;/g, "'")
@@ -94,20 +94,40 @@ document.addEventListener('DOMContentLoaded', () => {
             // Numeric character references (decimal)
             .replace(/&#(\d+);/g, (_, num) => String.fromCharCode(parseInt(num, 10)))
             // Numeric character references (hex)
-            .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+            .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
+            // Decode &amp; last to prevent double-unescaping (e.g., &amp;lt; -> &lt; -> <)
+            .replace(/&amp;/g, '&');
     };
 
     // Strip HTML tags for fallback scenarios
     // Note: This is only used when DOMParser fails (extremely rare in modern browsers).
-    // The output is always displayed as textContent, which provides an additional layer of safety.
+    // The output is always displayed via textContent, which provides an additional layer of safety.
+    // Uses a loop to handle nested/malformed tags that could bypass single-pass regex.
     const stripHtmlTags = (html) => {
         if (!html) return '';
-        // First pass: remove script/style content entirely (greedy match)
-        let text = html.replace(/<(script|style|noscript|template)[^>]*>[\s\S]*?<\/\1>/gi, '');
-        // Second pass: remove all HTML-like patterns including malformed tags
-        // This handles <tag>, </tag>, <tag attr>, and unclosed < followed by letters
-        text = text.replace(/<\/?[a-z][^>]*>/gi, '');
-        text = text.replace(/<[a-z]/gi, ''); // Remove orphaned open tags
+        let text = html;
+        let prevText;
+        // Maximum iterations to prevent infinite loops on malformed input
+        let iterations = 0;
+        const MAX_ITERATIONS = 10;
+        
+        // Loop until no more angle brackets are found or max iterations reached
+        do {
+            prevText = text;
+            // Remove complete script/style/noscript/template elements with content
+            text = text.replace(/<(script|style|noscript|template)\b[^>]*>[\s\S]*?<\/\1>/gi, '');
+            // Remove self-closing and void elements
+            text = text.replace(/<[^>]+\/>/gi, '');
+            // Remove any remaining HTML tags
+            text = text.replace(/<[^>]+>/g, '');
+            // Remove orphaned angle brackets that could form tags
+            text = text.replace(/<[a-zA-Z]/g, '');
+            iterations++;
+        } while (text !== prevText && text.includes('<') && iterations < MAX_ITERATIONS);
+        
+        // Final safety: remove all remaining angle brackets
+        text = text.replace(/[<>]/g, '');
+        
         return text;
     };
 
