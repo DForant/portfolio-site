@@ -6,6 +6,11 @@ const https = require('https');
 const http = require('http');
 const { URL } = require('url');
 
+// Configuration constants
+const MAX_PAGE_NUMBER = 1000;
+const MAX_PER_PAGE = 10;
+const DEFAULT_TIMEOUT = 10000;
+
 // Get the API base URL from environment variables
 const getApiBaseUrl = () => {
   return process.env.WP_API_BASE_URL || 'http://dfd-cms.local';
@@ -26,9 +31,9 @@ const sanitizeParams = (queryParams) => {
       const num = parseInt(value, 10);
       if (isNaN(num) || num < 1) continue;
       // Limit per_page to max 10 as per requirements
-      if (key === 'per_page' && num > 10) {
-        sanitized[key] = '10';
-      } else if (key === 'page' && num > 1000) {
+      if (key === 'per_page' && num > MAX_PER_PAGE) {
+        sanitized[key] = String(MAX_PER_PAGE);
+      } else if (key === 'page' && num > MAX_PAGE_NUMBER) {
         sanitized[key] = '1';
       } else {
         sanitized[key] = String(num);
@@ -60,9 +65,9 @@ const buildApiUrl = (params) => {
 const fetchFromWordPress = (url) => {
   return new Promise((resolve, reject) => {
     const protocol = url.protocol === 'https:' ? https : http;
-    const timeout = parseInt(process.env.WP_API_TIMEOUT, 10) || 10000;
+    const timeout = parseInt(process.env.WP_API_TIMEOUT, 10) || DEFAULT_TIMEOUT;
     
-    const req = protocol.get(url.href, { timeout }, (res) => {
+    const req = protocol.get(url.href, (res) => {
       let data = '';
       
       res.on('data', (chunk) => {
@@ -78,13 +83,13 @@ const fetchFromWordPress = (url) => {
       });
     });
     
-    req.on('error', (err) => {
-      reject(err);
-    });
-    
-    req.on('timeout', () => {
+    req.setTimeout(timeout, () => {
       req.destroy();
       reject(new Error('Request timeout'));
+    });
+    
+    req.on('error', (err) => {
+      reject(err);
     });
   });
 };

@@ -18,16 +18,41 @@ document.addEventListener('DOMContentLoaded', () => {
     let totalPages = 1;
     let isLoading = false;
 
-    // Placeholder image for articles without thumbnails
+    // Configuration constants
     const PLACEHOLDER_IMAGE = 'assets/images/article-placeholder.svg';
+    const NETLIFY_DEV_PORTS = ['8888', '8889'];
+
+    // Escape HTML to prevent XSS
+    const escapeHtml = (str) => {
+        if (!str) return '';
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    };
+
+    // Validate and sanitize URL
+    const sanitizeUrl = (url) => {
+        if (!url) return '#';
+        try {
+            const parsed = new URL(url);
+            // Only allow http and https protocols
+            if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+                return '#';
+            }
+            return parsed.href;
+        } catch (e) {
+            // If URL parsing fails, return safe fallback
+            return '#';
+        }
+    };
 
     // Get API endpoint - uses Netlify function or falls back for local dev
     const getApiEndpoint = () => {
         const host = window.location.hostname;
         const port = window.location.port;
         
-        // If running on localhost with Express dev server
-        if ((host === 'localhost' || host === '127.0.0.1') && port && port !== '8888' && port !== '8889') {
+        // If running on localhost with Express dev server (not Netlify dev ports)
+        if ((host === 'localhost' || host === '127.0.0.1') && port && !NETLIFY_DEV_PORTS.includes(port)) {
             return 'http://localhost:4000/api/articles';
         }
         
@@ -82,41 +107,81 @@ document.addEventListener('DOMContentLoaded', () => {
         return temp.textContent || temp.innerText || 'Untitled';
     };
 
-    // Create article card HTML
+    // Create article card using DOM manipulation (XSS safe)
     const createArticleCard = (article) => {
         const title = sanitizeTitle(article.title);
         const excerpt = sanitizeExcerpt(article.excerpt);
         const date = formatDate(article.date);
-        const author = article.author || 'Unknown';
-        const thumbnail = article.thumbnail || PLACEHOLDER_IMAGE;
-        const articleLink = article.link || '#';
+        const author = escapeHtml(article.author || 'Unknown');
+        const thumbnail = sanitizeUrl(article.thumbnail) || PLACEHOLDER_IMAGE;
+        const articleLink = sanitizeUrl(article.link);
         
         const card = document.createElement('article');
         card.className = 'article-card';
         
-        card.innerHTML = `
-            <div class="article-card__image">
-                <img src="${thumbnail}" alt="${title}" loading="lazy" onerror="this.onerror=null; this.src='${PLACEHOLDER_IMAGE}';" />
-            </div>
-            <div class="article-card__content">
-                <div class="article-card__meta">
-                    <span class="article-card__date">
-                        <i class="fa-regular fa-calendar" aria-hidden="true"></i>
-                        ${date}
-                    </span>
-                    <span class="article-card__author">
-                        <i class="fa-regular fa-user" aria-hidden="true"></i>
-                        ${author}
-                    </span>
-                </div>
-                <h2 class="article-card__title">${title}</h2>
-                <p class="article-card__excerpt">${excerpt}</p>
-                <a href="${articleLink}" class="btn btn--primary btn--small article-card__cta" target="_blank" rel="noopener">
-                    Read More
-                    <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                </a>
-            </div>
-        `;
+        // Create image container
+        const imageDiv = document.createElement('div');
+        imageDiv.className = 'article-card__image';
+        
+        const img = document.createElement('img');
+        img.src = thumbnail;
+        img.alt = title;
+        img.loading = 'lazy';
+        img.onerror = function() {
+            this.onerror = null;
+            this.src = PLACEHOLDER_IMAGE;
+        };
+        imageDiv.appendChild(img);
+        
+        // Create content container
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'article-card__content';
+        
+        // Create meta section
+        const metaDiv = document.createElement('div');
+        metaDiv.className = 'article-card__meta';
+        
+        const dateSpan = document.createElement('span');
+        dateSpan.className = 'article-card__date';
+        dateSpan.innerHTML = '<i class="fa-regular fa-calendar" aria-hidden="true"></i> ';
+        dateSpan.appendChild(document.createTextNode(date));
+        
+        const authorSpan = document.createElement('span');
+        authorSpan.className = 'article-card__author';
+        authorSpan.innerHTML = '<i class="fa-regular fa-user" aria-hidden="true"></i> ';
+        authorSpan.appendChild(document.createTextNode(author));
+        
+        metaDiv.appendChild(dateSpan);
+        metaDiv.appendChild(authorSpan);
+        
+        // Create title
+        const titleEl = document.createElement('h2');
+        titleEl.className = 'article-card__title';
+        titleEl.textContent = title;
+        
+        // Create excerpt
+        const excerptEl = document.createElement('p');
+        excerptEl.className = 'article-card__excerpt';
+        excerptEl.textContent = excerpt;
+        
+        // Create CTA link
+        const ctaLink = document.createElement('a');
+        ctaLink.href = articleLink;
+        ctaLink.className = 'btn btn--primary btn--small article-card__cta';
+        ctaLink.target = '_blank';
+        ctaLink.rel = 'noopener';
+        ctaLink.innerHTML = 'Read More <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>';
+        
+        // Assemble content
+        contentDiv.appendChild(metaDiv);
+        contentDiv.appendChild(titleEl);
+        contentDiv.appendChild(excerptEl);
+        contentDiv.appendChild(ctaLink);
+        
+        // Assemble card
+        card.appendChild(imageDiv);
+        card.appendChild(contentDiv);
+        
         
         return card;
     };
