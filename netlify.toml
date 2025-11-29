@@ -20,6 +20,13 @@
   status = 200
   force = true
 
+# Redirect articles API to function
+[[redirects]]
+  from = "/api/articles"
+  to = "/.netlify/functions/articles"
+  status = 200
+  force = true
+
 # Serve a blocking robots.txt on the staging domain; allow on others
 [[redirects]]
   from = "/robots.txt"

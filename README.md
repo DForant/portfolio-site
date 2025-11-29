@@ -21,6 +21,7 @@ portfolio-site/
 ├── frontend/                 # 🌐 Static website (HTML, CSS, JS, images)
 │   ├── assets/
 │   ├── index.html
+│   ├── articles.html         # Articles listing page
 │   ├── robots-prod.txt
 │   ├── robots-staging.txt
 │   ├── sitemap.xml
@@ -32,6 +33,7 @@ portfolio-site/
 ├── netlify/                  # ⚡ Netlify Functions
 │   └── functions/
 │       ├── contact.js
+│       ├── articles.js       # WordPress CMS proxy
 │       └── lib/
 │           └── validation.js
 ├── .env.example              # 📝 Environment variables template
@@ -49,6 +51,7 @@ portfolio-site/
 - **Client Carousel**: Interactive showcase of client logos
 - **Process Tabs**: Interactive workflow demonstration
 - **Security**: Helmet, rate limiting, CORS, input sanitization (xss), spam heuristics
+- **Articles Listing**: Dynamic articles page consuming content from WordPress headless CMS
 
 ## ⚙️ Preconfigured Netlify & SEO behavior
 
@@ -56,6 +59,7 @@ This repo ships with production-grade Netlify config and SEO safeguards baked in
 
 - Build config: `publish = frontend`, `functions = netlify/functions`, and build command `npm --workspace frontend run build` to compile Sass on deploy.
 - API route: `/api/contact` redirected to `/.netlify/functions/contact` via `netlify.toml`.
+- API route: `/api/articles` redirected to `/.netlify/functions/articles` for WordPress headless CMS content.
 - Staging no-indexing: For host `staging.deanforantdesigns.com`, all pages send `X-Robots-Tag: noindex, nofollow` and `/robots.txt` resolves to `frontend/robots-staging.txt` (Disallow all).
 - Production indexing: Other hosts serve `frontend/robots-prod.txt` (Allow all) and include a `Sitemap: https://www.deanforantdesigns.com/sitemap.xml`. A basic `frontend/sitemap.xml` is included.
 - Canonical host: Requests to apex `deanforantdesigns.com` 301-redirect to `https://www.deanforantdesigns.com/`.
@@ -209,6 +213,8 @@ Define in Netlify UI (recommended) or `.env` for Express local development.
 | `PORT` | Express only | Express | Default 4000 locally (if not set) |
 | `FRONTEND_URL` | Express CORS | Express | Comma separated origins |
 | `APP_PATH` | Path-based hosting alt | Express prod (cPanel) | See advanced section |
+| `WP_API_BASE_URL` | Required for articles | Articles function | WordPress headless CMS base URL |
+| `WP_API_TIMEOUT` | Optional | Articles function | API timeout in ms (default: 10000) |
 
 `.env.example` in the repository root is the reference for Express mode.
 
@@ -355,7 +361,71 @@ Files relevant to serverless mode:
 ```
 netlify.toml
 netlify/functions/contact.js
+netlify/functions/articles.js
 netlify/functions/lib/validation.js
+```
+
+---
+
+## 📰 Articles Listing Page
+
+The site includes a dynamic articles listing page that consumes content from a WordPress headless CMS.
+
+### Features
+
+- **Paginated listing**: Maximum 10 articles per page with pagination controls
+- **Responsive design**: Image-on-left layout for desktop, stacked layout for mobile (below 849px)
+- **Placeholder images**: Automatic fallback when no featured image is available
+- **Author and date display**: Shows article metadata from WordPress
+- **Error handling**: Graceful loading, error, and empty states
+
+### Setup
+
+1. **Configure the WordPress CMS endpoint**:
+   
+   Set the `WP_API_BASE_URL` environment variable to point to your WordPress instance:
+   
+   ```bash
+   # Local development
+   WP_API_BASE_URL=http://dfd-cms.local
+   
+   # Staging
+   WP_API_BASE_URL=https://staging-cms.yourdomain.com
+   
+   # Production
+   WP_API_BASE_URL=https://cms.yourdomain.com
+   ```
+
+2. **WordPress requirements**:
+   
+   - Custom post type `article` registered and exposed to REST API
+   - Featured images enabled for the article post type
+   - REST API endpoint: `{WP_API_BASE_URL}/wp-json/wp/v2/article`
+
+3. **Environment configuration**:
+   
+   | Environment | Configuration Location |
+   |-------------|----------------------|
+   | Local | `.env` file or inline before `netlify dev` |
+   | Staging | Netlify UI → Site Settings → Environment |
+   | Production | Netlify UI → Site Settings → Environment |
+
+### API Endpoint
+
+The articles Netlify function (`/api/articles`) proxies requests to WordPress with:
+
+- Query parameter sanitization (only `page`, `per_page`, `_embed` allowed)
+- Response transformation for cleaner frontend consumption
+- Caching headers (5-minute cache)
+- Error handling for network failures
+
+### Files
+
+```
+frontend/articles.html          # Articles listing page
+frontend/assets/js/articles.js  # Client-side JavaScript
+frontend/assets/sass/pages/_articles.scss  # Page styles
+netlify/functions/articles.js   # Netlify function (API proxy)
 ```
 
 ---
