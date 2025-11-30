@@ -11,7 +11,6 @@ const NAV_LINKS = [
   { label: 'About', href: '/#clients', isAnchor: true },
   { label: 'Services', href: '/#services', isAnchor: true },
   { label: 'Portfolio', href: '/#portfolio-section', isAnchor: true },
-  { label: 'Articles', href: '/articles', isAnchor: false },
   { label: 'Contact', href: '/#contact', isAnchor: true },
 ];
 
@@ -55,10 +54,6 @@ function Header({ currentPage = '' }) {
 
   // Determine if a link is active
   const isLinkActive = useCallback((link) => {
-    // For article page
-    if (link.href === '/articles' && (currentPage === 'articles' || location.pathname === '/articles')) {
-      return true;
-    }
     // For home page
     if (link.href === '/' && location.pathname === '/' && !currentPage) {
       return true;
