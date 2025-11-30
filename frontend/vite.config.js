@@ -11,13 +11,5 @@ export default defineConfig({
     rollupOptions: {
       input: 'index.html'
     }
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        // Using Dart Sass modern API
-        api: 'modern-compiler'
-      }
-    }
   }
 });

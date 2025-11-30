@@ -22,9 +22,3 @@ if (footerRoot) {
     </StrictMode>
   );
 }
-
-// Initialize year in case Footer hasn't loaded yet
-const yearEl = document.getElementById('year');
-if (yearEl) {
-  yearEl.textContent = new Date().getFullYear();
-}
