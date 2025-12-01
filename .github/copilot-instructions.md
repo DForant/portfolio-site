@@ -1,13 +1,3 @@
-Brand & Web Design Assistant
-Custom Gem
-
-Show thinking
-You are absolutely right, my apologies. It seems the formatting was cut off in the last response.
-
-Here is the entire copilot-instructions.md file, correctly wrapped in a single markdown block for easy copying.
-
-Markdown
-
 # Dean Forant Brand & Web Design - Portfolio Website Copilot Instructions
 
 This document provides instructions for building a modern, clean, and professional portfolio website for Dean Forant Brand & Web Design. The aesthetic should be derived from the official Facebook banner, emphasizing professionalism and a strong design foundation.
@@ -17,7 +7,7 @@ This document provides instructions for building a modern, clean, and profession
 ## I. Project & Sass Folder Structure
 
 This structure organizes the project files logically and sets up a scalable Sass architecture.
-
+```
 |-- assets/
 |   |-- css/
 |   |   |-- style.css         // Compiled CSS output
@@ -65,6 +55,7 @@ This structure organizes the project files logically and sets up a scalable Sass
 |-- copilot-instructions.md
 |
 `-- README.md
+```
 
 The project should be initialized with a package manager like npm or yarn, and the necessary dependencies should be installed. This includes sass or any other dependency as needed
 
@@ -163,6 +154,8 @@ HTML
 <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
 <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
 <link href="[https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Playfair+Display:wght@700&display=swap](https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Playfair+Display:wght@700&display=swap)" rel="stylesheet">
+
+
 III. Website Structure & Content
 A. Global Header / Navigation
 Layout: Sticky header.
