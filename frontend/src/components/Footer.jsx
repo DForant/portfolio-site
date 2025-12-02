@@ -103,7 +103,7 @@ function Footer({
                   key={link.href}
                   href={link.href}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noopener noreferrer nofollow"
                   className="footer__social-link"
                   aria-label={link.label}
                 >

@@ -34,7 +34,7 @@ function ProjectCard({ title, description, image, href }) {
       <a
         href={href}
         target="_blank"
-        rel="noopener noreferrer"
+        rel="noopener noreferrer nofollow"
         className="card__link"
         aria-label={`View ${title} project`}
       >
