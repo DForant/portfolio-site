@@ -1,13 +1,15 @@
 {
   "name": "dean-forant-portfolio-frontend",
   "version": "1.1.0",
+  "type": "module",
   "description": "Frontend website for Dean Forant Portfolio",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "sass": "sass assets/sass/main.scss assets/css/style.css",
     "sass:watch": "sass --watch assets/sass/main.scss assets/css/style.css",
-    "sass:build": "sass assets/sass/main.scss assets/css/style.css --style compressed",
-    "build": "npm run sass:build",
-    "dev": "npm run sass:watch"
+    "sass:build": "sass assets/sass/main.scss assets/css/style.css --style compressed"
   },
   "keywords": [
     "portfolio",
@@ -18,6 +20,14 @@
   "author": "Dean Forant",
   "license": "MIT",
   "devDependencies": {
-    "sass": "^1.90.0"
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^4.7.0",
+    "sass": "^1.90.0",
+    "vite": "^6.4.1"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }

@@ -1,7 +1,7 @@
 [build]
-  publish = "frontend" # directory with index.html
+  publish = "frontend/dist" # Vite outputs to dist directory
   functions = "netlify/functions"
-  command = "npm --workspace frontend run build" # compile Sass → CSS during Netlify build
+  command = "npm --workspace frontend run build" # Vite build
 
 [functions]
   node_bundler = "esbuild"
