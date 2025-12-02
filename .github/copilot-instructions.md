@@ -1,13 +1,3 @@
-Brand & Web Design Assistant
-Custom Gem
-
-Show thinking
-You are absolutely right, my apologies. It seems the formatting was cut off in the last response.
-
-Here is the entire copilot-instructions.md file, correctly wrapped in a single markdown block for easy copying.
-
-Markdown
-
 # Dean Forant Brand & Web Design - Portfolio Website Copilot Instructions
 
 This document provides instructions for building a modern, clean, and professional portfolio website for Dean Forant Brand & Web Design. The aesthetic should be derived from the official Facebook banner, emphasizing professionalism and a strong design foundation.
