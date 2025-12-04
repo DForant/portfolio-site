@@ -47,9 +47,6 @@ This structure organizes the project files logically and sets up a scalable Sass
 |       |
 |       |-- main.scss
 |
-|-- portfolio/
-|   |-- project.html          // The single, dynamic template for all projects
-|
 |-- index.html
 |
 |-- copilot-instructions.md
@@ -129,6 +126,7 @@ SCSS
         // Element styles
     }
 }
+
 II. Design System
 A. Color Palette
 Primary Blue: #4A6C9B
@@ -153,7 +151,9 @@ HTML
 <link rel="preconnect" href="[https://fonts.googleapis.com](https://fonts.googleapis.com)">
 <link rel="preconnect" href="[https://fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
 <link href="[https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Playfair+Display:wght@700&display=swap](https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&family=Playfair+Display:wght@700&display=swap)" rel="stylesheet">
+
 III. Website Structure & Content
+
 A. Global Header / Navigation
 Layout: Sticky header.
 
@@ -221,66 +221,13 @@ Headline (H2): Selected Works
 
 Layout: A modern grid of featured project cards.
 
-Functionality: Each card will link to the single project template (/portfolio/project.html) but will pass a unique identifier for the project using a URL parameter.
+The Featured Projects should be displayed in a Grid Layout with 3 columns on desktop, 2 columns on tablet, and 1 column on mobile.
 
-Link Examples:
-
-Cedarhurst Link: <a href="/portfolio/project.html?id=cedarhurst">
-
-Coffee Guild Link: <a href="/portfolio/project.html?id=coffeeguild">
-
-Chuckle Canvas Link: <a href="/portfolio/project.html?id=chucklecanvas">
-
-F.1. Dynamic Project Page (project.html)
-This single HTML file will serve as the template for all portfolio projects. Its content will be populated by JavaScript based on the id parameter in the URL.
-
-Header/Footer: The page must include the global header and footer.
-
-HTML Structure: The body should contain placeholder elements with unique IDs for JavaScript to target.
-
-HTML
-
-<main class="project-container">
-    <a href="/#portfolio-section">← Back to Portfolio</a>
-    <h1 id="project-title">[Project Title Loading...]</h1>
-    <div id="behance-embed-container">
-        </div>
-</main>
-JavaScript Functionality (/assets/js/portfolio.js):
-
-Project Data: Create a JavaScript object to store the information for each project, mapping the URL id to its title and Behance embed code.
-
-JavaScript
-
-const projectData = {
-    'cedarhurst': {
-        title: 'Cedarhurst Brewing Company',
-        embed: '<iframe src="https://www.behance.net/embed/project/227216357?ilo0=1" height="316" width="404" allowfullscreen lazyload frameborder="0" allow="clipboard-write" refererPolicy="strict-origin-when-cross-origin"></iframe>'
-    },
-    'coffeeguild': {
-        title: 'The Coffee Guild',
-        embed: '<iframe src="https://www.behance.net/embed/project/231368347?ilo0=1" height="316" width="404" allowfullscreen lazyload frameborder="0" allow="clipboard-write" refererPolicy="strict-origin-when-cross-origin"></iframe>'
-    },
-    'chucklecanvas': {
-        title: 'The Chuckle Canvas',
-        embed: '<iframe src="https://www.behance.net/embed/project/227216357?ilo0=1" height="316" width="404" allowfullscreen lazyload frameborder="0" allow="clipboard-write" refererPolicy="strict-origin-when-cross-origin"></iframe>'
-    }
-};
-On Page Load: The script should run when the project.html page loads.
-
-Read URL Parameter: Get the id from the URL. (e.g., using new URLSearchParams(window.location.search).get('id');).
-
-Find Project: Look up the corresponding project in the projectData object.
-
-Populate Content: If the project is found, use JavaScript to:
-
-Update the innerHTML of the <h1 id="project-title">.
-
-Update the innerHTML of the <div id="behance-embed-container"> with the project's embed code.
-
-Update the page's document title: document.title = 'Project: ' + project.title + ' | Dean Forant';.
-
-Error Handling: If no id is found or the id is invalid, redirect the user back to the main portfolio page.
+The Individual Project Cards should include:
+- Project Image
+- Project Title
+- Short Description
+- "View Project" button that links to the Behance project page.
 
 G. Section 6: Contact
 Headline (H2): Ready to Win? Let's Build Your Brand.
